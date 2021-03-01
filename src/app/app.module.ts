@@ -4,17 +4,25 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
-
-import { HomeModule } from './home/home.module';
-import { DetailModule } from './detail/detail.module';
 
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
-import { NbThemeModule } from '@nebular/theme';
-import { NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
+// import { NbButtonModule, NbLayoutModule, NbThemeModule } from '@nebular/theme';
+import {
+  NbSidebarModule,
+  NbMenuModule,
+  NbDatepickerModule,
+  NbDialogModule,
+  NbWindowModule,
+  NbToastrModule, NbCardModule
+} from '@nebular/theme';
+import {ThemeModule} from './@theme/theme.module';
+import { CommonService } from './services/common.service';
+import { WebService } from './services/web.service';
 
 @NgModule({
   declarations: [AppComponent, SidebarComponent],
@@ -24,16 +32,20 @@ import { NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme'
     HttpClientModule,
     CoreModule,
     SharedModule,
-    HomeModule,
-    DetailModule,
     AppRoutingModule,
-    NbLayoutModule,
-    NbSidebarModule, // NbSidebarModule.forRoot(), //if this is your app.module
-    NbButtonModule,
-    NbThemeModule.forRoot()
+    NbCardModule,
+    NbSidebarModule.forRoot(),
+    NbMenuModule.forRoot(),
+    NbDatepickerModule.forRoot(),
+    NbDialogModule.forRoot(),
+    NbWindowModule.forRoot(),
+    NbToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    //NbThemeModule.forRoot({ name: 'default' }),
+    ThemeModule.forRoot(),
   ],
   entryComponents: [SidebarComponent],
-  providers: [],
+  providers: [CommonService, WebService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
