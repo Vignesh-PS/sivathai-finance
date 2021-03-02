@@ -10,7 +10,6 @@ import {ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router}
 export class AppComponent implements OnInit,AfterViewChecked {
   isShowHeaderFooter:any="alwaysOpen";
   currentUrl:string="";adminid:any;
-  title = 'nbadmin1';
   menus: NbMenuItem[] = [
     {
       title: 'Dashboard',
@@ -21,74 +20,7 @@ export class AppComponent implements OnInit,AfterViewChecked {
       title: 'Admin Users Management',
       link: '/admin',
       icon: 'person-outline',
-    },
-    {
-      title: 'Students Management',
-      link: '/students',
-      icon: 'person-outline',
-    },
-    {
-      title: 'Promocodes Management',
-      link: '/promocodes',
-      icon: 'pantone-outline',
-    },
-    {
-      title: 'Plans Management',
-      link: '/plans',
-      icon: 'speaker-outline',
-    },
-    {
-      title: 'Courses',
-      link: '/courses',
-      icon: 'square-outline',
-    },
-
-    {
-      title: 'Contact Management',
-      icon: 'phone-call-outline',
-      link: '/contact',
-    },
-    {
-      title: 'Banner Management',
-      icon: 'edit-2-outline',
-      link: '/homepage',
-    },
-    {
-      title: 'Content Management',
-      icon: 'square-outline',
-      link: '/content',
-    },
-    {
-      title: 'FAQ Management',
-      icon: 'edit-2-outline',
-      link: '/faq',
-    },
-    {
-      title: 'Week Course Management',
-      icon: 'speaker-outline',
-      link: '/week_course',
-    },
-    {
-      title: 'Site Settings',
-      icon: 'home-outline',
-      link: '/site',
-    },
-
-    // {
-    //   title: 'Settings',
-    //   icon: { icon: 'settings-2-outline', pack: 'eva' },
-    //   children: [
-    //     {
-    //       title: 'Change Password',
-    //       link: '/changepassword',
-    //     }
-    //     ]
-    // },
-    // {
-    //   title: 'Logout',
-    //   icon: 'unlock-outline',
-    //   link: '/login',
-    // },
+    }
   ];
 
 
@@ -97,28 +29,25 @@ export class AppComponent implements OnInit,AfterViewChecked {
   constructor(private commonService:CommonService,
               private changeDetector:ChangeDetectorRef,
               private router:Router) {
-    this.adminid = localStorage.getItem('divinkAdminId');
-    console.log("jeni");
-    console.log(this.adminid);
-    // this.adminid = this.commonService.getGetuserid();
+    // this.adminid = localStorage.getItem('userLoggedIn');
+    // console.log("jeni");
+    // console.log(this.adminid);
+    // // this.adminid = this.commonService.getGetuserid();
     this.commonService.currentMessage.subscribe(isShowHeaderFooter=>this.isShowHeaderFooter=isShowHeaderFooter);
-    // @ts-ignore
-      this.router.events.subscribe((event:Event)=>{
-        this.adminid = localStorage.getItem('divinkAdminId');
-        console.log("router");
+    this.router.events.subscribe((event:any)=>{
       if(event instanceof NavigationStart){
         if(event.url=='/' || event.url=='/login'){
           this.commonService.changeMsg('hide');
-          let admin = localStorage.getItem('divinkAdminId');
+          const admin = localStorage.getItem('userLoggedIn');
           if(admin!=null && admin !='' && admin!=undefined){
             // this.adminid = admin;
             // console.log(this.adminid);
             this.router.navigate(['/home']);
           }
         }else{
-          let admin = localStorage.getItem('divinkAdminId');
+          const admin = localStorage.getItem('userLoggedIn');
           if(admin==null || admin ==''){
-            this.router.navigate(['/home']);
+            this.router.navigate(['/login']);
           }
         }
       }
@@ -131,7 +60,7 @@ export class AppComponent implements OnInit,AfterViewChecked {
           this.commonService.changeMsg('alwaysOpen');
         }
 
-        if(this.currentUrl=='/login' && event.url=='/dashboard'){
+        if(this.currentUrl=='/login' && event.url=='/home'){
           //console.log('curr:'+this.currentUrl+';forward:'+event.url);
 
         }
@@ -142,17 +71,14 @@ export class AppComponent implements OnInit,AfterViewChecked {
 
       }
     });
-    this.router.events.subscribe(url=>{
-      //console.log("url:"+url);
-    });
   }
 
   ngOnInit() {
     this.currentUrl=this.router.url;
 
-    let admin = localStorage.getItem('divinkAdminId');
+    const admin = localStorage.getItem('userLoggedIn');
     if(admin==null || admin ==''){
-      this.router.navigate(['/home']);
+      this.router.navigate(['/login']);
     }
   }
 
@@ -161,6 +87,12 @@ export class AppComponent implements OnInit,AfterViewChecked {
 
   // to prevent expression issue
   ngAfterViewChecked(): void {
-    this.changeDetector.detectChanges();
+
+    // const page = localStorage.getItem('currentPage');
+    // if(page=='loginPage'){
+    //   this.isShowHeaderFooter = false;
+    // }else{
+    //   this.isShowHeaderFooter = 'alwaysOpen';
+    // }
   }
 }

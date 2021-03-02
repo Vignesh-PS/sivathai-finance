@@ -1,0 +1,29 @@
+<div class="login-form-container" [nbSpinner]="loading">
+  <div class="login-form-box">
+
+    <div class="logo-wrapper">
+      <img src="assets/img/logo.png" alt="DivinkDev">
+    </div>
+
+    <nb-card>
+      <nb-card-header class="text-center">
+        Admin Panel - Login
+      </nb-card-header>
+      <nb-card-body>
+
+
+
+        <input class="w-100" type="text" fullWidth [(ngModel)]="loginForm.username" nbInput placeholder="Username">
+        <input class="w-100" type="password" fullWidth [(ngModel)]="loginForm.user_password" nbInput  placeholder="Password">
+
+        <div class="row">
+          <div class="col-12">
+            <button nbButton status="primary" (click)="login()">
+              Login
+            </button>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

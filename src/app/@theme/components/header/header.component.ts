@@ -14,24 +14,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   userPictureOnly: boolean = false;
   user: any;
 
-  themes = [
-    {
-      value: 'default',
-      name: 'Light',
-    },
-    {
-      value: 'dark',
-      name: 'Dark',
-    },
-    {
-      value: 'cosmic',
-      name: 'Cosmic',
-    },
-    {
-      value: 'corporate',
-      name: 'Corporate',
-    },
-  ];
 
   currentTheme = 'default';
 
@@ -55,23 +37,13 @@ user_name:any={};
   }
 
 
-  // logoutConfirm(){
-  //   if(window.confirm('Are you sure to logout..?')){
-  //     localStorage.removeItem('divinkAdminId');
-  //     this.commonService.showToast('success', 'Success', 'Logout Successfully');
-  //     setTimeout(() => {
-  //       this.router.navigate(['/login']);
-  //     }, 800);
-  //   }
-  // }
-
   ngOnInit() {
     this.user_name = localStorage.getItem('divinkAdminName');
     // console.log( this.dialogData.created_by);
     this.menuService.onItemClick().subscribe(res=>{
       if(res.item.title=='Log out'){
         if(window.confirm('Are you sure to logout..?')){
-          localStorage.removeItem('divinkAdminId');
+          localStorage.removeItem('userLoggedIn');
           this.commonService.showToast('success', 'Success', 'Logout Successfully');
           setTimeout(() => {
             this.router.navigate(['/login']);
