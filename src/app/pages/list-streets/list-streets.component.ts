@@ -1,15 +1,17 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { NbWindowService, NbWindowConfig } from "@nebular/theme";
 import ListStreetsModel from './list-streets-form/list-streets-model';
-import { environment} from './../../../environments/environment';
-import { WebService } from './../../services/web.service';
-import { CommonService } from './../../services/common.service';
+
 import { ListStreetsFormComponent } from "./list-streets-form/list-streets-form.component";
+import { CommonService } from "../../services/common.service";
+import { WebService } from "../../services/web.service";
+import { environment } from "../../../environments/environment";
+import { ListStreetsFormService } from "./list-streets-form/list-streets-form.service";
 
 @Component({
   selector: "ngx-listStreets",
-  templateUrl: "./listStreets.component.html",
-  styleUrls: ["./listStreets.component.scss"],
+  templateUrl: "./list-streets.component.html",
+  styleUrls: ["./list-streets.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -22,6 +24,7 @@ export class ListStreetsComponent implements OnInit {
     private windowService: NbWindowService,
     private web: WebService,
     private common: CommonService,
+    private formService: ListStreetsFormService
   ) {}
 
   tableSettings: any = {
@@ -96,7 +99,7 @@ export class ListStreetsComponent implements OnInit {
 
   createRow() {
     let w = this.windowService.open(ListStreetsFormComponent, {
-      title: `Add ListStreets`,
+      title: `Add Street`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
       context:  {data: new ListStreetsModel(), action: 'add'} ,
@@ -115,7 +118,7 @@ export class ListStreetsComponent implements OnInit {
     let data = event.data;
 
     let w = this.windowService.open(ListStreetsFormComponent, {
-      title: `Edit ListStreets`,
+      title: `Edit Street`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
       context:  {data: data, action: 'edit'} ,
@@ -139,7 +142,8 @@ export class ListStreetsComponent implements OnInit {
 
   getPageData() {
     this.loading = true;
-
+    this.tableSource = this.formService.getListStreets();
+    this.loading = false;
   }
 
   // mappingTableData(val:any){

@@ -9,8 +9,8 @@ import { ListStreetsFormService } from "./list-streets-form.service";
 
 @Component({
   selector: "ngx-listStreets-form",
-  templateUrl: "./listStreets-form.component.html",
-  styleUrls: ["./listStreets-form.component.scss"],
+  templateUrl: "./list-streets-form.component.html",
+  styleUrls: ["./list-streets-form.component.scss"],
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger(

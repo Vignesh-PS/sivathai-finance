@@ -10,15 +10,17 @@ export class ListStreetsFormService {
   private formData: any = {}
   constructor(private common: CommonService) { }
 
-  setFormData(val: any) {
-    this.formData = val;
-    console.log(this.getFormData());
+  getListStreets(){
+    const streets = [
+      1,2,3,4
+    ]
+
+    return streets;
   }
 
-  getFormData() {
-    return this.formData;
-  }
 
+
+  //validations
   async listStreetsFormValidation(val: ListStreetsModel):Promise<boolean> {
     let action = val.action=="add";
     console.log(action);

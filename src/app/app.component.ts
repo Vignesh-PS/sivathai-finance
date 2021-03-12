@@ -17,8 +17,8 @@ export class AppComponent implements OnInit,AfterViewChecked {
       link: '/home'
     },
     {
-      title: 'Admin Users Management',
-      link: '/admin',
+      title: 'List Streets',
+      link: '/list-streets',
       icon: 'person-outline',
     }
   ];
