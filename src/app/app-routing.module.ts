@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'list-streets',
-    loadChildren: ()=> import('./pages/list-streets/list-streets.module').then(m => m.ListStreetsModule)
+    loadChildren: ()=> import('./pages/list-streets/list-streets.module').then(m => m.StreetsModule)
   },
   {
     path: '',

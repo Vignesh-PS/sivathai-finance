@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NbCardModule, NbWindowModule, NbListModule, NbInputModule, NbToggleModule, NbButtonModule, NbSpinnerModule, NbSelectModule, NbDatepickerModule, NbRadioModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { ListStreetsFormService } from './list-streets-form/list-streets-form.service';
+import { StreetsFormService } from './list-streets-form/list-streets-form.service';
 import { FormsModule } from '@angular/forms';
-import { ListStreetsFormComponent } from './list-streets-form/list-streets-form.component';
-import { ListStreetsRouting } from './list-streets-routing';
-import { ListStreetsComponent } from './list-streets.component';
+import { StreetsFormComponent } from './list-streets-form/list-streets-form.component';
+import { StreetsRouting } from './list-streets-routing';
+import { StreetsComponent } from './list-streets.component';
 
 
 @NgModule({
-  declarations: [ListStreetsComponent, ListStreetsFormComponent],
+  declarations: [StreetsComponent, StreetsFormComponent],
   imports: [
     CommonModule,
-    ListStreetsRouting,
+    StreetsRouting,
     NbCardModule,
     NbListModule,
     NbInputModule,
@@ -28,12 +28,12 @@ import { ListStreetsComponent } from './list-streets.component';
      NbRadioModule
     ],
   entryComponents: [
-    ListStreetsComponent,
-    ListStreetsFormComponent
+    StreetsComponent,
+    StreetsFormComponent
   ],
   providers: [
-    ListStreetsFormService,
+    StreetsFormService,
     DatePipe
   ]
 })
-export class ListStreetsModule { }
+export class StreetsModule { }

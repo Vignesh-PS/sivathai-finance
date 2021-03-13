@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 
-import ListStreetsModel from './list-streets-model';
+import StreetsModel from './list-streets-model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ListStreetsFormService {
+export class StreetsFormService {
   private formData: any = {}
   constructor(private common: CommonService) { }
 
-  getListStreets(){
+  getStreets() {
     const streets = [
-      1,2,3,4
-    ]
+      {
+        street_name: 'Easy Samy Koil Street',
+        id: 1,
+        street_updated: '123'
+      },{
+        street_name: 'Easy Samy Koil Street',
+        id: 3,
+        street_updated: '123'
+      },{
+        street_name: 'Easy Samy Koil Street',
+        id: 2,
+        street_updated: '123'
+      }
+    ];
 
     return streets;
   }
@@ -21,26 +33,14 @@ export class ListStreetsFormService {
 
 
   //validations
-  async listStreetsFormValidation(val: ListStreetsModel):Promise<boolean> {
-    let action = val.action=="add";
+  async streetsFormValidation(val: StreetsModel): Promise<boolean> {
+    let action = val.action == "add";
     console.log(action);
- if(val.user_name==null || val.user_name==''){
+    if (val.street_name == null || val.street_name == '') {
       this.common.showToast('warning', 'Missing Fields', 'Enter User Login Name.')
-      document.getElementById('lname').focus();
+      document.getElementById('street_name').focus();
       return false;
- }else if(action && val.user_password==null || val.user_password==''){
-      this.common.showToast('warning', 'Missing Fields', 'Enter password.')
-      document.getElementById('pass').focus();
-      return false;
-    } else if(action && val.user_password.length<6){
-      this.common.showToast('warning', 'Need more characters', 'Password should have 6 characters.')
-      document.getElementById('pass').focus();
-      return false;
-    } else if(action && val.user_password!=val.user_cpassword){
-      this.common.showToast('warning', 'Mismatching fields', 'Confirm password mismatched.')
-      document.getElementById('cpass').focus();
-      return false;
-    } else {
+    }  else {
       return true;
     }
 

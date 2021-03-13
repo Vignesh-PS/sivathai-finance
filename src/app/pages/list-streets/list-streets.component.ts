@@ -1,30 +1,30 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { NbWindowService, NbWindowConfig } from "@nebular/theme";
-import ListStreetsModel from './list-streets-form/list-streets-model';
+import StreetsModel from './list-streets-form/list-streets-model';
 
-import { ListStreetsFormComponent } from "./list-streets-form/list-streets-form.component";
+import { StreetsFormComponent } from "./list-streets-form/list-streets-form.component";
 import { CommonService } from "../../services/common.service";
 import { WebService } from "../../services/web.service";
 import { environment } from "../../../environments/environment";
-import { ListStreetsFormService } from "./list-streets-form/list-streets-form.service";
+import { StreetsFormService } from "./list-streets-form/list-streets-form.service";
 
 @Component({
-  selector: "ngx-listStreets",
+  selector: "ngx-streets",
   templateUrl: "./list-streets.component.html",
   styleUrls: ["./list-streets.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
 
-export class ListStreetsComponent implements OnInit {
+export class StreetsComponent implements OnInit {
   //tableSettings:any;
-  tableSource: ListStreetsModel[];
+  tableSource: any[];
   base_url: string = environment.base_url;
   loading:boolean;
   constructor(
     private windowService: NbWindowService,
     private web: WebService,
     private common: CommonService,
-    private formService: ListStreetsFormService
+    private formService: StreetsFormService
   ) {}
 
   tableSettings: any = {
@@ -60,12 +60,12 @@ export class ListStreetsComponent implements OnInit {
 
       },
 
-      listStreets_status:{
+      streets_status:{
         title: "Status",
         type: 'html',
         width: '30px',
         valuePrepareFunction:(data:any)=>{
-          let active = data==1;
+          const active = data==1;
           return active?'<i class="far fa-check-circle check"></i>': '<i class="far fa-times-circle times"></i>';
         }
       }
@@ -82,9 +82,9 @@ export class ListStreetsComponent implements OnInit {
   }
 
   selectRow(event: any) {
-    let data = event.data
-    let w = this.windowService.open(ListStreetsFormComponent, {
-      title: `View ListStreets`,
+    const data = event.data
+    const w = this.windowService.open(StreetsFormComponent, {
+      title: `View Streets`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
       context:  {data: data, action: 'view'} ,
@@ -98,11 +98,11 @@ export class ListStreetsComponent implements OnInit {
   }
 
   createRow() {
-    let w = this.windowService.open(ListStreetsFormComponent, {
+    const w = this.windowService.open(StreetsFormComponent, {
       title: `Add Street`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
-      context:  {data: new ListStreetsModel(), action: 'add'} ,
+      context:  {data: new StreetsModel(), action: 'add'} ,
       windowClass: "formWindow",
     });
 
@@ -114,10 +114,10 @@ export class ListStreetsComponent implements OnInit {
 
   editRow(event: any) {
 
-    let id = event.data.web_id;
-    let data = event.data;
+    const id = event.data.web_id;
+    const data = event.data;
 
-    let w = this.windowService.open(ListStreetsFormComponent, {
+    const w = this.windowService.open(StreetsFormComponent, {
       title: `Edit Street`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
@@ -142,7 +142,7 @@ export class ListStreetsComponent implements OnInit {
 
   getPageData() {
     this.loading = true;
-    this.tableSource = this.formService.getListStreets();
+    this.tableSource = this.formService.getStreets();
     this.loading = false;
   }
 

@@ -1,9 +1,9 @@
 <nb-card>
   <nb-card-header>
-    Manage ListStreets Users
+    Manage Streets Users
   </nb-card-header>
 
-  <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching ListStreets details'">
+  <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Streets details'">
     <ng2-smart-table (userRowSelect)="selectRow($event)" (create)="createRow()" (edit)="editRow($event)" (delete)="deleteRow($event)" [settings]="tableSettings" [source]="tableSource">
     </ng2-smart-table>
   </nb-card-body>

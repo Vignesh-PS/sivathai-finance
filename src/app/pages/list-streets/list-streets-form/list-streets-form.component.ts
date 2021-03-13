@@ -4,11 +4,11 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonService } from "../../../services/common.service";
 import { WebService } from "../../../services/web.service";
 import { environment } from "../../../../environments/environment";
-import ListStreetsModel from "./list-streets-model";
-import { ListStreetsFormService } from "./list-streets-form.service";
+import StreetsModel from "./list-streets-model";
+import { StreetsFormService } from "./list-streets-form.service";
 
 @Component({
-  selector: "ngx-listStreets-form",
+  selector: "ngx-streets-form",
   templateUrl: "./list-streets-form.component.html",
   styleUrls: ["./list-streets-form.component.scss"],
   encapsulation: ViewEncapsulation.None,
@@ -27,8 +27,8 @@ import { ListStreetsFormService } from "./list-streets-form.service";
     )
   ]
 })
-export class ListStreetsFormComponent implements OnInit {
-  dialogData: ListStreetsModel;
+export class StreetsFormComponent implements OnInit {
+  dialogData: StreetsModel;
   dialogAction:string;
   base_url:string = environment.base_url;
   loading:boolean = false;
@@ -38,7 +38,7 @@ export class ListStreetsFormComponent implements OnInit {
   constructor(
     @Inject(NB_WINDOW_CONTEXT) context,
     public windowRef: NbWindowRef,
-    private formService: ListStreetsFormService,
+    private formService: StreetsFormService,
     private common: CommonService,
     private web: WebService
   ) {
@@ -61,22 +61,16 @@ export class ListStreetsFormComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
 
-    console.log(this.dialogData);
-    this.dialogData.listStreets_status = this.dialogData.listStreets_status == 1 ;
-    if(this.dialogAction=='add'){
-      this.dialogData.type='2';
-    }
-
   }
 
   async submitFormResults(){
     console.log(this.dialogData);
-    let confirm = await this.formService.listStreetsFormValidation(this.dialogData);
+    let confirm = await this.formService.streetsFormValidation(this.dialogData);
     console.log(confirm);
     if(confirm){
       this.loading = true;
-      this.dialogData.listStreets_status == this.dialogData.listStreets_status ? 1 : 0;
-       this.dialogData.type='2';
+
+
 
     }else{
       this.loading = false;

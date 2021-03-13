@@ -14,25 +14,6 @@
         </div>
       </nb-list-item>
 
-<!--
-      <nb-list-item *ngIf="dialogData.listStreets_email" class="row">
-        <div class="title col-4">
-          <h6> Email</h6>
-        </div>
-        <div class="content col-8">
-        <a class="text-muted" href="mailto:{{dialogData.listStreets_email}}">{{dialogData.listStreets_email}}</a>
-        </div>
-      </nb-list-item> -->
-
-
-      <nb-list-item  class="row">
-        <div class="title col-4">
-          <h6>User Status</h6>
-        </div>
-        <div class="content col-8">
-          <nb-toggle [(checked)]="dialogData.listStreets_status" disabled [(ngModel)]="dialogData.listStreets_status"></nb-toggle>
-        </div>
-      </nb-list-item>
 
     </nb-list>
 
@@ -47,43 +28,7 @@
           <h6>User Name</h6>
         </div>
         <div class="content col-8">
-          <input type="text" [(ngModel)]="dialogData.user_name" nbInput fullWidth status="basic" id="lname" placeholder="User name">
-        </div>
-      </nb-list-item>
-
-      <!-- <nb-list-item class="row">
-        <div class="title col-4">
-          <h6>Email</h6>
-        </div>
-        <div class="content col-8">
-          <input type="text" [disabled]="dialogAction=='edit'" [(ngModel)]="dialogData.user_email" nbInput fullWidth status="basic" id="email" placeholder="Last Name">
-        </div>
-      </nb-list-item> -->
-
-      <nb-list-item class="row">
-        <div class="title col-4">
-          <h6>Password</h6>
-        </div>
-        <div class="content col-8">
-          <input type="password" [(ngModel)]="dialogData.user_password"  nbInput fullWidth status="basic" id="pass" placeholder="Password">
-        </div>
-      </nb-list-item>
-
-      <nb-list-item class="row">
-        <div class="title col-4">
-          <h6>Confirm Password</h6>
-        </div>
-        <div class="content col-8">
-          <input type="password" [(ngModel)]="dialogData.user_cpassword"  nbInput fullWidth status="basic" id="cpass" placeholder="Confirm Password">
-        </div>
-      </nb-list-item>
-
-      <nb-list-item class="row">
-        <div class="title col-4">
-          <h6>ListStreets Active Status</h6>
-        </div>
-        <div class="content col-8">
-          <nb-toggle [(checked)]="dialogData.listStreets_status" [(ngModel)]="dialogData.listStreets_status"></nb-toggle>
+          <input type="text" [(ngModel)]="dialogData.street_name" nbInput fullWidth status="basic" id="street_name" placeholder="Street Name">
         </div>
       </nb-list-item>
 
