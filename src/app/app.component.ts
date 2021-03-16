@@ -1,5 +1,5 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {NbComponentStatus, NbGlobalPhysicalPosition, NbMenuItem, NbToastrService} from '@nebular/theme';
+import {NbComponentStatus, NbMenuItem} from '@nebular/theme';
 import {CommonService} from './services/common.service';
 import {ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
 
@@ -17,8 +17,13 @@ export class AppComponent implements OnInit,AfterViewChecked {
       link: '/home'
     },
     {
-      title: 'Admin Users Management',
-      link: '/admin',
+      title: 'Streets',
+      link: '/list-streets',
+      icon: 'grid-outline',
+    },
+    {
+      title: 'Families',
+      link: '/list-families',
       icon: 'person-outline',
     }
   ];

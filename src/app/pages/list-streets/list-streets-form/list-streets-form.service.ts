@@ -1,44 +1,27 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
-
-import ListStreetsModel from './list-streets-model';
+import StreetsModel from './list-streets-model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ListStreetsFormService {
-  private formData: any = {}
-  constructor(private common: CommonService) { }
+export class StreetsFormService {
 
-  setFormData(val: any) {
-    this.formData = val;
-    console.log(this.getFormData());
+  constructor(private common: CommonService) {
+
   }
 
-  getFormData() {
-    return this.formData;
-  }
 
-  async listStreetsFormValidation(val: ListStreetsModel):Promise<boolean> {
-    let action = val.action=="add";
+  //validations
+  streetsFormValidation(val: StreetsModel) {
+    const action = val.action == "add";
     console.log(action);
- if(val.user_name==null || val.user_name==''){
-      this.common.showToast('warning', 'Missing Fields', 'Enter User Login Name.')
-      document.getElementById('lname').focus();
+    if (val.street_name == null || val.street_name == '') {
+      this.common.showToast('warning', 'Missing Fields', 'Enter street name.');
+      document.getElementById('street_name').focus();
       return false;
- }else if(action && val.user_password==null || val.user_password==''){
-      this.common.showToast('warning', 'Missing Fields', 'Enter password.')
-      document.getElementById('pass').focus();
-      return false;
-    } else if(action && val.user_password.length<6){
-      this.common.showToast('warning', 'Need more characters', 'Password should have 6 characters.')
-      document.getElementById('pass').focus();
-      return false;
-    } else if(action && val.user_password!=val.user_cpassword){
-      this.common.showToast('warning', 'Mismatching fields', 'Confirm password mismatched.')
-      document.getElementById('cpass').focus();
-      return false;
-    } else {
+    }  else {
       return true;
     }
 

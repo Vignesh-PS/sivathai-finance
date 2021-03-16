@@ -1,5 +1,4 @@
 export const environment = {
-  production: true,  base_url: 'http://constructionmarket.info/zerosoftzst/divinkdev/'
-
-
+  production: true,
+  base_url: 'http://localhost:3000/'
 };

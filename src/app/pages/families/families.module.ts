@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NbCardModule, NbWindowModule, NbListModule, NbInputModule, NbToggleModule, NbButtonModule, NbSpinnerModule, NbSelectModule, NbDatepickerModule, NbRadioModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { StreetsFormService } from './list-streets-form/list-streets-form.service';
+import { FamiliesFormService } from './families-form/families-form.service';
 import { FormsModule } from '@angular/forms';
-import { StreetsFormComponent } from './list-streets-form/list-streets-form.component';
-import { StreetsRouting } from './list-streets-routing';
-import { StreetsComponent } from './list-streets.component';
+import { FamiliesFormComponent } from './families-form/families-form.component';
+import { FamiliesRouting } from './families-routing';
+import { FamiliesComponent } from './families.component';
 
 
 @NgModule({
-  declarations: [StreetsComponent, StreetsFormComponent],
+  declarations: [FamiliesComponent, FamiliesFormComponent],
   imports: [
     CommonModule,
-    StreetsRouting,
+    FamiliesRouting,
     NbCardModule,
     NbListModule,
     NbInputModule,
@@ -28,12 +28,12 @@ import { StreetsComponent } from './list-streets.component';
      NbRadioModule
     ],
   entryComponents: [
-    StreetsComponent,
-    StreetsFormComponent
+    FamiliesComponent,
+    FamiliesFormComponent
   ],
   providers: [
-    StreetsFormService,
+    FamiliesFormService,
     DatePipe
   ]
 })
-export class StreetsModule { }
+export class FamiliesModule { }

@@ -1,13 +1,13 @@
 {
   "env": {
       "browser": true,
-      "node": true,
-      "es6": true,
-      "es2017": true
+      "node": false,
+      "es6": false,
+      "es2017": false
   },
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": ["*.php"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",

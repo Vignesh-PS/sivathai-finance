@@ -4,13 +4,13 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonService } from "../../../services/common.service";
 import { WebService } from "../../../services/web.service";
 import { environment } from "../../../../environments/environment";
-// import StreetsModel from "./list-streets-model";
-import { StreetsFormService } from "./list-streets-form.service";
+// import FamiliesModel from "./list-families-model";
+import { FamiliesFormService } from "./families-form.service";
 
 @Component({
-  selector: "ngx-streets-form",
-  templateUrl: "./list-streets-form.component.html",
-  styleUrls: ["./list-streets-form.component.scss"],
+  selector: "ngx-families-form",
+  templateUrl: "./families-form.component.html",
+  styleUrls: ["./families-form.component.scss"],
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger(
@@ -27,7 +27,7 @@ import { StreetsFormService } from "./list-streets-form.service";
     )
   ]
 })
-export class StreetsFormComponent implements OnInit {
+export class FamiliesFormComponent implements OnInit {
   dialogData: any;
   dialogAction: string;
   base_url: string = environment.base_url;
@@ -38,7 +38,7 @@ export class StreetsFormComponent implements OnInit {
   constructor(
     @Inject(NB_WINDOW_CONTEXT) context,
     public windowRef: NbWindowRef,
-    private formService: StreetsFormService,
+    private formService: FamiliesFormService,
     private common: CommonService,
     private web: WebService
   ) {
@@ -59,14 +59,14 @@ export class StreetsFormComponent implements OnInit {
 
   submitFormResults() {
     console.log(this.dialogData);
-    const confirm = this.formService.streetsFormValidation(this.dialogData);
+    const confirm = this.formService.familiesFormValidation(this.dialogData);
     console.log(confirm);
     if (confirm) {
 
       const action = this.dialogAction;
       if (action == 'add') {
         this.loading = true;
-        this.web.postData('streetAdd', this.dialogData).then(res => {
+        this.web.postData('familyAdd', this.dialogData).then(res => {
           this.loading = false;
           if (res.status == '200') {
             this.closeWindow();
@@ -81,7 +81,7 @@ export class StreetsFormComponent implements OnInit {
           });
         } else {
         this.loading = true;
-        this.web.postData('updateStreet/' + this.dialogData.id, this.dialogData).then(res => {
+        this.web.postData('updateFamily/' + this.dialogData.id, this.dialogData).then(res => {
           this.loading = false;
           if (res.status == '200') {
             this.closeWindow();

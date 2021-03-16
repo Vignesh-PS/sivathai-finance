@@ -7,7 +7,7 @@
 
       <nb-list-item *ngIf="dialogData.user_name" class="row">
         <div class="title col-4">
-          <h6>Street Name</h6>
+          <h6>Family Name</h6>
         </div>
         <div class="content col-8">
         {{dialogData.user_name}}
@@ -23,10 +23,10 @@
 
       <nb-list-item class="row">
         <div class="title col-4">
-          <h6>Street Name</h6>
+          <h6>Family Name</h6>
         </div>
         <div class="content col-8">
-          <input type="text" [(ngModel)]="dialogData.street_name" nbInput fullWidth status="basic" id="street_name" placeholder="Street Name">
+          <input type="text" [(ngModel)]="dialogData.family_name" nbInput fullWidth status="basic" id="family_name" placeholder="Family Name">
         </div>
       </nb-list-item>
 

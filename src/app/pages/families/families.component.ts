@@ -1,21 +1,21 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { NbWindowService, NbWindowConfig } from "@nebular/theme";
-import StreetsModel from './list-streets-form/list-streets-model';
+import FamiliesModel from './families-form/families-model';
 
-import { StreetsFormComponent } from "./list-streets-form/list-streets-form.component";
+import { FamiliesFormComponent } from "./families-form/families-form.component";
 import { CommonService } from "../../services/common.service";
 import { WebService } from "../../services/web.service";
 import { environment } from "../../../environments/environment";
-import { StreetsFormService } from "./list-streets-form/list-streets-form.service";
+import { FamiliesFormService } from "./families-form/families-form.service";
 
 @Component({
-  selector: "ngx-streets",
-  templateUrl: "./list-streets.component.html",
-  styleUrls: ["./list-streets.component.scss"],
+  selector: "ngx-families",
+  templateUrl: "./families.component.html",
+  styleUrls: ["./families.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
 
-export class StreetsComponent implements OnInit {
+export class FamiliesComponent implements OnInit {
   //tableSettings:any;
   tableSource: any[];
   base_url: string = environment.base_url;
@@ -24,10 +24,10 @@ export class StreetsComponent implements OnInit {
     private windowService: NbWindowService,
     private web: WebService,
     private common: CommonService,
-    private formService: StreetsFormService
+    private formService: FamiliesFormService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getPageData();
   }
 
@@ -58,12 +58,16 @@ export class StreetsComponent implements OnInit {
       perPage: 15
     },
     columns: {
-      street_name: {
+      family_head_name: {
+        title: "Family Head",
+        type: "string"
+      },
+      family_street_name: {
         title: "Street Name",
         type: "string"
       },
-      street_families: {
-        title: "No of families",
+      family_no_of_members: {
+        title: "No of members",
         type: "string"
       }
     }
@@ -75,8 +79,8 @@ export class StreetsComponent implements OnInit {
 
   selectRow(event: any) :void{
     const data = event.data
-    const w = this.windowService.open(StreetsFormComponent, {
-      title: `View Streets`,
+    const w = this.windowService.open(FamiliesFormComponent, {
+      title: `View Families`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
       context: { data: data, action: 'view' },
@@ -90,11 +94,11 @@ export class StreetsComponent implements OnInit {
   }
 
   createRow() :void {
-    const w = this.windowService.open(StreetsFormComponent, {
-      title: `Add Street`,
+    const w = this.windowService.open(FamiliesFormComponent, {
+      title: `Add Family`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
-      context: { data: new StreetsModel(), action: 'add' },
+      context: { data: new FamiliesModel(), action: 'add' },
       windowClass: "formWindow",
     });
 
@@ -108,8 +112,8 @@ export class StreetsComponent implements OnInit {
 
     const data = event.data;
 
-    const w = this.windowService.open(StreetsFormComponent, {
-      title: `Edit Street`,
+    const w = this.windowService.open(FamiliesFormComponent, {
+      title: `Edit Family`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
       context: { data: data, action: 'edit' },
@@ -125,7 +129,7 @@ export class StreetsComponent implements OnInit {
   deleteRow(event: any) :void{
     console.log(event);
     if (window.confirm('Are you sure you want to delete..?')) {
-      this.web.postData('deleteStreet/'+event.data.id, {})
+      this.web.postData('deleteFamily/'+event.data.id, {})
         .then(res=>{
           if(res.status==200){
             this.getPageData();
@@ -136,7 +140,7 @@ export class StreetsComponent implements OnInit {
         })
         .catch(err=>{
           this.common.showToast('danger', 'Error', 'Connection Error');
-        });
+        })
 
     }
 
@@ -144,7 +148,7 @@ export class StreetsComponent implements OnInit {
 
   getPageData() :void{
     this.loading = true;
-    this.web.getData('getStreets').then(res=>{
+    this.web.getData('getFamilies').then(res=>{
       this.loading = false;
       if(res.status=='200'){
         this.tableSource = res.data;

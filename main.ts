@@ -1,6 +1,7 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import * as server from './server';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -17,6 +18,8 @@ function createWindow(): BrowserWindow {
     y: 0,
     width: size.width,
     height: size.height,
+    frame: false,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
@@ -25,8 +28,9 @@ function createWindow(): BrowserWindow {
     },
   });
 
-  if (serve) {
+  console.log(server);
 
+  if (serve) {
     win.webContents.openDevTools();
 
     require('electron-reload')(__dirname, {
@@ -41,7 +45,6 @@ function createWindow(): BrowserWindow {
       slashes: true
     }));
   }
-
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store window
