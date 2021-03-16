@@ -37,7 +37,28 @@ Family.create = (newFamily, result) => {
 
 Family.findById = (familyId, result) => {
   try {
-    result(null, { status: "400", error: "All Familys" });
+
+    knex.select(knex.raw('sp.people_name AS family_head_name, sp.people_yob as family_head_yob, sp.people_gender as family_head_gender, sp.people_in_native as family_head_in_native, sp.people_contact as family_head_contact, ss.*,sf.*, count(sfc.id) as family_no_of_members')).from(knex.raw('sivathai_families sf'))
+        .leftJoin(knex.raw('sivathai_streets ss'), 'ss.id', 'sf.family_street_id')
+        .leftJoin(knex.raw('sivathai_people sp'), 'sp.id', 'sf.family_head')
+        .leftJoin(knex.raw('sivathai_people sfc'), 'sfc.people_family_id', 'sf.id')
+        .where('sf.id', familyId)
+        .then(async res=>{
+
+          let allStreets = [];
+         await knex.select('*').from('sivathai_streets').orderBy('id', 'desc').then(resStreets=>{
+            allStreets = resStreets;
+          })
+          .catch(err=>{
+            result(null, { status: "400", error: "Family not found" });
+          })
+          result(null, { status: "200", data: res[0], streets:allStreets });
+
+        })
+        .catch(err=>{
+          result(null, { status: "400", error: "Family not found" });
+        });
+
   } catch (e) {
     result(null, { status: "400", error: "Data not found", err: e });
   }
@@ -45,7 +66,7 @@ Family.findById = (familyId, result) => {
 
 Family.getAll = (result) => {
   try {
-    knex.select(knex.raw('sp.people_name AS family_head_name, ss.street_name AS family_street_name,sf.*, count(sfc.id) as family_no_of_members')).from(knex.raw('sivathai_families sf')).leftJoin(knex.raw('sivathai_streets ss'), 'ss.id', 'sf.family_street_id')
+    knex.select(knex.raw('sp.people_name AS family_head_name, sp.people_yob as family_head_yob, sp.people_gender as family_head_gender, sp.people_in_native as family_head_in_native, ss.street_name AS family_street_name,sf.*, count(sfc.id) as family_no_of_members')).from(knex.raw('sivathai_families sf')).leftJoin(knex.raw('sivathai_streets ss'), 'ss.id', 'sf.family_street_id')
        .leftJoin(knex.raw('sivathai_people sp'), 'sp.id', 'sf.family_head')
        .leftJoin(knex.raw('sivathai_people sfc'), 'sfc.people_family_id', 'sf.id')
        .groupBy('sf.id')
@@ -53,7 +74,6 @@ Family.getAll = (result) => {
       .then((res) => {
         result(null, {
           status: "200",
-          error: "Data not found",
           data: res,
         });
       })

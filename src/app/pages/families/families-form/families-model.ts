@@ -9,6 +9,11 @@ export default class FamiliesModel {
   public family_comments: string;
   public family_updated: any;
   public family_no_of_members : number;
+  public family_head_yob : number;
+  public family_head_gender : string;
+  public family_head_in_native : string;
+  public family_head_contact : string;
+
 
   constructor(families:any = {}){
     this.id = families.id || '';
@@ -21,6 +26,10 @@ export default class FamiliesModel {
     this.family_comments = families.family_comments || '';
     this.family_updated = families.family_updated || '';
     this.family_no_of_members = families.family_no_of_members || '';
+    this.family_head_yob = families.family_head_yob || '';
+    this.family_head_gender = families.family_head_gender || '';
+    this.family_head_in_native = families.family_head_in_native || '';
+    this.family_head_contact = families.family_head_contact || '';
   }
 
 }

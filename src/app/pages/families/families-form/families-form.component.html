@@ -1,16 +1,53 @@
 <nb-card accent="info">
-  <nb-card-header> Profile</nb-card-header>
+  <nb-card-header> Family Details</nb-card-header>
   <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
     <nb-list *ngIf="dialogAction=='view'" class="dialog-list">
 
+      <h3 class="heading_family">Family Head Info </h3>
 
-      <nb-list-item *ngIf="dialogData.user_name" class="row">
+      <nb-list-item *ngIf="dialogData.family_head_name" class="row">
         <div class="title col-4">
-          <h6>Family Name</h6>
+          <h6>Name(Mr./Mrs.)</h6>
         </div>
         <div class="content col-8">
-        {{dialogData.user_name}}
+        {{dialogData.family_head_name}}
+        </div>
+      </nb-list-item>
+
+      <nb-list-item *ngIf="dialogData.family_head_yob" class="row">
+        <div class="title col-4">
+          <h6>Year of Birth</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.family_head_yob}}
+        </div>
+      </nb-list-item>
+
+      <nb-list-item *ngIf="dialogData.family_head_gender" class="row">
+        <div class="title col-4">
+          <h6>Gender</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.family_head_gender=='female'?'Female':dialogData.family_head_gender=='other'?'Other':'Male'}}
+        </div>
+      </nb-list-item>
+
+      <nb-list-item *ngIf="dialogData.family_head_in_native" class="row">
+        <div class="title col-4">
+          <h6>In Native</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.family_head_in_native=='no'?'No':'Yes'}}
+        </div>
+      </nb-list-item>
+
+      <nb-list-item *ngIf="dialogData.family_head_contact" class="row">
+        <div class="title col-4">
+          <h6>Contact Number</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.family_head_contact}}
         </div>
       </nb-list-item>
 
@@ -21,14 +58,92 @@
 
     <nb-list class="dialog-list" *ngIf="dialogAction=='edit' || dialogAction=='add'">
 
+      <h3 class="heading_family">Family Head Info </h3>
+
       <nb-list-item class="row">
         <div class="title col-4">
-          <h6>Family Name</h6>
+          <h6>Name(Mr./Mrs.)</h6>
         </div>
         <div class="content col-8">
-          <input type="text" [(ngModel)]="dialogData.family_name" nbInput fullWidth status="basic" id="family_name" placeholder="Family Name">
+          <input type="text" [(ngModel)]="dialogData.family_head_name" nbInput fullWidth status="basic" id="family_head_name" placeholder="Name(Mr./Mrs.)">
         </div>
       </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Year of Birth</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.family_head_yob" nbInput fullWidth status="basic" id="family_head_yob" placeholder="Year of Birth">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Gender</h6>
+        </div>
+        <div class="content col-8">
+          <nb-select placeholder="Gender" [(selected)]="dialogData.family_head_gender">
+            <nb-option value="male">Male</nb-option>
+            <nb-option value="female">Female</nb-option>
+            <nb-option value="other">Other</nb-option>
+          </nb-select>
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>In Native</h6>
+        </div>
+        <div class="content col-8">
+          <nb-select placeholder="In Native" [(selected)]="dialogData.family_head_in_native">
+            <nb-option value="yes">Yes</nb-option>
+            <nb-option value="no">No</nb-option>
+          </nb-select>
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Contact No</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.family_head_contact" nbInput fullWidth status="basic" id="family_head_contact" placeholder="Contact No">
+        </div>
+      </nb-list-item>
+
+      <h3 class="heading_family">House Info </h3>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Door No</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.family_door_no" nbInput fullWidth status="basic" id="family_door_no" placeholder="Door No">
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item class="row" *ngIf="listStreets.length>0">
+        <div class="title col-4">
+          <h6>Street</h6>
+        </div>
+        <div class="content col-8">
+          <nb-select placeholder="Street Name" [(selected)]="dialogData.family_street_id">
+            <nb-option *ngFor="let s of listStreets" [value]="s.id">{{s.street_name}}</nb-option>
+          </nb-select>
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Comments</h6>
+        </div>
+        <div class="content col-8">
+          <textarea type="text" [(ngModel)]="dialogData.family_comments" nbInput fullWidth rows="4" status="basic" id="family_comments" placeholder="Comments"></textarea>
+        </div>
+      </nb-list-item>
+
 
     </nb-list>
 

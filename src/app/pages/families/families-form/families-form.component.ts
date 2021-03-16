@@ -1,38 +1,25 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, Inject, ViewEncapsulation, } from "@angular/core";
 import { NbWindowRef, NB_WINDOW_CONTEXT } from "@nebular/theme";
-import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonService } from "../../../services/common.service";
 import { WebService } from "../../../services/web.service";
 import { environment } from "../../../../environments/environment";
-// import FamiliesModel from "./list-families-model";
 import { FamiliesFormService } from "./families-form.service";
+import FamiliesModel from "./families-model";
 
 @Component({
   selector: "ngx-families-form",
   templateUrl: "./families-form.component.html",
   styleUrls: ["./families-form.component.scss"],
-  encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger(
-      'enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateX(100%)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateX(0)', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateX(0)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateX(100%)', opacity: 1 }))
-      ])
-    ]
-    )
-  ]
+  encapsulation: ViewEncapsulation.None
 })
 export class FamiliesFormComponent implements OnInit {
-  dialogData: any;
+  familyId:number;
+  dialogData: FamiliesModel = new FamiliesModel();
   dialogAction: string;
   base_url: string = environment.base_url;
   loading: boolean = false;
   fetchingStatus: boolean = false;
+  listStreets:any = [];
 
 
   constructor(
@@ -42,7 +29,8 @@ export class FamiliesFormComponent implements OnInit {
     private common: CommonService,
     private web: WebService
   ) {
-    this.dialogData = context.data;
+    //this.dialogData = context.data;
+    this.familyId = context.data.id;
     this.dialogAction = context.action;
     this.dialogData.action = context.action;
   }
@@ -52,9 +40,25 @@ export class FamiliesFormComponent implements OnInit {
     this.windowRef.close();
   }
 
+  fillPageInfo(){
+    this.web.getData('getFamily/'+this.familyId).then(res=>{
+      if(res.status=='200'){
+        this.dialogData = res.data;
+        this.listStreets = res.streets;
+      }else{
+        this.common.showToast('warning', 'Warning', res.error);
+        this.closeWindow();
+      }
+    })
+    .catch(err=>{
+      this.common.showToast('danger', 'Error', 'Connection Error');
+    })
+  }
+
 
   async ngOnInit() {
 
+    this.fillPageInfo();
   }
 
   submitFormResults() {

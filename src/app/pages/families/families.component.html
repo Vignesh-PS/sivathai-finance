@@ -4,7 +4,8 @@
   </nb-card-header>
 
   <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Families details'">
-    <ng2-smart-table (userRowSelect)="false?selectRow($event):false" (create)="createRow()" (edit)="editRow($event)" (delete)="deleteRow($event)" [settings]="tableSettings" [source]="tableSource">
+    <ng2-smart-table (userRowSelect)="selectRow($event)" (create)="createRow()" (edit)="editRow($event)" (delete)="deleteRow($event)" [settings]="tableSettings" [source]="tableSource">
     </ng2-smart-table>
   </nb-card-body>
+
 </nb-card>
