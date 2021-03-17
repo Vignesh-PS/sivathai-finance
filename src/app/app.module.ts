@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { CoreModule } from './core/core.module';
+//import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -28,9 +28,10 @@ import { WebService } from './services/web.service';
   declarations: [AppComponent, SidebarComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    CoreModule,
+    //CoreModule,
     SharedModule,
     AppRoutingModule,
     NbCardModule,
@@ -40,7 +41,6 @@ import { WebService } from './services/web.service';
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
-    BrowserAnimationsModule,
     //NbThemeModule.forRoot({ name: 'default' }),
     ThemeModule.forRoot(),
   ],

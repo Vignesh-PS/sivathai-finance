@@ -47,7 +47,7 @@ const COMPONENTS = [
   exports: [CommonModule, ...COMPONENTS],
   declarations: [...COMPONENTS],
 })
-
+// @ts-ignore
 export class ThemeModule {
   static forRoot(): ModuleWithProviders<ThemeModule> {
     return {
