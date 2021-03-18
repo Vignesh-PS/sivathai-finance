@@ -5,7 +5,7 @@ export default class FamiliesModel {
   public family_street_name: string;
   public family_head: number;
   public family_door_no: string;
-  public family_street_id: number;
+  public family_street_id: number | string;
   public family_comments: string;
   public family_updated: any;
   public family_no_of_members : number;
@@ -13,6 +13,8 @@ export default class FamiliesModel {
   public family_head_gender : string;
   public family_head_in_native : string;
   public family_head_contact : string;
+  public family_unique_id : string;
+  public family_tax_count : string;
 
 
   constructor(families:any = {}){
@@ -30,6 +32,8 @@ export default class FamiliesModel {
     this.family_head_gender = families.family_head_gender || '';
     this.family_head_in_native = families.family_head_in_native || '';
     this.family_head_contact = families.family_head_contact || '';
+    this.family_unique_id = families.family_unique_id || '';
+    this.family_tax_count = families.family_tax_count || '';
   }
 
 }

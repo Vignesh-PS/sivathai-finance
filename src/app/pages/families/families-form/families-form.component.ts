@@ -41,10 +41,14 @@ export class FamiliesFormComponent implements OnInit {
   }
 
   fillPageInfo(){
+    this.getAllStreets();
+
+    if(!this.familyId){
+      return;
+    }
     this.web.getData('getFamily/'+this.familyId).then(res=>{
       if(res.status=='200'){
         this.dialogData = res.data;
-        this.listStreets = res.streets;
       }else{
         this.common.showToast('warning', 'Warning', res.error);
         this.closeWindow();
@@ -52,7 +56,21 @@ export class FamiliesFormComponent implements OnInit {
     })
     .catch(err=>{
       this.common.showToast('danger', 'Error', 'Connection Error');
+    });
+
+  }
+
+  getAllStreets(){
+    this.web.getData('getStreets').then(res=>{
+      if(res.status=='200'){
+        this.listStreets = res.data;
+      }else{
+        this.common.showToast('warning', 'No data', res.error);
+      }
     })
+      .catch(err=>{
+        this.common.showToast('danger', 'Error', 'Connection Error');
+      })
   }
 
 

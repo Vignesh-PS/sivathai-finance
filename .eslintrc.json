@@ -2,7 +2,7 @@
   "env": {
       "browser": true,
       "node": false,
-      "es6": false,
+      "es6": true,
       "es2017": false
   },
   "overrides": [
@@ -16,7 +16,7 @@
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "ecmaVersion": 10,
+        "ecmaVersion": 2017,
         "project": [
           "./tsconfig.serve.json",
           "./src/tsconfig.app.json",

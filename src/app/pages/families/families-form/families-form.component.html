@@ -83,7 +83,7 @@
           <h6>Gender</h6>
         </div>
         <div class="content col-8">
-          <nb-select placeholder="Gender" [(selected)]="dialogData.family_head_gender">
+          <nb-select id="family_head_gender" placeholder="Gender" [(selected)]="dialogData.family_head_gender">
             <nb-option value="male">Male</nb-option>
             <nb-option value="female">Female</nb-option>
             <nb-option value="other">Other</nb-option>
@@ -123,13 +123,31 @@
         </div>
       </nb-list-item>
 
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Family No</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.family_unique_id" nbInput fullWidth status="basic" id="family_unique_id" placeholder="Family No">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Tax Count</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.family_tax_count" nbInput fullWidth status="basic" id="family_tax_count" placeholder="Tax Count">
+        </div>
+      </nb-list-item>
+
 
       <nb-list-item class="row" *ngIf="listStreets.length>0">
         <div class="title col-4">
           <h6>Street</h6>
         </div>
         <div class="content col-8">
-          <nb-select placeholder="Street Name" [(selected)]="dialogData.family_street_id">
+          <nb-select id="family_street_id" placeholder="Street Name" [(selected)]="dialogData.family_street_id">
             <nb-option *ngFor="let s of listStreets" [value]="s.id">{{s.street_name}}</nb-option>
           </nb-select>
         </div>

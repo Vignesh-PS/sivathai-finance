@@ -58,6 +58,10 @@ export class FamiliesComponent implements OnInit {
       perPage: 15
     },
     columns: {
+      family_unique_id: {
+        title: "Family No",
+        type: "string"
+      },
       family_head_name: {
         title: "Family Head",
         type: "string"
@@ -68,6 +72,10 @@ export class FamiliesComponent implements OnInit {
       },
       family_no_of_members: {
         title: "No of members",
+        type: "string"
+      },
+      family_tax_count: {
+        title: "No of Tax",
         type: "string"
       }
     }

@@ -11,7 +11,17 @@ exports.create = (req, res) => {
 
   // Create a Family
   const family = new Family({
-      family_name: req.body.family_name,
+      family_comments: req.body.family_comments,
+      family_door_no: req.body.family_door_no,
+      family_head: req.body.family_head,
+      family_head_contact: req.body.family_head_contact,
+      family_head_gender: req.body.family_head_gender,
+      family_head_in_native: req.body.family_head_in_native,
+      family_head_name: req.body.family_head_name,
+      family_head_yob: req.body.family_head_yob,
+      family_street_id: req.body.family_street_id,
+      family_unique_id: req.body.family_unique_id,
+      family_tax_count: req.body.family_tax_count,
       family_updated: Date.now(),
   });
 
