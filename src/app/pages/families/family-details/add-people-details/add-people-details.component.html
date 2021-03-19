@@ -1,0 +1,167 @@
+
+<nb-card accent="info">
+  <nb-card-header> People Info</nb-card-header>
+  <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
+
+    <nb-list *ngIf="dialogAction=='view'" class="dialog-list">
+
+
+      <nb-list-item *ngIf="dialogData.people_name" class="row">
+        <div class="title col-4">
+          <h6>Name</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_name}}
+        </div>
+      </nb-list-item>
+
+      <nb-list-item *ngIf="dialogData.people_yob" class="row">
+        <div class="title col-4">
+          <h6>Year of birth</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_yob}}
+        </div>
+      </nb-list-item>
+
+      <nb-list-item *ngIf="dialogData.people_gender" class="row">
+        <div class="title col-4">
+          <h6>Gender</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_gender=='female'?'Female': dialogData.people_gender=='other'?'Other':'male'}}
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item *ngIf="dialogData.people_yob" class="row">
+        <div class="title col-4">
+          <h6>In Native</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_in_native=='no'?'No':'Yes'}}
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item *ngIf="dialogData.people_other_address" class="row">
+        <div class="title col-4">
+          <h6>Other Address</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_other_address}}
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item *ngIf="dialogData.people_contact" class="row">
+        <div class="title col-4">
+          <h6>Contact No</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_contact}}
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item *ngIf="dialogData.people_updated" class="row">
+        <div class="title col-4">
+          <h6>Last Modified</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.people_updated}}
+        </div>
+      </nb-list-item>
+
+
+    </nb-list>
+
+
+
+    <nb-list class="dialog-list" *ngIf="dialogAction=='edit' || dialogAction=='add'">
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Name</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.people_name" nbInput fullWidth status="basic" id="people_name" placeholder="People Name">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Year of Birth</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.people_yob" nbInput fullWidth status="basic" id="people_yob" placeholder="Year of Birth">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Gender</h6>
+        </div>
+        <div class="content col-8">
+          <nb-select id="people_gender" placeholder="Gender" [(selected)]="dialogData.people_gender">
+            <nb-option value="male">Male</nb-option>
+            <nb-option value="female">Female</nb-option>
+            <nb-option value="other">Other</nb-option>
+          </nb-select>
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>In Native</h6>
+        </div>
+        <div class="content col-8">
+          <nb-select id="people_in_native" placeholder="In Native" [(selected)]="dialogData.people_in_native">
+            <nb-option value="yes">Yes</nb-option>
+            <nb-option value="no">No</nb-option>
+          </nb-select>
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item class="row" *ngIf="dialogData.people_in_native=='no'">
+        <div class="title col-4">
+          <h6>Other Address</h6>
+        </div>
+        <div class="content col-8">
+          <textarea nbInput fullWidth id="people_other_address" [(ngModel)]="dialogData.people_other_address" rows="3"></textarea>
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Contact No</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.people_contact" nbInput fullWidth status="basic" id="people_contact" placeholder="Contact No">
+        </div>
+      </nb-list-item>
+
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Comments</h6>
+        </div>
+        <div class="content col-8">
+          <textarea nbInput fullWidth id="people_comments" [(ngModel)]="dialogData.people_comments" rows="3"></textarea>
+        </div>
+      </nb-list-item>
+
+    </nb-list>
+
+  </nb-card-body>
+
+  <nb-card-footer *ngIf="dialogAction!='view'">
+    <div class="mt-3">
+      <button nbButton outline (click)="closeWindow()" status="danger" [disabled]="loading">Cancel</button>
+      <button class="ml-3" nbButton outline (click)="submitFormResults()" status="primary" [disabled]="loading">{{dialogAction=='edit'?'Update': 'Add'}}</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

@@ -1,0 +1,98 @@
+<ul class="list-group">
+  <h2 class="text-primary mt-1">House Details - 4 Members</h2>
+  <div class="align-items-center mb-3">
+    <div class="list-item-title">
+    <label for="family_door_no" class="font-weight-bold">Door No</label>
+  </div>
+  <div class="list-item-content">
+    48/31A
+  </div>
+</div>
+
+<div class="align-items-center mb-3">
+  <div class="list-item-title">
+    <label for="family_street_id" class="font-weight-bold">Street Name</label>
+  </div>
+  <div class="list-item-content">
+    East Samy Koil Street
+  </div>
+</div>
+
+<div class="align-items-center mb-3">
+  <div class="list-item-title">
+    <label for="family_comments" class="font-weight-bold">Comments.</label>
+  </div>
+  <div class="list-item-content">
+    Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book.
+  </div>
+</div>
+
+<div class="input-group mt-3 d-none">
+  <button class="btn btn-outline-info" type="submit">Save</button>
+</div>
+</ul>
+
+<ul class="list-group">
+<div class="list-header d-flex mb-3 align-items-center">
+  <h2 class="text-primary mt-4 nb-2 float-left">Family Members</h2>
+  <button class="btn-btn-outline-info ml-4 mt-4 people-add">
+    <i class="fa fa-plus-circle"></i>
+  </button>
+</div>
+
+<div class="row people">
+  <div class="col-md-6 col-lg-4 mb-2">
+      <div class="card p-3">
+        <span class="people-head">H</span>
+        <img class="rounded-circle m-auto" src="assets/img/no-avatar-m.png">
+          <h3 class="text-center mt-2">Ben Johnson</h3>
+          <div class="profile-options">
+            <i class="far fa-trash-alt" (click)="openPeopleInfo('view', people[0])"></i>
+            <i class="far fa-edit" (click)="openPeopleInfo('edit', people[0])"></i>
+          </div>
+          <p class="mb-1">Age: 23</p>
+          <span>
+            <i class="fa fa-phone"></i>
+            <a href="te:123456789">123456789</a>
+          </span>
+          <span>
+            <i class="fa fa-plane pr-2"></i>
+            Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card p-3">
+          <img class="rounded-circle m-auto" src="assets/img/no-avatar-f.png">
+          <h3 class="text-center mt-2">Emily Clark</h3>
+          <div class="profile-options">
+            <i class="far fa-trash-alt" (click)="openPeopleInfo('view', people[1])"></i>
+            <i class="far fa-edit" (click)="openPeopleInfo('edit', people[1])"></i>
+          </div>
+          <p class="mb-1">Age: 22</p>
+          <span>
+            <i class="fa fa-phone"></i>
+            <a href="te:123456789">123456789</a>
+          </span>
+          <span>
+            <i class="fa fa-home pr-2"></i>
+            Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
+          </span>
+      </div>
+  </div>
+</div>
+</ul>
+
+
+<nb-card>
+  <nb-card-header>
+    Manage Families
+  </nb-card-header>
+
+  <nb-card-body *ngIf="false" [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Families details'">
+    <ng2-smart-table (userRowSelect)="selectRow($event)" (create)="createRow()" (edit)="editRow($event)" (delete)="deleteRow($event)" [settings]="tableSettings" [source]="tableSource">
+    </ng2-smart-table>
+  </nb-card-body>
+
+</nb-card>
+

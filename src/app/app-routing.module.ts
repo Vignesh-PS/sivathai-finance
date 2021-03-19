@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: ()=> import('./pages/families/families.module').then(m => m.FamiliesModule)
   },
   {
+    path:'list-families/:familyId',
+    loadChildren: ()=> import('./pages/families/family-details/family-details.module').then(m => m.FamilyDetailsModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

@@ -38,7 +38,7 @@ user_name:any={};
 
 
   ngOnInit() {
-    this.user_name = localStorage.getItem('divinkAdminName');
+    this.user_name = "Sivathai Admin";
     // console.log( this.dialogData.created_by);
     this.menuService.onItemClick().subscribe(res=>{
       if(res.item.title=='Log out'){

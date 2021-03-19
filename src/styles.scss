@@ -7,4 +7,12 @@ html, body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@import './../node_modules/@nebular/theme/styles/prebuilt/default.css'
+@import './../node_modules/@nebular/theme/styles/prebuilt/default.css';
+
+i.far, i.fa{
+  transition: all 0.2s;
+  &:active{
+    transform: scale(1.15);
+  }
+}
+// i.far:active, i.fa:active

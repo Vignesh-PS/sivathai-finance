@@ -1,8 +1,4 @@
-// .formWindow{
-//  // min-width: 70%;
-// }
 nb-list-item{
-  //display: unset !important;
   .title {
     h6{
       font-weight: 600;
@@ -26,15 +22,4 @@ nb-card-body{
 }
 .dialog-list{
   overflow: unset !important;
-}
-.max-height-100{
-  max-height: 100px;
-}
-.color-unset{
-  color: unset !important;
-}
-
-
-.nb-theme-default nb-option-list{
-  min-width: 300px !important;
 }

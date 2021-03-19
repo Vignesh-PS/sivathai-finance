@@ -1,0 +1,42 @@
+.rounded-circle{
+  width: 150px;
+  height: 150px;
+}
+
+.people-head{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  top: 0px;
+  left: 0px;
+  border-radius: 0px 0px 25px 0px;
+  background: #d40000;
+}
+
+.people-add{
+  height: 35px;
+  width: 30px;
+}
+
+.profile-options{
+  position: absolute;
+  right: 10px;
+  width: 25%;
+  display: flex;
+  font-size: 1.3rem;
+  justify-content: space-around;
+}
+
+.profile-options .fa{
+  cursor: pointer;
+  animation: ease 0.2s;
+}
+
+.profile-options .fa:hover{
+  transform: scale(1.2);
+}
