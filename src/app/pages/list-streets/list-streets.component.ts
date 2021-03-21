@@ -125,8 +125,10 @@ export class StreetsComponent implements OnInit {
   deleteRow(event: any) :void{
     console.log(event);
     if (window.confirm('Are you sure you want to delete..?')) {
+      this.loading = true;
       this.web.postData('deleteStreet/'+event.data.id, {})
-        .then(res=>{
+      .then(res=>{
+          this.loading = false;
           if(res.status==200){
             this.getPageData();
             this.common.showToast('success', 'Success', res.error);
@@ -135,6 +137,7 @@ export class StreetsComponent implements OnInit {
           }
         })
         .catch(err=>{
+          this.loading = false;
           this.common.showToast('danger', 'Error', 'Connection Error');
         });
 

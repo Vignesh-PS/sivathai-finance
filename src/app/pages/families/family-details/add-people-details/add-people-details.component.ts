@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
 import { environment } from '../../../../../environments/environment';
 import { CommonService } from '../../../../services/common.service';
@@ -18,13 +19,14 @@ export class AddPeopleDetailsComponent implements OnInit {
   loading: boolean = false;
 
 
-  constructor(private common: CommonService, private web: WebService, private dialogRef: NbDialogRef<any>) { }
+  constructor(private common: CommonService, private web: WebService, private route: ActivatedRoute, private dialogRef: NbDialogRef<any>) { }
 
   closeWindow(){
     this.dialogRef.close();
   }
 
   ngOnInit(): void {
+    this.dialogData = new PeopleModel(this.dialogData);
     console.log('this.action :>> ', this.dialogAction);
     console.log('this.data :>> ', this.dialogData);
     // this.dialogData = new PeopleModel(this.data);
@@ -57,32 +59,36 @@ export class AddPeopleDetailsComponent implements OnInit {
     const confirm = this.peopleFormValidation(this.dialogData);
     console.log(confirm);
     if (confirm) {
-      this.dialogRef.close(this.dialogData);
+      //this.dialogRef.close(this.dialogData);
 
-      return;
+      //return;
 
       const action = this.dialogAction;
       if (action == 'add') {
         this.loading = true;
-        this.web.postData('familyAdd', this.dialogData).then(res => {
+        this.web.postData('peopleAdd', this.dialogData).then(res => {
           this.loading = false;
           if (res.status == '200') {
-            this.closeWindow();
+            this.dialogRef.close(true);
             this.common.showToast('success', 'Success', res.error);
           } else {
             this.common.showToast('warning', 'Warning', res.error);
           }
         })
-          .catch(err => {
-            this.loading = false;
-            this.common.showToast('danger', 'Error', 'Connection Error');
-          });
-        } else {
+        .catch(err => {
+          this.loading = false;
+          this.common.showToast('danger', 'Error', 'Connection Error');
+        });
+      } else {
+
+        if(this.dialogData.people_is_head=='yes'){
+          this.dialogData.people_family_id = '';
+        }
         this.loading = true;
-        this.web.postData('updateFamily/' + this.dialogData.id, this.dialogData).then(res => {
+        this.web.postData('updatePeople/' + this.dialogData.id, this.dialogData).then(res => {
           this.loading = false;
           if (res.status == '200') {
-            this.closeWindow();
+            this.dialogRef.close(true);
             this.common.showToast('success', 'Success', res.error);
           } else {
             this.common.showToast('warning', 'Warning', res.error);
@@ -100,7 +106,7 @@ export class AddPeopleDetailsComponent implements OnInit {
 
 
   timeStamptoDate(str: number): Date {
-    const d = new Date(str * 1000);
+    const d = new Date(str);
     return d;
   }
 

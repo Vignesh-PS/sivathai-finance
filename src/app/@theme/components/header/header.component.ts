@@ -49,6 +49,8 @@ user_name:any={};
             this.router.navigate(['/login']);
           }, 800);
         }
+      }else if(res.item.title=='Change Password'){
+        this.commonService.showToast('warning', 'Warning', 'Service not available.');
       }
     })
   }

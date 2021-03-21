@@ -48,9 +48,43 @@ exports.findAll = (req, res) => {
       });
 };
 
+// Retrieve all Familys from the database.
+exports.checkUnique = (req, res) => {
+  Family.checkUnique(req.body,(err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Family with id ${req.params.familyId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating Family with id " + req.params.familyId
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};
+
 // Find a single Family with a familyId
 exports.findOne = (req, res) => {
     Family.findById(req.params.familyId, (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            res.status(404).send({
+              message: `Not found Family with id ${req.params.familyId}.`
+            });
+          } else {
+            res.status(500).send({
+              message: "Error retrieving Family with id " + req.params.familyId
+            });
+          }
+        } else res.send(data);
+      });
+};
+
+exports.familyAllDetails = (req, res) => {
+    Family.familyAllDetails(req.params.familyId, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({

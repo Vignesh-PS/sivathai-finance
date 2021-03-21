@@ -7,6 +7,7 @@ import { CommonService } from "../../services/common.service";
 import { WebService } from "../../services/web.service";
 import { environment } from "../../../environments/environment";
 import { FamiliesFormService } from "./families-form/families-form.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "ngx-families",
@@ -24,7 +25,8 @@ export class FamiliesComponent implements OnInit {
     private windowService: NbWindowService,
     private web: WebService,
     private common: CommonService,
-    private formService: FamiliesFormService
+    private formService: FamiliesFormService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -87,6 +89,10 @@ export class FamiliesComponent implements OnInit {
 
   selectRow(event: any) :void{
     const data = event.data
+    this.router.navigate(['list-families', data.id]);
+
+
+    return;
     const w = this.windowService.open(FamiliesFormComponent, {
       title: `View Families`,
       hasBackdrop: true,

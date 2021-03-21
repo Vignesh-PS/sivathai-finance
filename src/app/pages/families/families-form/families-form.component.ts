@@ -35,6 +35,23 @@ export class FamiliesFormComponent implements OnInit {
     this.dialogData.action = context.action;
   }
 
+  checkUniqueIdExists(){
+    if(this.dialogAction=='edit'){
+      return false;
+    }
+    this.web.postData('checkUniqueExists', {uniqueId: this.dialogData.family_unique_id, family: this.familyId || ''})
+    .then(res=>{
+      if(res.status=='200'){
+        if(res.data.length!=0){
+          this.common.showToast('warning', 'Warning', res.error);
+        }
+      }
+    })
+    .catch(err=>{
+      this.common.showToast('danger', 'Error', 'Connection Error');
+    })
+  }
+
 
   closeWindow() {
     this.windowRef.close();

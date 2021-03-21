@@ -24,12 +24,37 @@ const knex = require("knex")({
   },
 });
 
-Family.create = (newFamily, result) => {
-  // console.log('newFamily :>> ', newFamily);
-  // result(null, { status: "400", error: "Can not be added." });
-  // return;
-
+Family.create = async (newFamily, result) => {
   try {
+
+    let uniqueExists = [];
+
+    const uniqueId = newFamily.family_unique_id;
+    await knex.select('id')
+        .from("sivathai_families")
+        .where({family_unique_id: uniqueId})
+        .then((res) => {
+          if(res.length>0){
+          uniqueExists = res;
+          }
+        })
+        .catch((err) => {
+          result(null, {
+            status: "400",
+            error: "Data not found.",
+            err: err,
+          });
+          return;
+        });
+
+    if(uniqueExists.length!=0){
+      result(null, {
+        status: "400",
+        error: 'Family No is already exists, use other no.'
+      });
+      return;
+    }
+
     knex
       .insert({
         people_name: newFamily.family_head_name,
@@ -140,6 +165,35 @@ Family.getAll = (result) => {
   }
 };
 
+Family.checkUnique = (data, result) => {
+  try {
+    const uniqueId = data.uniqueId;
+    knex
+      .select('id')
+      .from("sivathai_families")
+      .where({family_unique_id: uniqueId})
+      .then((res) => {
+        result(null, {
+          status: "200",
+          data: res,
+          error: 'Family No is already exists.'
+        });
+      })
+      .catch((err) => {
+        result(null, {
+          status: "400",
+          error: "Data not found.",
+          err: err,
+        });
+      });
+  } catch (err) {
+    result(null, {
+      status: "400",
+      error: "Data not found",
+    });
+  }
+};
+
 Family.updateById = (id, newFamily, result) => {
   try {
     knex("sivathai_families")
@@ -149,7 +203,6 @@ Family.updateById = (id, newFamily, result) => {
         family_street_id: newFamily.family_street_id,
         family_comments: newFamily.family_comments,
         family_updated: newFamily.family_updated,
-        family_unique_id: newFamily.family_unique_id,
         family_tax_count: newFamily.family_tax_count,
         family_updated: Date.now(),
       })
@@ -195,6 +248,53 @@ Family.remove = (id, result) => {
       });
   } catch (err) {
     result(null, { status: "400", error: "Family can not be deleted." });
+  }
+};
+
+Family.familyAllDetails = async (familyId, result) => {
+  try {
+    let familyInfo = {};
+    await knex
+        .select(knex.raw("ss.*,sf.*"))
+        .from(knex.raw("sivathai_families sf"))
+        .leftJoin(knex.raw("sivathai_streets ss"), "ss.id", "sf.family_street_id")
+        .where("sf.id", familyId)
+        .then((res) => {
+          familyInfo.family = res[0];
+        })
+        .catch((err) => {
+          result(null, { status: "400", error: "Family not found" });
+        });
+
+        if(!familyInfo.family){
+              result(null, { status: "400", error: "Family not found" });
+        }
+
+    const peopleHead = familyInfo.family.family_head;
+    await knex.select('*').from('sivathai_people').where({id: peopleHead})
+        .then(peopleHead=>{
+          familyInfo.family_head = peopleHead[0];
+        })
+        .catch((err)=>{
+          familyInfo.family_head = {};
+        });
+
+    await knex.select('*').from('sivathai_people').where({people_family_id: familyId}).orderBy('id', 'desc')
+        .then(familyMember=>{
+          familyInfo.members = [familyInfo.family_head, ...familyMember];
+          const year = (new Date()).getFullYear();
+          familyInfo.members.map(x=>{
+            if(x.people_yob!=''){
+              x.people_age = year-x.people_yob;
+            }
+          });
+        });
+
+    result(null, { status: "200", data: familyInfo });
+
+
+  } catch (e) {
+    result(null, { status: "400", error: "Data not found", err: e });
   }
 };
 

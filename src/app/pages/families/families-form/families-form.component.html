@@ -51,14 +51,15 @@
         </div>
       </nb-list-item>
 
-
     </nb-list>
 
 
 
     <nb-list class="dialog-list" *ngIf="dialogAction=='edit' || dialogAction=='add'">
 
-      <h3 class="heading_family">Family Head Info </h3>
+      <nb-list-item class="row border-bottom-0">
+        <h3 class="heading-family">Family Head Info </h3>
+      </nb-list-item>
 
       <nb-list-item class="row">
         <div class="title col-4">
@@ -112,7 +113,9 @@
         </div>
       </nb-list-item>
 
-      <h3 class="heading_family">House Info </h3>
+      <nb-list-item class="row border-bottom-0">
+        <h3 class="heading-family">House Info </h3>
+      </nb-list-item>
 
       <nb-list-item class="row">
         <div class="title col-4">
@@ -128,7 +131,7 @@
           <h6>Family No</h6>
         </div>
         <div class="content col-8">
-          <input type="text" [(ngModel)]="dialogData.family_unique_id" nbInput fullWidth status="basic" id="family_unique_id" placeholder="Family No">
+          <input [readonly]="dialogAction=='edit'" (blur)="checkUniqueIdExists()" type="text" [(ngModel)]="dialogData.family_unique_id" nbInput fullWidth status="basic" id="family_unique_id" placeholder="Family No">
         </div>
       </nb-list-item>
 
