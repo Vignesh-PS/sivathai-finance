@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
-var server = require("./server");
+// var server = require("./server");
 var win = null;
 var args = process.argv.slice(1), serve = args.some(function (val) { return val === '--serve'; });
 function createWindow() {
@@ -15,8 +15,8 @@ function createWindow() {
         y: 0,
         width: size.width,
         height: size.height,
-        frame: false,
-        show: false,
+        frame: true,
+        show: true,
         webPreferences: {
             nodeIntegration: true,
             allowRunningInsecureContent: (serve) ? true : false,
@@ -24,7 +24,7 @@ function createWindow() {
             enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
         },
     });
-    console.log(server);
+    // console.log(server);
     if (serve) {
         win.webContents.openDevTools();
         require('electron-reload')(__dirname, {
