@@ -22,7 +22,7 @@ export class FamilyDetailsComponent implements OnInit {
 
   constructor(private dialog: NbDialogService, private web: WebService, private common: CommonService, private route: ActivatedRoute) { }
 
-  deletePeople(people:PeopleModel){
+  deletePeople(people:any){
     if(people.people_is_head=='yes'){
       this.common.showToast('warning', 'Warning', 'Family head can not be removed')
       return;

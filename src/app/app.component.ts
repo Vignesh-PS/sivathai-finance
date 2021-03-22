@@ -25,6 +25,11 @@ export class AppComponent implements OnInit,AfterViewChecked {
       title: 'Families',
       link: '/list-families',
       icon: 'person-outline',
+    },
+    {
+      title: 'All Collections',
+      link: '/list-collections',
+      icon: 'briefcase-outline',
     }
   ];
 

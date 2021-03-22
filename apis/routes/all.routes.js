@@ -2,6 +2,7 @@ module.exports = (app) => {
   const street = require("../controllers/street.controller.js");
   const family = require("../controllers/family.controller.js");
   const people = require("../controllers/people.controller.js");
+  const collection = require("../controllers/collection.controller.js");
 
   //Streets
   app.post("/streetAdd", street.create);
@@ -29,9 +30,22 @@ module.exports = (app) => {
 
   app.post("/checkUniqueExists", family.checkUnique);
 
+  //People
   app.post("/peopleAdd", people.create);
 
   app.post("/updatePeople/:peopleId", people.update);
 
   app.post("/deletePeople/:peopleId", people.delete);
+
+  //Collections
+    app.post("/collectionAdd", collection.create);
+
+    app.get("/getCollection", collection.findAll);
+
+    app.get("/getCollection/:collectionId", collection.findOne);
+
+    app.post("/updateCollection/:collectionId", collection.update);
+
+    app.post("/deleteCollection/:collectionId", collection.delete);
+
 };

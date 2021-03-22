@@ -73,7 +73,7 @@
           <p class="mb-1"><b>Age: 23</b></p>
           <span *ngIf="m.people_contact!=''" class="mb-1">
             <i class="fa fa-phone pr-3"></i>
-            <a href="{{m.people_contact}}">{{m.people_contact}}</a>
+            <a href="tel:{{m.people_contact}}">{{m.people_contact}}</a>
           </span>
           <span>
             <i class="fa pr-2 text-hint native-icon float-right" [ngClass]="{'fa-plane': m.people_in_native=='no', 'fa-home':m.people_in_native=='yes'}"></i>

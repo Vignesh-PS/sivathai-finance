@@ -60,14 +60,12 @@ Street.getAll = (result) => {
         result(null, {
           status: "400",
           error: "Data not found",
-          file: homedir + "\\Documents\\sivathai-collections\\sivathai-db",
         });
       });
   } catch (err) {
     result(null, {
       status: "400",
       error: "Data not found",
-      file: homedir + "\\Documents\\sivathai-collections\\sivathai-db",
     });
   }
 };

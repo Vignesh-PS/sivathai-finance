@@ -1,0 +1,61 @@
+<nb-card accent="info">
+  <nb-card-header> Profile</nb-card-header>
+  <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
+
+    <nb-list *ngIf="dialogAction=='view'" class="dialog-list">
+
+
+      <nb-list-item *ngIf="dialogData.user_name" class="row">
+        <div class="title col-4">
+          <h6>Collection Name</h6>
+        </div>
+        <div class="content col-8">
+        {{dialogData.user_name}}
+        </div>
+      </nb-list-item>
+
+
+    </nb-list>
+
+
+
+    <nb-list class="dialog-list" *ngIf="dialogAction=='edit' || dialogAction=='add'">
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Collection Name</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.collection_name" nbInput fullWidth status="basic" id="collection_name" placeholder="Collection Name">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Year</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.collection_year" nbInput fullWidth status="basic" id="collection_year" placeholder="Year">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
+          <h6>Amount per Tax</h6>
+        </div>
+        <div class="content col-8">
+          <input type="text" [(ngModel)]="dialogData.collection_amount" nbInput fullWidth status="basic" id="collection_amount" placeholder="Amount">
+        </div>
+      </nb-list-item>
+
+    </nb-list>
+
+  </nb-card-body>
+
+  <nb-card-footer *ngIf="dialogAction!='view'">
+    <div class="mt-3">
+      <button nbButton outline (click)="closeWindow()" status="danger" [disabled]="loading">Cancel</button>
+      <button class="ml-3" nbButton outline (click)="submitFormResults()" status="primary" [disabled]="loading">{{dialogAction=='edit'?'Update': 'Add'}}</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

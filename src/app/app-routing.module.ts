@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: ()=> import('./pages/families/family-details/family-details.module').then(m => m.FamilyDetailsModule)
   },
   {
+    path: 'list-collections',
+    loadChildren: ()=> import('./pages/collections/collections.module').then(m => m.CollectionsModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
