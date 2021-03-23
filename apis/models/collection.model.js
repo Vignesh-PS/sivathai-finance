@@ -41,6 +41,16 @@ Collection.create = (newCollection, result) => {
 
 Collection.findById = (collectionId, result) => {
   try {
+    let collectionInfo = {};
+
+
+      // SELECT ss.*, (SELECT count(id) FROM sivathai_collection_details WHERE detail_street_id=ss.id) as contributed_count,
+      //     (SELECT count(id) FROM sivathai_collection_details WHERE detail_street_id=ss.id AND detail_is_cleared=1) as cleared_count,
+      //     (SELECT sum(detail_contributed) FROM sivathai_collection_details WHERE detail_street_id=ss.id) as collected_amount,
+      //     (SELECT count(id) FROM sivathai_families WHERE family_street_id=ss.id) as all_families_count
+      // FROM sivathai_streets ss;
+
+
     result(null, { status: "400", error: "All Collections" });
   } catch (e) {
     result(null, { status: "400", error: "Data not found", err: e });
@@ -106,5 +116,7 @@ Collection.remove = (id, result) => {
     result(null, { status: "400", error: "Collection can not be deleted." });
   }
 };
+
+
 
 module.exports = Collection;

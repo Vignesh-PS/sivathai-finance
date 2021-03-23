@@ -4,8 +4,14 @@ import { CollectionsComponent } from './collections.component';
 
 const routes: Routes = [{
   path: '',
-  component: CollectionsComponent
-}];
+  component: CollectionsComponent,
+  pathMatch: 'full',
+},
+{
+  path: ':streetId',
+  loadChildren: ()=> import('./collection-streets/collection-streets.module').then(m => m.CollectionStreetsModule)
+}
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
