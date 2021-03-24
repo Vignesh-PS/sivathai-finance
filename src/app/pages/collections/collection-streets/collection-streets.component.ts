@@ -7,6 +7,7 @@ import { CommonService } from "../../../services/common.service";
 import { WebService } from "../../../services/web.service";
 import { environment } from "../../../../environments/environment";
 import { CollectionStreetsFormService } from "./collection-streets-form/collection-streets-form.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-collection-streets",
@@ -19,16 +20,20 @@ export class CollectionStreetsComponent implements OnInit {
   tableSource: any[];
   base_url: string = environment.base_url;
   loading: boolean;
-  streetId:string|number;
+  collectionId:string|number;
+  collectionInfo:any = {};
+  statsInfo:any = {};
 
   constructor(
     private windowService: NbWindowService,
     private web: WebService,
-    private common: CommonService,
+    public common: CommonService,
+    private route: ActivatedRoute,
     private formService: CollectionStreetsFormService
   ) { }
 
   ngOnInit() {
+    this.collectionId = this.route.snapshot.params['collectionId'];
     this.getPageData();
   }
 
@@ -63,32 +68,30 @@ export class CollectionStreetsComponent implements OnInit {
         title: "Street Name",
         type: "string"
       },
-      street_families: {
-        title: "No of families",
+      contributed_count: {
+        title: "Contributed",
         type: "string"
+      },
+      cleared_count: {
+        title: 'Cleared',
+        type: 'string'
+      },
+      collected_amount: {
+        title: 'Collected Amount(Rs)',
+        type: 'string',
+        valuePrepareFunction: (data)=>{
+          return !data? '0': this.common.currencyFormatter(data);
+        }
+      },
+      all_families_count: {
+        title: 'Pending (Families)',
+        type: 'string',
+        valuePrepareFunction: (col, row, event)=>{
+          return row.all_families_count - row.cleared_count;
+        }
       }
     }
   };
-
-  onCustomAction(event: any) :void{
-    console.log(event);
-  }
-
-
-  createRow() :void {
-    const w = this.windowService.open(CollectionStreetsFormComponent, {
-      title: `Add CollectionStreet`,
-      hasBackdrop: true,
-      closeOnBackdropClick: false,
-      context: { data: new CollectionStreetsModel(), action: 'add' },
-      windowClass: "formWindow",
-    });
-
-    w.onClose.pipe().subscribe((res) => {
-      console.log(res);
-      this.ngOnInit();
-    });
-  }
 
   editRow(event: any) :void {
 
@@ -108,35 +111,15 @@ export class CollectionStreetsComponent implements OnInit {
     });
   }
 
-  deleteRow(event: any) :void{
-    console.log(event);
-    if (window.confirm('Are you sure you want to delete..?')) {
-      this.loading = true;
-      this.web.postData('deleteCollectionStreet/'+event.data.id, {})
-      .then(res=>{
-          this.loading = false;
-          if(res.status==200){
-            this.getPageData();
-            this.common.showToast('success', 'Success', res.error);
-          }else{
-            this.common.showToast('warning', 'Failed', res.error);
-          }
-        })
-        .catch(err=>{
-          this.loading = false;
-          this.common.showToast('danger', 'Error', 'Connection Error');
-        });
-
-    }
-
-  }
 
   getPageData() :void{
     this.loading = true;
-    this.web.getData('getCollectionStreets').then(res=>{
+    this.web.getData('getCollection/'+this.collectionId).then(res=>{
       this.loading = false;
       if(res.status=='200'){
         this.tableSource = res.data;
+        this.collectionInfo = res.collection;
+        this.statsInfo = res.stats;
       }else{
         this.common.showToast('warning', 'No data', res.error);
       }
@@ -150,25 +133,8 @@ export class CollectionStreetsComponent implements OnInit {
 
 
   selectRow(event: any) :void{
-    const data = event.data
-    const w = this.windowService.open(CollectionStreetsFormComponent, {
-      title: `View CollectionStreets`,
-      hasBackdrop: true,
-      closeOnBackdropClick: false,
-      context: { data: data, action: 'view' },
-      windowClass: "formWindow",
-    });
 
-    w.onClose.pipe().subscribe((res) => {
-      console.log(res);
-      //this.ngOnInit();
-    });
   }
-
-  // mappingTableData(val:any){
-  //   this.tableSource = val;
-  //   this.tableSourceTemp = JSON.parse(JSON.stringify(val));
-  // }
 
 
 

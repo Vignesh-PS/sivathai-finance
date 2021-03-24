@@ -8,7 +8,7 @@ const routes: Routes = [{
   pathMatch: 'full',
 },
 {
-  path: ':streetId',
+  path: ':collectionId',
   loadChildren: ()=> import('./collection-streets/collection-streets.module').then(m => m.CollectionStreetsModule)
 }
 ];

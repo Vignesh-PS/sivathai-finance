@@ -48,6 +48,14 @@ export class CommonService {
   changeMsg(msg:string):void{
     this.msgSource.next(msg);
   }
+
+  currencyFormatter(number: number){
+    if(!number){
+      return 0;
+    }
+    return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number);
+  }
+
   getMsg():any {
     return this.msgSource.getValue();
   }

@@ -7,6 +7,7 @@ import { CommonService } from "../../services/common.service";
 import { WebService } from "../../services/web.service";
 import { environment } from "../../../environments/environment";
 import { CollectionsFormService } from "./collections-form/collections-form.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "ngx-collections",
@@ -24,6 +25,7 @@ export class CollectionsComponent implements OnInit {
     private windowService: NbWindowService,
     private web: WebService,
     private common: CommonService,
+    private router: Router,
     private formService: CollectionsFormService
   ) { }
 
@@ -68,7 +70,10 @@ export class CollectionsComponent implements OnInit {
       },
       collection_amount: {
         title: 'Amount for 1 tax',
-        type: 'string'
+        type: 'string',
+        valuePrepareFunction: (data)=>{
+          return this.common.currencyFormatter(data);
+        }
       }
     }
   };
@@ -78,19 +83,21 @@ export class CollectionsComponent implements OnInit {
   }
 
   selectRow(event: any) :void{
-    const data = event.data
-    const w = this.windowService.open(CollectionsFormComponent, {
-      title: `View Collections`,
-      hasBackdrop: true,
-      closeOnBackdropClick: false,
-      context: { data: data, action: 'view' },
-      windowClass: "formWindow",
-    });
+    const data = event.data;
+    this.router.navigate(['list-collections', data.id]);
 
-    w.onClose.pipe().subscribe((res) => {
-      console.log(res);
-      //this.ngOnInit();
-    });
+    // const w = this.windowService.open(CollectionsFormComponent, {
+    //   title: `View Collections`,
+    //   hasBackdrop: true,
+    //   closeOnBackdropClick: false,
+    //   context: { data: data, action: 'view' },
+    //   windowClass: "formWindow",
+    // });
+
+    // w.onClose.pipe().subscribe((res) => {
+    //   console.log(res);
+    //   //this.ngOnInit();
+    // });
   }
 
   createRow() :void {

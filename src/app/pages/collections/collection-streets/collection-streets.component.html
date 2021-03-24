@@ -1,10 +1,52 @@
 <nb-card>
-  <nb-card-header>
-    Streets
+  <nb-card-header [nbSpinner]="loading">
+    Streets - {{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}
+    <button class="btn btn-outline-dark float-right" [routerLink]="['/list-collections']" >Back</button>
   </nb-card-header>
 
-  <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching CollectionStreets details'">
-    <ng2-smart-table (userRowSelect)="false?selectRow($event):false" (create)="createRow()" (edit)="editRow($event)" (delete)="deleteRow($event)" [settings]="tableSettings" [source]="tableSource">
+  <nb-card-body  [nbSpinner]="loading">
+    <ng2-smart-table (userRowSelect)="selectRow($event)" (edit)="editRow($event)" [settings]="tableSettings" [source]="tableSource">
     </ng2-smart-table>
   </nb-card-body>
+
+  <div class="row mt-4 ml-2 mr-2 collection-info">
+
+    <div class="col-3">
+      <div class="alert alert-primary text-center" role="alert" [nbSpinner]="loading">
+        <h4 class="text-primary">Total Contributed Families</h4>
+        <p>
+          {{statsInfo.total_contribute_count}}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="alert alert-secondary text-center" role="alert" [nbSpinner]="loading">
+        <h4 class="text-secondary">Total Cleared Families</h4>
+        <p>
+          {{statsInfo.total_cleared_count}}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="alert alert-success text-center" role="alert" [nbSpinner]="loading">
+        <h4 class="text-success">Total Collected Amount</h4>
+        <p>
+          {{common.currencyFormatter(statsInfo.total_amount)}}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="alert alert-warning text-center" role="alert" [nbSpinner]="loading">
+        <h4 class="text-warning">Total Pending Families</h4>
+        <p>
+          {{statsInfo.total_families}}
+        </p>
+    </div>
+    </div>
+
+  </div>
+
 </nb-card>
