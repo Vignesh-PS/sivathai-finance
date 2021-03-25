@@ -5,9 +5,12 @@
   </nb-card-header>
 
   <nb-card-body  [nbSpinner]="loading">
-    <ng2-smart-table (userRowSelect)="selectRow($event)" (edit)="editRow($event)" [settings]="tableSettings" [source]="tableSource">
+    <ng2-smart-table (userRowSelect)="editRow($event)" (edit)="editRow($event)" [settings]="tableSettings" [source]="tableSource">
     </ng2-smart-table>
   </nb-card-body>
+
+  <nb-card-footer>
+
 
   <div class="row mt-4 ml-2 mr-2 collection-info">
 
@@ -48,5 +51,7 @@
     </div>
 
   </div>
+</nb-card-footer>
+
 
 </nb-card>

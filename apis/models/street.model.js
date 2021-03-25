@@ -51,6 +51,7 @@ Street.getAll = (result) => {
       .from(knex.raw("sivathai_streets s"))
       .leftJoin(knex.raw("sivathai_families f"), "s.id", "f.family_street_id")
       .groupBy("s.id")
+      .whereRaw('s.street_deleted=0')
       .orderBy("s.id", "desc")
       .then(function (res) {
         // resolve(res);
@@ -88,7 +89,9 @@ Street.updateById = (id, street, result) => {
 
 Street.remove = (id, result) => {
   try {
-    knex('sivathai_streets').where({id: id}).del()
+    knex('sivathai_streets')
+    .where({id: id})
+    .update({street_deleted: '1', street_updated: Date.now()})
     .then(res=>{
       result(null, { status: "200", error: "Street deleted successfully." });
     })

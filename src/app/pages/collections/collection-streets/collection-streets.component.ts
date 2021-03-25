@@ -29,6 +29,7 @@ export class CollectionStreetsComponent implements OnInit {
     private web: WebService,
     public common: CommonService,
     private route: ActivatedRoute,
+    private router: Router,
     private formService: CollectionStreetsFormService
   ) { }
 
@@ -42,7 +43,7 @@ export class CollectionStreetsComponent implements OnInit {
       addButtonContent: '<i class="fa fa-plus-circle"></i>'
     },
     edit: {
-      editButtonContent: '<i class="fa fa-edit"></i>',
+      editButtonContent: '<i class="fa fa-eye"></i>',
     },
     delete: {
       deleteButtonContent: '<i class="fa fa-trash"></i>',
@@ -97,18 +98,19 @@ export class CollectionStreetsComponent implements OnInit {
 
     const data = event.data;
 
-    const w = this.windowService.open(CollectionStreetsFormComponent, {
-      title: `Edit CollectionStreet`,
-      hasBackdrop: true,
-      closeOnBackdropClick: false,
-      context: { data: data, action: 'edit' },
-      windowClass: "formWindow",
-    });
+    this.router.navigate(['/list-collections', this.collectionId, data.id]);
+    // const w = this.windowService.open(CollectionStreetsFormComponent, {
+    //   title: `Edit CollectionStreet`,
+    //   hasBackdrop: true,
+    //   closeOnBackdropClick: false,
+    //   context: { data: data, action: 'edit' },
+    //   windowClass: "formWindow",
+    // });
 
-    w.onClose.pipe().subscribe((res) => {
-      console.log(res);
-      this.ngOnInit();
-    });
+    // w.onClose.pipe().subscribe((res) => {
+    //   console.log(res);
+    //   this.ngOnInit();
+    // });
   }
 
 
@@ -129,11 +131,6 @@ export class CollectionStreetsComponent implements OnInit {
         this.common.showToast('danger', 'Error', 'Connection Error');
       })
     //this.loading = false;
-  }
-
-
-  selectRow(event: any) :void{
-
   }
 
 

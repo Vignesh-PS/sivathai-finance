@@ -46,12 +46,12 @@ Collection.findById = async (collectionId, result) => {
     const contributed_count = knex.count('id').from('sivathai_collection_details').whereRaw(`detail_street_id=ss.id AND detail_collection_id=${collectionId}`).as('contributed_count');
     const cleared_count = knex.count('id').from('sivathai_collection_details').whereRaw(`detail_street_id=ss.id AND detail_is_cleared=1  AND detail_collection_id=${collectionId}`).as('cleared_count');
     const collection_amount = knex.sum('detail_contributed').from('sivathai_collection_details').whereRaw(`detail_street_id=ss.id  AND detail_collection_id=${collectionId}`).as('collected_amount');
-    const all_families_count = knex.count('id').from('sivathai_families').whereRaw('family_street_id=ss.id').as('all_families_count');
+    const all_families_count = knex.count('id').from('sivathai_families').whereRaw('family_street_id=ss.id AND family_deleted=0').as('all_families_count');
 
     const all_contribute_count = knex.count('id').from('sivathai_collection_details').where({detail_collection_id: collectionId}).as('total_contribute_count');
     const all_clear_count = knex.count('id').from('sivathai_collection_details').where({detail_collection_id: collectionId, detail_is_cleared: 1}).as('total_cleared_count');
     const all_amount = knex.sum('detail_contributed').from('sivathai_collection_details').where({detail_collection_id: collectionId}).as('total_amount');
-    const all_families = knex.count('id').from('sivathai_families').as('total_families');
+    const all_families = knex.count('id').from('sivathai_families').where({family_deleted:0}).as('total_families');
 
     await knex.select('*').from('sivathai_collections').where({id: collectionId}).then(collection=>{
       if(collection.length>0){
@@ -79,11 +79,32 @@ Collection.findById = async (collectionId, result) => {
   }
 };
 
+Collection.collectionStreet = (collectionId, streetId, result)=>{
+  try{
+    const familySelect = 'sf.family_head, sf.family_unique_id, sf.family_tax_count';
+
+    knex.select(knex.raw('scd.*, '+ familySelect))
+    .from('sivathai_collection_details as scd')
+    .join('sivathai_families as sf', {'sf.id': 'scd.detail_family_id'})
+    .where('scd.detail_collection_id', collectionId)
+    .where('scd.detail_street_id', streetId)
+    .then(collections=>{
+      result(null, {status: '200',data: collections});
+    })
+    .catch(err=>{
+      result(null, {status: '500',err: err, error: 'Data not found'})
+    })
+  }catch(err){
+    result(null, {status: '400', error: 'Data not found'})
+  }
+}
+
 Collection.getAll = (result) => {
   try {
     knex
       .select("*")
       .from("sivathai_collections")
+      .where({collection_deleted: 0})
       .orderBy("id", "desc")
       .then(function (res) {
         // resolve(res);
@@ -127,7 +148,8 @@ Collection.updateById = (id, collection, result) => {
 
 Collection.remove = (id, result) => {
   try {
-    knex('sivathai_collections').where({id: id}).del()
+    knex('sivathai_collections').where({id: id})
+    .update({collection_deleted: 1, collection_updated: Date.now()})
     .then(res=>{
       result(null, { status: "200", error: "Collection deleted successfully." });
     })

@@ -143,6 +143,7 @@ Family.getAll = (result) => {
         "sf.id"
       )
       .groupBy("sf.id")
+      .whereRaw('sf.family_deleted=0')
       .orderBy("sf.id", "desc")
       .then((res) => {
         result(null, {
@@ -239,7 +240,7 @@ Family.remove = (id, result) => {
   try {
     knex("sivathai_families")
       .where({ id: id })
-      .del()
+      .update({family_deleted: 1, family_updated: Date.now()})
       .then((res) => {
         result(null, { status: "200", error: "Family deleted successfully." });
       })

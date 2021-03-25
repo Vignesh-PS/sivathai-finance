@@ -56,6 +56,22 @@ exports.findOne = (req, res) => {
   });
 };
 
+exports.collectionStreet = (req, res) => {
+  Collection.collectionStreet(req.params.collectionId, req.params.streetId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Collection with id ${req.params.collectionId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Collection with id " + req.params.collectionId,
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Update a Collection identified by the collectionId in the request
 exports.update = (req, res) => {
   // Validate Request
