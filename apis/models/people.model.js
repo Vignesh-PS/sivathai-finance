@@ -112,10 +112,10 @@ People.updateById = (id, people, result) => {
         result(null, { status: "200", error: "Updated successfully" });
       })
       .catch((err) => {
-        result(null, { status: "400", error: "Can not be updated" });
+        result(null, { status: "400", err: err,error: "Can not be updated" });
       });
   } catch (err) {
-    result(null, { status: "400", error: "Can not be updated" });
+    result(null, { status: "500",err: err, error: "Can not be updated" });
   }
 };
 

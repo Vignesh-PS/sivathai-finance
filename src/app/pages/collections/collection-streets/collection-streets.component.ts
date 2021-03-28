@@ -21,7 +21,10 @@ export class CollectionStreetsComponent implements OnInit {
   base_url: string = environment.base_url;
   loading: boolean;
   collectionId:string|number;
-  collectionInfo:any = {};
+  collectionInfo:any = {
+    collection_name: '',
+    collection_year: ''
+  };
   statsInfo:any = {};
 
   constructor(
@@ -69,6 +72,13 @@ export class CollectionStreetsComponent implements OnInit {
         title: "Street Name",
         type: "string"
       },
+      all_families_counts: {
+        title: 'Total Families',
+        type: 'string',
+        valuePrepareFunction: (column:null, row:any)=>{
+          return row.all_families_count;
+        }
+      },
       contributed_count: {
         title: "Contributed",
         type: "string"
@@ -77,18 +87,18 @@ export class CollectionStreetsComponent implements OnInit {
         title: 'Cleared',
         type: 'string'
       },
-      collected_amount: {
-        title: 'Collected Amount(Rs)',
-        type: 'string',
-        valuePrepareFunction: (data)=>{
-          return !data? '0': this.common.currencyFormatter(data);
-        }
-      },
       all_families_count: {
         title: 'Pending (Families)',
         type: 'string',
         valuePrepareFunction: (col, row, event)=>{
           return row.all_families_count - row.cleared_count;
+        }
+      },
+      collected_amount: {
+        title: 'Collected Amount(Rs)',
+        type: 'string',
+        valuePrepareFunction: (data)=>{
+          return !data? '0': this.common.currencyFormatter(data);
         }
       }
     }
@@ -99,18 +109,6 @@ export class CollectionStreetsComponent implements OnInit {
     const data = event.data;
 
     this.router.navigate(['/list-collections', this.collectionId, data.id]);
-    // const w = this.windowService.open(CollectionStreetsFormComponent, {
-    //   title: `Edit CollectionStreet`,
-    //   hasBackdrop: true,
-    //   closeOnBackdropClick: false,
-    //   context: { data: data, action: 'edit' },
-    //   windowClass: "formWindow",
-    // });
-
-    // w.onClose.pipe().subscribe((res) => {
-    //   console.log(res);
-    //   this.ngOnInit();
-    // });
   }
 
 

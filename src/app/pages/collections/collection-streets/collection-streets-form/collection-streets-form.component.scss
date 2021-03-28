@@ -38,3 +38,20 @@ nb-card-body{
 .nb-theme-default nb-option-list{
   min-width: 300px !important;
 }
+
+.collection-info{
+  h4{
+    font-size: 1.2rem;
+  }
+  p{
+    font-size: 1.5rem;
+    color: #8a4040;
+  }
+  .col-3{
+    cursor: pointer;
+  }
+}
+
+.outline{
+  outline: auto;
+}

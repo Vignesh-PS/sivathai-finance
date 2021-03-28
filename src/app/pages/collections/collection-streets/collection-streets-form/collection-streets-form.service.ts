@@ -16,14 +16,8 @@ export class CollectionStreetsFormService {
   //validations
   collectionstreetsFormValidation(val: CollectionStreetsModel) {
     const action = val.action == "add";
-    console.log(action);
-    if (val.collectionstreet_name == null || val.collectionstreet_name == '') {
-      this.common.showToast('warning', 'Missing Fields', 'Enter collectionstreet name.');
-      document.getElementById('collectionstreet_name').focus();
-      return false;
-    }  else {
-      return true;
-    }
+
+
 
     return false;
   }

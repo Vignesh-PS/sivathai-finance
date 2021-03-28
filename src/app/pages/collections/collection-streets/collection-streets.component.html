@@ -1,6 +1,15 @@
 <nb-card>
   <nb-card-header [nbSpinner]="loading">
-    Streets - {{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}
+    <!-- {{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}  -->
+
+    <nav aria-label="breadcrumb" class="float-left" [ngClass]="{'invisible': loading}">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections']" class="text-dark">All Collections</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
+      </ol>
+    </nav>
+
     <button class="btn btn-outline-dark float-right" [routerLink]="['/list-collections']" >Back</button>
   </nb-card-header>
 
@@ -14,9 +23,19 @@
 
   <div class="row mt-4 ml-2 mr-2 collection-info">
 
+    <div class="col-3" >
+      <div class="alert alert-info text-center" style="min-height: 135px;" role="alert" [nbSpinner]="loading">
+        <h4 class="text-info">Total Families</h4>
+
+        <p>
+          {{statsInfo.total_families}}
+        </p>
+      </div>
+    </div>
+
     <div class="col-3">
       <div class="alert alert-primary text-center" role="alert" [nbSpinner]="loading">
-        <h4 class="text-primary">Total Contributed Families</h4>
+        <h4 class="text-primary">Partially Contributed Families</h4>
         <p>
           {{statsInfo.total_contribute_count}}
         </p>
@@ -25,7 +44,7 @@
 
     <div class="col-3">
       <div class="alert alert-secondary text-center" role="alert" [nbSpinner]="loading">
-        <h4 class="text-secondary">Total Cleared Families</h4>
+        <h4 class="text-secondary">Cleared Families</h4>
         <p>
           {{statsInfo.total_cleared_count}}
         </p>
@@ -33,24 +52,25 @@
     </div>
 
     <div class="col-3">
+      <div class="alert alert-warning text-center" role="alert" [nbSpinner]="loading">
+        <h4 class="text-warning">Pending Families</h4>
+        <p>
+          {{statsInfo.total_families - statsInfo.total_cleared_count}}
+        </p>
+    </div>
+    </div>
+
+    <div class="col-3">
       <div class="alert alert-success text-center" role="alert" [nbSpinner]="loading">
-        <h4 class="text-success">Total Collected Amount</h4>
+        <h4 class="text-success">Collected Amount</h4>
         <p>
           {{common.currencyFormatter(statsInfo.total_amount)}}
         </p>
       </div>
     </div>
 
-    <div class="col-3">
-      <div class="alert alert-warning text-center" role="alert" [nbSpinner]="loading">
-        <h4 class="text-warning">Total Pending Families</h4>
-        <p>
-          {{statsInfo.total_families}}
-        </p>
-    </div>
-    </div>
-
   </div>
+
 </nb-card-footer>
 
 

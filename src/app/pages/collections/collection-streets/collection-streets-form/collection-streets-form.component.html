@@ -1,14 +1,74 @@
 <nb-card accent="info">
-  <nb-card-header> Collection
+  <nb-card-header>
+
+    <nav aria-label="breadcrumb" class="float-left" [ngClass]="{'invisible': loading}">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections']" class="text-dark">All Collections</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId]" class="text-dark">{{streetInfo.street_name}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
+      </ol>
+    </nav>
+
     <button class="btn btn-outline-dark float-right" [routerLink]="['/list-collections', collectionId]" >Back</button>
   </nb-card-header>
-  <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
-   <h3>Detail works</h3>
-
+  <nb-card-body  [nbSpinner]="loading">
+    <ng2-smart-table (userRowSelect)="editRow($event)" (edit)="editRow($event)" [settings]="tableSettings" [source]="tableSource">
+    </ng2-smart-table>
   </nb-card-body>
 
   <nb-card-footer>
+
+    <div class="row mt-4 ml-2 mr-2 collection-info">
+
+      <div class="col-3" (click)="mappingData('total')">
+        <div class="alert alert-info text-center" style="min-height: 135px;" role="alert" [nbSpinner]="loading" [ngClass]="{'outline': selectedList=='total'}">
+          <h4 class="text-info">Total Families <br></h4>
+          <p>
+            {{statsInfo.total_families}}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-3" (click)="mappingData('contributed')">
+        <div class="alert alert-primary text-center" role="alert" [nbSpinner]="loading" [ngClass]="{'outline': selectedList=='contributed'}">
+          <h4 class="text-primary">Partially Contributed</h4>
+          <p>
+            {{statsInfo.total_contribute_count}}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-3" (click)="mappingData('cleared')">
+        <div class="alert alert-secondary text-center" role="alert" [nbSpinner]="loading" [ngClass]="{'outline': selectedList=='cleared'}">
+          <h4 class="text-secondary">Cleared Families</h4>
+          <p>
+            {{statsInfo.total_cleared_count}}
+          </p>
+        </div>
+      </div>
+
+
+      <div class="col-3" (click)="mappingData('pending')">
+        <div class="alert alert-warning text-center" role="alert" [nbSpinner]="loading" [ngClass]="{'outline': selectedList=='pending'}">
+          <h4 class="text-warning">Pending Families</h4>
+          <p>
+            {{statsInfo.total_families - statsInfo.total_cleared_count}}
+          </p>
+      </div>
+      </div>
+
+      <div class="col-3">
+        <div class="alert alert-success text-center" role="alert" [nbSpinner]="loading">
+          <h4 class="text-success">Collected Amount</h4>
+          <p>
+            {{common.currencyFormatter(statsInfo.total_amount)}}
+          </p>
+        </div>
+      </div>
+
+    </div>
 
   </nb-card-footer>
 </nb-card>
