@@ -67,15 +67,22 @@ export class CollectionStreetsFormComponent implements OnInit {
       tax_detail: {
         title: 'Tax Amount',
         type: 'string',
-        // valuePrepareFunction:(colum:number, row:CollectionStreetsModel, ev:any)=>{
-        //   return row.family_tax_count + ' x ' + row.
-        // }
+        valuePrepareFunction:(colum:number, row:CollectionStreetsModel, ev:any)=>{
+          return row.tax_amount + ' (' + colum + ')';
+        }
       },
       detail_contributed: {
         title: 'Collected Amount(Rs)',
         type: 'string',
         valuePrepareFunction: (data)=>{
           return !data? '0': this.common.currencyFormatter(data);
+        }
+      },
+      detail_is_cleared: {
+        title: 'Status',
+        type: 'html',
+        valuePrepareFunction: (data:number)=>{
+          return data==1?'<i class="fas fa-check-double text-success"></i>': data==0 ?'<i class="fas fa-exclamation-triangle text-warning"></i>':'<i class="fas fa-times-circle text-danger"></i>'
         }
       },
       members_count: {

@@ -7,10 +7,11 @@ import { FormsModule } from '@angular/forms';
 import { CollectionStreetsFormComponent } from './collection-streets-form/collection-streets-form.component';
 import { CollectionStreetsRouting } from './collection-streets-routing';
 import { CollectionStreetsComponent } from './collection-streets.component';
+import {CollectionstreetfamilyComponent} from './collection-streets-family/collection-streets-family.component';
 
 
 @NgModule({
-  declarations: [CollectionStreetsComponent, CollectionStreetsFormComponent],
+  declarations: [CollectionStreetsComponent, CollectionStreetsFormComponent, CollectionstreetfamilyComponent],
   imports: [
     CommonModule,
     CollectionStreetsRouting,
@@ -29,7 +30,8 @@ import { CollectionStreetsComponent } from './collection-streets.component';
     ],
   entryComponents: [
     CollectionStreetsComponent,
-    CollectionStreetsFormComponent
+    CollectionStreetsFormComponent,
+    CollectionstreetfamilyComponent
   ],
   providers: [
     CollectionStreetsFormService,

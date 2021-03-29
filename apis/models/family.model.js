@@ -126,8 +126,17 @@ Family.findById = (familyId, result) => {
   }
 };
 
-Family.getAll = (result) => {
+Family.getAll = async (result) => {
   try {
+
+    let allStreets = [];
+    knex
+    .select('*')
+    .from('sivathai_streets')
+    .then(streets=>{
+      allStreets = streets;
+    })
+
     knex
       .select(
         knex.raw(
@@ -149,6 +158,7 @@ Family.getAll = (result) => {
         result(null, {
           status: "200",
           data: res,
+          streets: allStreets
         });
       })
       .catch((err) => {

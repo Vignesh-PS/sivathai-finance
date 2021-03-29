@@ -1,0 +1,15 @@
+<nb-card accent="info">
+  <nb-card-header> Profile</nb-card-header>
+  <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
+
+    <h3>Detail Page</h3>
+
+  </nb-card-body>
+
+  <nb-card-footer>
+    <div class="mt-3">
+      <button nbButton outline (click)="closeWindow()" status="danger" [disabled]="loading">Cancel</button>
+      <button class="ml-3" nbButton outline (click)="submitFormResults()" status="primary" [disabled]="loading">Button</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

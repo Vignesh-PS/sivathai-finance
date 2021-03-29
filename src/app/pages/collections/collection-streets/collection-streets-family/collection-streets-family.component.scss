@@ -1,0 +1,40 @@
+// .formWindow{
+//  // min-width: 70%;
+// }
+nb-list-item{
+  //display: unset !important;
+  .title {
+    h6{
+      font-weight: 600;
+      margin: unset;
+    }
+  }
+
+  .content{
+    pre{
+      background: #efeaea;
+      display: block;
+    }
+  }
+}
+
+
+nb-card-body{
+  max-height: 80vh;
+  overflow: scroll;
+  min-width: 700px;
+}
+.dialog-list{
+  overflow: unset !important;
+}
+.max-height-100{
+  max-height: 100px;
+}
+.color-unset{
+  color: unset !important;
+}
+
+
+.nb-theme-default nb-option-list{
+  min-width: 300px !important;
+}

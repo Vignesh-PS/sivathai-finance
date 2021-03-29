@@ -8,6 +8,7 @@ import { WebService } from "../../services/web.service";
 import { environment } from "../../../environments/environment";
 import { FamiliesFormService } from "./families-form/families-form.service";
 import { Router } from "@angular/router";
+import StreetsModel from "../list-streets/list-streets-form/list-streets-model";
 
 @Component({
   selector: "ngx-families",
@@ -19,8 +20,12 @@ import { Router } from "@angular/router";
 export class FamiliesComponent implements OnInit {
   //tableSettings:any;
   tableSource: any[];
+  tableSourceTemp: any[];
   base_url: string = environment.base_url;
   loading: boolean;
+  listStreets:StreetsModel[] = [];
+  selectedStreet:string = '';
+
   constructor(
     private windowService: NbWindowService,
     private web: WebService,
@@ -90,21 +95,6 @@ export class FamiliesComponent implements OnInit {
   selectRow(event: any) :void{
     const data = event.data
     this.router.navigate(['list-families', data.id]);
-
-
-    return;
-    const w = this.windowService.open(FamiliesFormComponent, {
-      title: `View Families`,
-      hasBackdrop: true,
-      closeOnBackdropClick: false,
-      context: { data: data, action: 'view' },
-      windowClass: "formWindow",
-    });
-
-    w.onClose.pipe().subscribe((res) => {
-      console.log(res);
-      //this.ngOnInit();
-    });
   }
 
   createRow() :void {
@@ -165,7 +155,10 @@ export class FamiliesComponent implements OnInit {
     this.web.getData('getFamilies').then(res=>{
       this.loading = false;
       if(res.status=='200'){
-        this.tableSource = res.data;
+        // this.tableSource = res.data;
+        this.listStreets = res.streets;
+        this.tableSourceTemp = [...res.data];
+        this.mappingTableData(this.selectedStreet);
       }else{
         this.common.showToast('warning', 'No data', res.error);
       }
@@ -177,10 +170,16 @@ export class FamiliesComponent implements OnInit {
     //this.loading = false;
   }
 
-  // mappingTableData(val:any){
-  //   this.tableSource = val;
-  //   this.tableSourceTemp = JSON.parse(JSON.stringify(val));
-  // }
+  mappingTableData(street:any){
+    let data = [...this.tableSourceTemp];
+    if(street==null || street==''){
+      this.tableSource = data;
+      return;
+    }
+
+    this.tableSource = data.filter((x: any)=> x.family_street_id==street);
+
+  }
 
 
 

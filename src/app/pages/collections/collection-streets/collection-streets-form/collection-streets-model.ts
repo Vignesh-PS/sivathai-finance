@@ -5,7 +5,7 @@ export default class CollectionStreetsModel {
   public family_head_name: string;
   public detail_id: number;
   public detail_contributed: number;
-  public detail_is_cleared: number;
+  public detail_is_cleared: number ;
   public family_id: number;
   public family_unique_id: number|string;
   public family_head: string;

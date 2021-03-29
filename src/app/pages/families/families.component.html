@@ -1,6 +1,11 @@
 <nb-card>
   <nb-card-header>
     Manage Families
+
+    <nb-select  class="float-right" placeholder="Select Showcase" [(ngModel)]="selectedStreet" (selectedChange)="mappingTableData(selectedStreet)">
+      <nb-option value="">All Families</nb-option>
+      <nb-option [value]="s.id" *ngFor="let s of listStreets">{{s.street_name}}</nb-option>
+    </nb-select>
   </nb-card-header>
 
   <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Families details'">
