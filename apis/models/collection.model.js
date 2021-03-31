@@ -132,6 +132,82 @@ Collection.collectionStreet = async (collectionId, streetId, result)=>{
   }
 }
 
+Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>{
+  try{
+    let collectionInfo = {};
+    let collectionDetailInfo = {};
+    let streetInfo = {};
+    let familyInfo = {};
+    let familyHeadInfo = {};
+
+    await knex.select('*').from('sivathai_collections').where({id: collectionId}).then(collection=>{
+      if(collection.length>0){
+        collectionInfo = collection[0];
+      }
+    });
+
+    await knex.select('*').from('sivathai_streets').where({id: streetId}).then(street=>{
+      if(street.length>0){
+        streetInfo = street[0];
+      }
+    });
+
+    await knex
+        .select(knex.raw("ss.*,sf.*"))
+        .from(knex.raw("sivathai_families sf"))
+        .leftJoin(knex.raw("sivathai_streets ss"), "ss.id", "sf.family_street_id")
+        .where("sf.id", familyId)
+        .then((res) => {
+          familyInfo = res[0];
+        })
+        .catch((err) => {
+          result(null, { status: "400", error: "Family not found" });
+        });
+
+
+    const peopleHead = familyInfo.family_head;
+    await knex.select('*').from('sivathai_people').where({id: peopleHead})
+        .then(peopleHead=>{
+          familyHeadInfo = peopleHead[0];
+        })
+        .catch((err)=>{
+          familyHeadInfo = {};
+        });
+
+
+    await knex.select('sd.*')
+    .from('sivathai_collection_details as sd')
+    .where({'sd.detail_collection_id':collectionId, 'sd.detail_family_id': familyId})
+    .then( async res=>{
+      collectionDetailInfo = res;
+    })
+    .catch(err=>{
+      result(null, {status: '400',err: err, error: 'Data not found'})
+    });
+
+    if(collectionDetailInfo.length==0){
+      await knex.insert({detail_collection_id: collectionId, detail_street_id: streetId, detail_family_id: familyId, detail_tax_count: familyInfo.family_tax_count, detail_amount: familyInfo.family_tax_count*collectionInfo.collection_amount, detail_modified: Date.now()}).into('sivathai_collection_details')
+      .then( async detail_id=>{
+
+       });
+
+       await knex.select('sd.*')
+       .from('sivathai_collection_details as sd')
+       .where({'sd.detail_collection_id':collectionId, 'sd.detail_family_id': familyId})
+       .then( async res=>{
+         collectionDetailInfo = res;
+       })
+       .catch(err=>{
+         result(null, {status: '400',err: err, error: 'Data not found'})
+       });
+    }
+
+    result(null, { status: "200", collection : collectionInfo, data: collectionDetailInfo[0], street: streetInfo, family: familyInfo, family_head: familyHeadInfo, error: "All Collections" });
+  }catch(err){
+    result(null, {status: '500', error: 'Data not found', err: err})
+  }
+}
+
 Collection.getAll = (result) => {
   try {
     knex

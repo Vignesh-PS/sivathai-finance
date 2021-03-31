@@ -3,7 +3,7 @@ import { CommonService } from "../../../../services/common.service";
 import { WebService } from "../../../../services/web.service";
 import { environment } from "../../../../../environments/environment";
 import { CollectionStreetsFormService } from "./collection-streets-form.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import CollectionStreetsModel from "./collection-streets-model";
 
 @Component({
@@ -28,7 +28,8 @@ export class CollectionStreetsFormComponent implements OnInit {
     private formService: CollectionStreetsFormService,
     public common: CommonService,
     private web: WebService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
 
   }
@@ -96,7 +97,7 @@ export class CollectionStreetsFormComponent implements OnInit {
 
     const data = event.data;
 
-    // this.router.navigate(['/list-collections', this.collectionId, data.id]);
+    this.router.navigate(['/list-collections', this.collectionId, this.streetId, data.id]);
   }
 
   fillPageInfo(){

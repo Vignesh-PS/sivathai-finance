@@ -1,5 +1,19 @@
 <nb-card accent="info">
-  <nb-card-header> Profile</nb-card-header>
+  <nb-card-header>
+
+    <nav aria-label="breadcrumb" class="float-left" [ngClass]="{'invisible': loading}">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections']" class="text-dark">All Collections</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId]" class="text-dark">{{streetInfo.street_name}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{familyInfo.people_head_name}} per tax</a></li>
+      </ol>
+    </nav>
+
+    <button class="btn btn-outline-dark float-right" [routerLink]="['/list-collections', collectionId, streetId]" >Back</button>
+
+  </nb-card-header>
   <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
     <h3>Detail Page</h3>

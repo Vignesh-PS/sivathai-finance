@@ -46,6 +46,8 @@ module.exports = (app) => {
 
     app.get("/getCollection/:collectionId/:streetId", collection.collectionStreet);
 
+    app.get("/getCollection/:collectionId/:streetId/:familyId", collection.collectionFamily);
+
     app.post("/updateCollection/:collectionId", collection.update);
 
     app.post("/deleteCollection/:collectionId", collection.delete);

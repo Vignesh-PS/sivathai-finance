@@ -1,40 +1,33 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
-import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonService } from "../../../../services/common.service";
 import { WebService } from "../../../../services/web.service";
 import { environment } from "../../../../../environments/environment";
-// import CollectionstreetfamilysModel from "./list-collectionstreetfamilys-model";
 import { CollectionstreetfamilysFormService } from "./collection-streets-family.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-collection-street-family",
   templateUrl: "./collection-streets-family.component.html",
   styleUrls: ["./collection-streets-family.component.scss"],
-  encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger(
-      'enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateX(100%)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateX(0)', opacity: 1 }))
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateX(0)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateX(100%)', opacity: 1 }))
-      ])
-    ]
-    )
-  ]
+  encapsulation: ViewEncapsulation.None
 })
 export class CollectionstreetfamilyComponent implements OnInit {
   base_url: string = environment.base_url;
   loading: boolean = false;
 
+  collectionId:any;
+  streetId:any;
+  familyId:any;
+
+  collectionInfo:any = {};
+  streetInfo:any = {};
+  familyInfo:any = {};
 
   constructor(
     private formService: CollectionstreetfamilysFormService,
     private common: CommonService,
-    private web: WebService
+    private web: WebService,
+    private route: ActivatedRoute
   ) {
 
   }
@@ -43,9 +36,32 @@ export class CollectionstreetfamilyComponent implements OnInit {
   closeWindow() {
   }
 
+  fillPageInfo(){
+    this.loading = true;
+    this.web.getData(`getCollection/${this.collectionId}/${this.streetId}/${this.familyId}`)
+    .then(res=>{
+      this.loading = false;
+      if(res.status=='200'){
+        this.collectionInfo = res.collection;
+        this.streetInfo = res.street;
+        this.familyInfo = res.family;
+      }else{
+        this.common.showToast('warning', 'No data', res.error);
+      }
+    })
+    .catch(err=>{
+      this.loading = false;
+      this.common.showToast('danger', 'Error', 'Connection Error');
+    })
+  }
+
 
   async ngOnInit() {
+    this.collectionId = this.route.snapshot.params['collectionId'];
+    this.streetId = this.route.snapshot.params['streetId'];
+    this.familyId = this.route.snapshot.params['familyId'];
 
+    this.fillPageInfo();
   }
 
   submitFormResults() {
