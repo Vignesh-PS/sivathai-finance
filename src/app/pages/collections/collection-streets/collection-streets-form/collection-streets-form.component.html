@@ -6,7 +6,7 @@
         <li class="breadcrumb-item"><a [routerLink]="['/list-collections']" class="text-dark">All Collections</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId]" class="text-dark">{{streetInfo.street_name}}</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
       </ol>
     </nav>
 

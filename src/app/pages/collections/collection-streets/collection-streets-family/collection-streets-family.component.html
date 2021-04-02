@@ -6,8 +6,8 @@
         <li class="breadcrumb-item"><a [routerLink]="['/list-collections']" class="text-dark">All Collections</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_name+' - '+collectionInfo.collection_year}}</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId]" class="text-dark">{{streetInfo.street_name}}</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId]" class="text-dark">{{familyInfo.people_head_name}} per tax</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId, familyId]" class="text-dark">{{familyHeadInfo.people_name}}</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/list-collections', collectionId, streetId, familyId]" class="text-dark">{{collectionInfo.collection_amount}} per tax</a></li>
       </ol>
     </nav>
 
@@ -17,6 +17,24 @@
   <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
     <h3>Detail Page</h3>
+
+    <div class="align-items-center mb-3">
+      <div class="list-item-title">
+        <label for="family_street_id" class="font-weight-bold">Family No</label>
+      </div>
+      <div class="list-item-content">
+        {{familyInfo.family_no}}
+      </div>
+    </div>
+
+    <div class="align-items-center mb-3">
+      <div class="list-item-title">
+        <label for="family_comments" class="font-weight-bold">Tax Count</label>
+      </div>
+      <div class="list-item-content">
+        {{familyInfo.family_tax_count}}
+      </div>
+    </div>
 
   </nb-card-body>
 

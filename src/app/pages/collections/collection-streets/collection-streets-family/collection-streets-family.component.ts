@@ -20,8 +20,11 @@ export class CollectionstreetfamilyComponent implements OnInit {
   familyId:any;
 
   collectionInfo:any = {};
+  collectionDetailsInfo:any = {};
   streetInfo:any = {};
   familyInfo:any = {};
+  familyHeadInfo:any = {};
+  creditInfo:any = [];
 
   constructor(
     private formService: CollectionstreetfamilysFormService,
@@ -43,8 +46,11 @@ export class CollectionstreetfamilyComponent implements OnInit {
       this.loading = false;
       if(res.status=='200'){
         this.collectionInfo = res.collection;
+        this.collectionDetailsInfo = res.data;
         this.streetInfo = res.street;
         this.familyInfo = res.family;
+        this.familyHeadInfo = res.family_head;
+        this.creditInfo = res.credit_info;
       }else{
         this.common.showToast('warning', 'No data', res.error);
       }

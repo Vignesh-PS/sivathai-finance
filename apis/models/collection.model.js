@@ -139,6 +139,7 @@ Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>
     let streetInfo = {};
     let familyInfo = {};
     let familyHeadInfo = {};
+    let creditInfo = [];
 
     await knex.select('*').from('sivathai_collections').where({id: collectionId}).then(collection=>{
       if(collection.length>0){
@@ -174,6 +175,14 @@ Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>
           familyHeadInfo = {};
         });
 
+    await knex.select('*').from('sivathai_taxes_amount').where({tax_collection_id: collectionId, tax_family_id: familyId})
+        .then(taxes=>{
+          creditInfo = taxes;
+        })
+        .catch((err)=>{
+          creditInfo = [];
+        });
+
 
     await knex.select('sd.*')
     .from('sivathai_collection_details as sd')
@@ -202,7 +211,7 @@ Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>
        });
     }
 
-    result(null, { status: "200", collection : collectionInfo, data: collectionDetailInfo[0], street: streetInfo, family: familyInfo, family_head: familyHeadInfo, error: "All Collections" });
+    result(null, { status: "200", collection : collectionInfo, credit_info: creditInfo, data: collectionDetailInfo[0], street: streetInfo, family: familyInfo, family_head: familyHeadInfo, error: "All Collections" });
   }catch(err){
     result(null, {status: '500', error: 'Data not found', err: err})
   }
