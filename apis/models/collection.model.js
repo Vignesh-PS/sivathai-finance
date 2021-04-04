@@ -167,6 +167,7 @@ Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>
 
 
     const peopleHead = familyInfo.family_head;
+
     await knex.select('*').from('sivathai_people').where({id: peopleHead})
         .then(peopleHead=>{
           familyHeadInfo = peopleHead[0];
@@ -184,6 +185,8 @@ Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>
         });
 
 
+
+
     await knex.select('sd.*')
     .from('sivathai_collection_details as sd')
     .where({'sd.detail_collection_id':collectionId, 'sd.detail_family_id': familyId})
@@ -194,8 +197,10 @@ Collection.collectionFamily = async (collectionId, streetId, familyId, result)=>
       result(null, {status: '400',err: err, error: 'Data not found'})
     });
 
+
+
     if(collectionDetailInfo.length==0){
-      await knex.insert({detail_collection_id: collectionId, detail_street_id: streetId, detail_family_id: familyId, detail_tax_count: familyInfo.family_tax_count, detail_amount: familyInfo.family_tax_count*collectionInfo.collection_amount, detail_modified: Date.now()}).into('sivathai_collection_details')
+      await knex.insert({detail_collection_id: collectionId, detail_street_id: streetId, detail_family_id: familyId, detail_tax_count: familyInfo.family_tax_count, detail_amount: familyInfo.family_tax_count*collectionInfo.collection_amount, detail_updated: Date.now()}).into('sivathai_collection_details')
       .then( async detail_id=>{
 
        });
@@ -252,6 +257,78 @@ Collection.updateById = (id, collection, result) => {
         collection_amount: collection.collection_amount,
         collection_year: collection.collection_year,
         collection_updated: Date.now()
+      })
+      .then((res) => {
+        result(null, { status: "200", error: "Updated successfully" });
+      })
+      .catch((err) => {
+        result(null, { status: "400", error: "Can not be updated" });
+      });
+  } catch (err) {
+    result(null, { status: "400", error: "Can not be updated" });
+  }
+};
+
+Collection.updateCollectionComments = (id, collection, result) => {
+  try {
+    knex("sivathai_collection_details")
+      .where({ id: id })
+      .update({
+        detail_comments: collection.detail_comments,
+        detail_updated: Date.now()
+      })
+      .then((res) => {
+        result(null, { status: "200", error: "Updated successfully" });
+      })
+      .catch((err) => {
+        result(null, { status: "400", error: "Can not be updated" });
+      });
+  } catch (err) {
+    result(null, { status: "400", error: "Can not be updated" });
+  }
+};
+
+Collection.updateCollectionTaxes = async (contribute, result) => {
+  try {
+    const collectionDetailId = contribute.id;
+    const familyId = contribute.detail_family_id;
+    const collectionId = contribute.detail_collection_id;
+
+    await knex('sivathai_taxes_amount')
+    .where({tax_collection_id: collectionId, tax_collection_detail_id: collectionDetailId, tax_family_id: familyId })
+    .delete()
+    .then(res=>{
+      })
+    .catch(ere=>{
+
+    })
+
+    let familyTaxes = contribute.contribute.map(x=>{
+      let y = {
+        tax_amount : x.tax_amount,
+        tax_collection_detail_id : x.tax_collection_detail_id,
+        tax_collection_id : x.tax_collection_id,
+        tax_family_id : x.tax_family_id,
+        tax_updated: Date.now()
+      };
+      return y;
+    })
+
+    if(familyTaxes.length>0){
+      await knex.insert(familyTaxes).into('sivathai_taxes_amount')
+      .then(res=>{
+
+      })
+      .catch(err=>{
+        result(null, { status: "400", error: "Can not be updated" });
+      });
+    }
+
+    await knex("sivathai_collection_details")
+      .where({ id: collectionDetailId })
+      .update({
+        detail_contributed: contribute.detail_contributed,
+        detail_updated: Date.now()
       })
       .then((res) => {
         result(null, { status: "200", error: "Updated successfully" });

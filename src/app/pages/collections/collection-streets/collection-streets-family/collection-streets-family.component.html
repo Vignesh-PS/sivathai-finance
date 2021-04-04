@@ -16,32 +16,163 @@
   </nb-card-header>
   <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
-    <h3>Detail Page</h3>
+    <h3>Contibution Details</h3>
 
-    <div class="align-items-center mb-3">
-      <div class="list-item-title">
-        <label for="family_street_id" class="font-weight-bold">Family No</label>
+    <div class="row">
+      <div class="col-6">
+        <div class="align-items-center mb-3">
+          <div class="list-item-title">
+            <label for="family_street_id" class="font-weight-bold">Family No</label>
+          </div>
+          <div class="list-item-content">
+            {{familyInfo.family_unique_id}}
+          </div>
+        </div>
+
+        <div class="align-items-center mb-3">
+          <div class="list-item-title">
+            <label for="family_comments" class="font-weight-bold">Tax Count(Rs)</label>
+          </div>
+          <div class="list-item-content">
+            {{familyInfo.family_tax_count}}
+          </div>
+        </div>
+
+        <div class="align-items-center mb-3">
+          <div class="list-item-title">
+            <label for="family_comments" class="font-weight-bold">Tax Amount(Rs)</label>
+          </div>
+          <div class="list-item-content">
+             {{common.currencyFormatter(collectionDetailsInfo.detail_amount)}}
+          </div>
+        </div>
+
+        <div class="align-items-center mb-3">
+          <div class="list-item-title">
+            <label for="family_comments" class="font-weight-bold d-block">Contributed Amount
+          <button *ngIf="collectionDetailsInfo.detail_is_cleared!=1" nbButton outline class="ml-3 p-1 px-3" (click)="addContribution(dialogAddAmount)" status="dark" [disabled]="loading">
+            <i class="fa fa-plus"></i>
+          </button>
+            </label>
+          </div>
+          <div class="list-item-content">
+            <b class="contribute-amount" *ngIf="collectionDetailsInfo.detail_contributed">
+              {{common.currencyFormatter(collectionDetailsInfo.detail_contributed)}}
+            </b>
+            <b *ngIf="!collectionDetailsInfo.detail_contributed">No contribution made yet.</b>
+            <br>
+
+            <table class="w-100 mt-3">
+              <tr class="bg-light">
+                <th>S.No</th>
+                <th>Amount (Rs)</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+              <tr *ngFor="let c of creditInfo; let i = index" [ngClass]="{'bg-light': i%2==1}">
+                <td>{{c.sno}}</td>
+                <td>{{common.currencyFormatter(c.tax_amount)}}</td>
+                <td>{{timeStamptoDate(c?.tax_updated)|date:'medium'}}</td>
+                <td>
+                  <i class="fa fa-times-circle" (click)="alertAmountRemove(i)"></i>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
       </div>
-      <div class="list-item-content">
-        {{familyInfo.family_no}}
+
+      <div class="col-6">
+         <div class="align-items-center mb-3">
+          <div class="list-item-title">
+            <label for="family_street_id" class="font-weight-bold">Any Comments</label>
+          </div>
+          <div class="list-item-content">
+            <textarea (blur)="updateComments()" placeholder="Comments" nbInput fullWidth [(ngModel)]="collectionDetailsInfo.detail_comments" rows="4">
+
+            </textarea>
+          </div>
+        </div>
+
+        <div class="align-items-center mb-3">
+          <div class="list-item-title">
+            <label for="family_comments" class="font-weight-bold">Last Modified</label>
+          </div>
+          <div class="list-item-content">
+            {{timeStamptoDate(collectionDetailsInfo?.detail_updated) | date:'medium'}}
+          </div>
+        </div>
+
       </div>
+
     </div>
 
-    <div class="align-items-center mb-3">
-      <div class="list-item-title">
-        <label for="family_comments" class="font-weight-bold">Tax Count</label>
-      </div>
-      <div class="list-item-content">
-        {{familyInfo.family_tax_count}}
-      </div>
-    </div>
 
   </nb-card-body>
 
   <nb-card-footer>
-    <div class="mt-3">
-      <button nbButton outline (click)="closeWindow()" status="danger" [disabled]="loading">Cancel</button>
-      <button class="ml-3" nbButton outline (click)="submitFormResults()" status="primary" [disabled]="loading">Button</button>
+    <div class="mt-3 row">
+
+      <div class="col-10">
+        <!-- <div class="alert alert-info text-center" role="alert" [nbSpinner]="loading">
+          <h4 class="text-info">
+            <i class="fa fa-check-double"></i>
+            Cleared
+          </h4>
+        </div> -->
+        <nb-alert accent="success" *ngIf="collectionDetailsInfo.detail_is_cleared==1">
+          <h4 class="text-success">
+          <i class="fa fa-check-double"></i>
+          Cleared
+        </h4>
+      </nb-alert>
+
+        <nb-alert accent="warning" *ngIf="collectionDetailsInfo.detail_is_cleared===0">
+          <h4 class="text-warning">
+            <i class="fa fa-exclamation-triangle"></i>
+            Pending
+          </h4>
+        </nb-alert>
+
+        <nb-alert accent="danger" *ngIf="collectionDetailsInfo.detail_is_cleared===null">
+          <h4 class="text-danger">
+            <i class="fa fa-times-circle"></i>
+            Not contributed yet.
+          </h4>
+        </nb-alert>
+
+      </div>
+
+      <div class="col-2">
+        <button nbButton fullWidth outline size="giant" status="danger" (click)="collectionDetailsInfo.detail_is_cleared=0" *ngIf="collectionDetailsInfo.detail_is_cleared==1">
+          Mark as <br> pending
+        </button>
+
+        <button nbButton fullWidth outline size="giant" status="success" (click)="collectionDetailsInfo.detail_is_cleared=1" *ngIf="collectionDetailsInfo.detail_is_cleared!=1">
+          Mark as <br> cleared
+        </button>
+      </div>
     </div>
   </nb-card-footer>
+
+  <ng-template #dialogAddAmount let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Template Dialog
+    <button class="btn btn-outline-dark float-right" (click)="ref.close()">
+      <i class="fa fa-times"></i>
+    </button>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="list-item-content">
+          <label for="tax_amount">Enter Amount</label>
+          <input type="number" name="tax_amount" id="tax_amount" placeholder="Enter Amount" nbInput fullWidth [(ngModel)]="taxAmount">
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+      <button nbButton outline status="danger" (click)="addTaxesAmount(ref)" [disabled]="loading">Add</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
 </nb-card>

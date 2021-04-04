@@ -1,9 +1,11 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, Inject, ViewEncapsulation, TemplateRef } from "@angular/core";
 import { CommonService } from "../../../../services/common.service";
 import { WebService } from "../../../../services/web.service";
 import { environment } from "../../../../../environments/environment";
 import { CollectionstreetfamilysFormService } from "./collection-streets-family.service";
 import { ActivatedRoute } from "@angular/router";
+import { DatePipe } from "@angular/common";
+import { NbDialogService } from "@nebular/theme";
 
 @Component({
   selector: "app-collection-street-family",
@@ -25,22 +27,51 @@ export class CollectionstreetfamilyComponent implements OnInit {
   familyInfo:any = {};
   familyHeadInfo:any = {};
   creditInfo:any = [];
+  taxAmount:number = 0;
 
   constructor(
     private formService: CollectionstreetfamilysFormService,
-    private common: CommonService,
+    public common: CommonService,
     private web: WebService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private date: DatePipe,
+    private dialog: NbDialogService
   ) {
 
   }
 
+  alertAmountRemove(index){
+    if(window.confirm('Are you sure to remove..?')){
+      this.creditInfo.splice(index,1)
+     this.updateCollectionTaxes();
+    }
+  }
 
-  closeWindow() {
+  addTaxesAmount(dialog:any){
+
+    if(!this.taxAmount || this.taxAmount<1){
+      this.common.showToast('warning', 'Warning', 'Invalid amount');
+      return;
+    }
+
+    const data = {
+      tax_collection_id: this.collectionId,
+      tax_collection_detail_id: this.collectionDetailsInfo.id,
+      tax_family_id: this.familyId,
+      tax_amount: this.taxAmount
+    };
+
+     this.creditInfo.push(data);
+    // this.taxesAmountSerial();
+    this.updateCollectionTaxes();
+
+    this.taxAmount = 0;
+
+    dialog.close();
+
   }
 
   fillPageInfo(){
-    this.loading = true;
     this.web.getData(`getCollection/${this.collectionId}/${this.streetId}/${this.familyId}`)
     .then(res=>{
       this.loading = false;
@@ -51,6 +82,7 @@ export class CollectionstreetfamilyComponent implements OnInit {
         this.familyInfo = res.family;
         this.familyHeadInfo = res.family_head;
         this.creditInfo = res.credit_info;
+        this.taxesAmountSerial();
       }else{
         this.common.showToast('warning', 'No data', res.error);
       }
@@ -67,57 +99,66 @@ export class CollectionstreetfamilyComponent implements OnInit {
     this.streetId = this.route.snapshot.params['streetId'];
     this.familyId = this.route.snapshot.params['familyId'];
 
+    this.loading = true;
     this.fillPageInfo();
   }
 
-  submitFormResults() {
-    // const confirm = this.formService.collectionstreetfamilysFormValidation(this.dialogData);
-    // console.log(confirm);
-    // if (confirm) {
+  addContribution(dialog:TemplateRef<any>){
+    const d = this.dialog.open(dialog, {
 
-    //   const action = this.dialogAction;
-    //   if (action == 'add') {
-    //     this.loading = true;
-    //     this.web.postData('collectionstreetfamilyAdd', this.dialogData).then(res => {
-    //       this.loading = false;
-    //       if (res.status == '200') {
-    //         this.closeWindow();
-    //         this.common.showToast('success', 'Success', res.error);
-    //       } else {
-    //         this.common.showToast('warning', 'Warning', res.error);
-    //       }
-    //     })
-    //       .catch(err => {
-    //         this.loading = false;
-    //         this.common.showToast('danger', 'Error', 'Connection Error');
-    //       });
-    //     } else {
-    //     this.loading = true;
-    //     this.web.postData('updateCollectionstreetfamily/' + this.dialogData.id, this.dialogData).then(res => {
-    //       this.loading = false;
-    //       if (res.status == '200') {
-    //         this.closeWindow();
-    //         this.common.showToast('success', 'Success', res.error);
-    //       } else {
-    //         this.common.showToast('warning', 'Warning', res.error);
-    //       }
-    //     })
-    //     .catch(err => {
-    //         this.loading = false;
-    //         this.common.showToast('danger', 'Error', 'Connection Error');
-    //       });
-    //   }
-    // } else {
-    //   this.loading = false;
-    // }
+    })
+
+    d.onClose.pipe().subscribe(res=>{
+
+    })
+
   }
 
+  taxesAmountSerial(){
 
-  timeStamptoDate(str: number): Date {
-    const d = new Date(str * 1000);
+    this.creditInfo = this.creditInfo.map((x, index)=>{
+      x.sno = index + 1;
+      return x;
+    });
+
+  }
+
+  timeStamptoDate(str) {
+    if(!str){
+      return false;
+    }
+
+    let d = new Date(str);
+    d = new Date();
     return d;
   }
 
+  updateCollectionTaxes(){
+    let contributeAmount = 0;
+    this.creditInfo.forEach((x:any) => {
+      contributeAmount += x.tax_amount;
+    });
 
+    this.collectionDetailsInfo.detail_contributed = contributeAmount;
+    let contribut = {...this.collectionDetailsInfo, contribute: this.creditInfo};
+    console.log('contribute :>> ', contribut);
+
+    this.web.postData('updateCollectionTaxes', contribut).then(res=>{
+      if(res.status==200){
+        this.fillPageInfo();
+      }
+    })
+    .catch(err=>{
+
+    })
+
+  }
+
+  updateComments(){
+    this.web.postData(`updateCollectionComments/${this.collectionDetailsInfo.id}`, this.collectionDetailsInfo)
+    .catch(err=>{
+
+    })
+  }
 
 }

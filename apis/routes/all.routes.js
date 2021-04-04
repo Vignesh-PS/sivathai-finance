@@ -50,6 +50,10 @@ module.exports = (app) => {
 
     app.post("/updateCollection/:collectionId", collection.update);
 
+    app.post("/updateCollectionComments/:collectionId", collection.updateCollectionComments);
+
+    app.post("/updateCollectionTaxes", collection.updateCollectionTaxes);
+
     app.post("/deleteCollection/:collectionId", collection.delete);
 
 };
