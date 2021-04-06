@@ -161,6 +161,30 @@ exports.updateCollectionTaxes = (req, res) => {
   });
 };
 
+exports.updateClearStatus = (req, res) => {
+  // Validate Request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!",
+    });
+    return;
+  }
+
+  Collection.updateClearStatus( req.body, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Collection with id ${req.params.collectionId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error updating Collection with id " + req.params.collectionId,
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 // Delete a Collection with the specified collectionId in the request
 exports.delete = (req, res) => {
   Collection.remove(req.params.collectionId, (err, data) => {

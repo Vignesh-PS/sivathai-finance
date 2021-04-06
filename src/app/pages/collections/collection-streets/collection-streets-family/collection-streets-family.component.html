@@ -74,7 +74,7 @@
                 <td>{{common.currencyFormatter(c.tax_amount)}}</td>
                 <td>{{timeStamptoDate(c?.tax_updated)|date:'medium'}}</td>
                 <td>
-                  <i class="fa fa-times-circle" (click)="alertAmountRemove(i)"></i>
+                  <i class="fa fa-times-circle" (click)="collectionDetailsInfo.detail_is_cleared!=1?alertAmountRemove(i):false"></i>
                 </td>
               </tr>
             </table>
@@ -124,7 +124,7 @@
         <nb-alert accent="success" *ngIf="collectionDetailsInfo.detail_is_cleared==1">
           <h4 class="text-success">
           <i class="fa fa-check-double"></i>
-          Cleared
+          Cleared on {{timeStamptoDate(collectionDetailsInfo.detail_cleared_time) | date : 'medium'}}
         </h4>
       </nb-alert>
 
@@ -145,11 +145,11 @@
       </div>
 
       <div class="col-2">
-        <button nbButton fullWidth outline size="giant" status="danger" (click)="collectionDetailsInfo.detail_is_cleared=0" *ngIf="collectionDetailsInfo.detail_is_cleared==1">
+        <button nbButton fullWidth outline size="giant" status="danger" (click)="changeClearStatus(0)" *ngIf="collectionDetailsInfo.detail_is_cleared==1">
           Mark as <br> pending
         </button>
 
-        <button nbButton fullWidth outline size="giant" status="success" (click)="collectionDetailsInfo.detail_is_cleared=1" *ngIf="collectionDetailsInfo.detail_is_cleared!=1">
+        <button nbButton fullWidth outline size="giant" status="success" (click)="changeClearStatus(1)" *ngIf="collectionDetailsInfo.detail_is_cleared!=1">
           Mark as <br> cleared
         </button>
       </div>

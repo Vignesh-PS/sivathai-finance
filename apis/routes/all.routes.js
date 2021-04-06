@@ -54,6 +54,8 @@ module.exports = (app) => {
 
     app.post("/updateCollectionTaxes", collection.updateCollectionTaxes);
 
+    app.post("/updateClearStatus", collection.updateClearStatus);
+
     app.post("/deleteCollection/:collectionId", collection.delete);
 
 };

@@ -47,6 +47,17 @@ export class CollectionstreetfamilyComponent implements OnInit {
     }
   }
 
+  addContribution(dialog:TemplateRef<any>){
+    const d = this.dialog.open(dialog, {
+
+    })
+
+    d.onClose.pipe().subscribe(res=>{
+
+    })
+
+  }
+
   addTaxesAmount(dialog:any){
 
     if(!this.taxAmount || this.taxAmount<1){
@@ -69,6 +80,26 @@ export class CollectionstreetfamilyComponent implements OnInit {
 
     dialog.close();
 
+  }
+
+  changeClearStatus(stat:number){
+    let status = stat;
+    if(window.confirm('Are you sure to proceed..?')){
+      let contribute = {...this.collectionDetailsInfo};
+      contribute.detail_is_cleared = status;
+      this.web.postData('updateClearStatus', contribute)
+        .then(res=>{
+          if(res.status=='200'){
+            this.fillPageInfo();
+            this.common.showToast('success', 'Success', res.error);
+          }else{
+            this.common.showToast('warning', 'Warning', res.error);
+          }
+        })
+        .catch(err=>{
+          this.common.showToast('danger', 'Error', 'Connection Error');
+        })
+    }
   }
 
   fillPageInfo(){
@@ -103,16 +134,6 @@ export class CollectionstreetfamilyComponent implements OnInit {
     this.fillPageInfo();
   }
 
-  addContribution(dialog:TemplateRef<any>){
-    const d = this.dialog.open(dialog, {
-
-    })
-
-    d.onClose.pipe().subscribe(res=>{
-
-    })
-
-  }
 
   taxesAmountSerial(){
 
@@ -128,8 +149,8 @@ export class CollectionstreetfamilyComponent implements OnInit {
       return false;
     }
 
-    let d = new Date(str);
-    d = new Date();
+    let d = new Date(parseInt(str));
+    // d = new Date();
     return d;
   }
 

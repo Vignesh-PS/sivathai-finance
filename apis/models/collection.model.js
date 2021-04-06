@@ -110,7 +110,7 @@ Collection.collectionStreet = async (collectionId, streetId, result)=>{
       }
     });
 
-    knex.select(knex.raw('sc.id as collectionId,(sf.family_tax_count || " x " || sc.collection_amount) as tax_detail, sc.collection_amount * sf.family_tax_count as tax_amount, sph.people_name as family_head_name, sd.id as detail_id, sd.detail_contributed, sd.detail_is_cleared,sf.id, sf.id as family_id, sf.family_unique_id, sf.family_head, sf.family_tax_count'), members_count)
+    knex.select(knex.raw('sc.id as collectionId,(sd.detail_tax_count || " x " || sc.collection_amount) as tax_detail, sc.collection_amount * sd.detail_tax_count as tax_amount, sph.people_name as family_head_name, sd.id as detail_id, sd.detail_contributed, sd.detail_is_cleared,sf.id, sf.id as family_id, sf.family_unique_id, sf.family_head, sf.family_tax_count'), members_count)
     .from('sivathai_families as sf')
     .leftJoin('sivathai_collection_details as sd', function(){
       this.on(function(){
@@ -338,6 +338,29 @@ Collection.updateCollectionTaxes = async (contribute, result) => {
       });
   } catch (err) {
     result(null, { status: "400", error: "Can not be updated" });
+  }
+};
+
+Collection.updateClearStatus = async (contribute, result) => {
+  try {
+    const collectionDetailId = contribute.id;
+    const familyId = contribute.detail_family_id;
+
+    let clearStatus = contribute.detail_is_cleared;
+    await knex("sivathai_collection_details")
+      .where({ id: collectionDetailId, detail_family_id: familyId })
+      .update({
+        detail_is_cleared: contribute.detail_is_cleared,
+        detail_cleared_time: Date.now()
+      })
+      .then((res) => {
+        result(null, { status: "200", error: clearStatus==1?'Cleared successfully.':'Changed it into pending.' });
+      })
+      .catch((err) => {
+        result(null, { status: "400", error: "Can not be changed" });
+      });
+  } catch (err) {
+    result(null, { status: "400", error: "Can not be changed" });
   }
 };
 

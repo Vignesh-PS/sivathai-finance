@@ -82,8 +82,8 @@ export class CollectionStreetsFormComponent implements OnInit {
       detail_is_cleared: {
         title: 'Status',
         type: 'html',
-        valuePrepareFunction: (data:number)=>{
-          return data==1?'<i class="fas fa-check-double text-success"></i>': data==0 ?'<i class="fas fa-exclamation-triangle text-warning"></i>':'<i class="fas fa-times-circle text-danger"></i>'
+        valuePrepareFunction: (data:number, row:any)=>{
+          return data==1?'<i class="fas fa-check-double text-success"></i>': row.detail_contributed ?'<i class="fas fa-exclamation-triangle text-warning"></i>':'<i class="fas fa-times-circle text-danger"></i>'
         }
       },
       members_count: {
