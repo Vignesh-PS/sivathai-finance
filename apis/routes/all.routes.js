@@ -33,6 +33,8 @@ module.exports = (app) => {
   //People
   app.post("/peopleAdd", people.create);
 
+  app.get("/dashboardInfo", people.dashboardInfo);
+
   app.post("/updatePeople/:peopleId", people.update);
 
   app.post("/deletePeople/:peopleId", people.delete);
@@ -52,7 +54,9 @@ module.exports = (app) => {
 
     app.post("/updateCollectionComments/:collectionId", collection.updateCollectionComments);
 
-    app.post("/updateCollectionTaxes", collection.updateCollectionTaxes);
+    app.post("/addCollectionTaxes", collection.addCollectionTaxes);
+
+    app.post("/removeCollectionTaxes", collection.removeCollectionTaxes);
 
     app.post("/updateClearStatus", collection.updateClearStatus);
 

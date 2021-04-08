@@ -44,6 +44,17 @@ exports.findAll = (req, res) => {
   });
 };
 
+
+exports.dashboardInfo = (req, res) => {
+  People.dashboardInfo((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving peoples.",
+      });
+    else res.send(data);
+  });
+};
+
 // Find a single People with a peopleId
 exports.findOne = (req, res) => {
   People.findById(req.params.peopleId, (err, data) => {

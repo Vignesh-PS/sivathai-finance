@@ -137,7 +137,7 @@ exports.updateCollectionComments = (req, res) => {
   });
 };
 
-exports.updateCollectionTaxes = (req, res) => {
+exports.addCollectionTaxes = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -146,7 +146,31 @@ exports.updateCollectionTaxes = (req, res) => {
     return;
   }
 
-  Collection.updateCollectionTaxes( req.body, (err, data) => {
+  Collection.addCollectionTaxes( req.body, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Collection with id ${req.params.collectionId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error updating Collection with id " + req.params.collectionId,
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.removeCollectionTaxes = (req, res) => {
+  // Validate Request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!",
+    });
+    return;
+  }
+
+  Collection.removeCollectionTaxes( req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({

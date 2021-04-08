@@ -74,7 +74,7 @@
                 <td>{{common.currencyFormatter(c.tax_amount)}}</td>
                 <td>{{timeStamptoDate(c?.tax_updated)|date:'medium'}}</td>
                 <td>
-                  <i class="fa fa-times-circle" (click)="collectionDetailsInfo.detail_is_cleared!=1?alertAmountRemove(i):false"></i>
+                  <i class="fa fa-times-circle" (click)="collectionDetailsInfo.detail_is_cleared!=1?alertAmountRemove(c):false"></i>
                 </td>
               </tr>
             </table>

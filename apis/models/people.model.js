@@ -91,6 +91,77 @@ People.getAll = (result) => {
   }
 };
 
+People.dashboardInfo = async(result)=>{
+  try {
+
+    let dashboardInfo = {};
+
+    await knex
+      .select(knex.raw("count(ss.id) as count"))
+      .from(knex.raw("sivathai_streets as ss"))
+      .where({"ss.street_deleted": '0'})
+      .then(function (res) {
+        dashboardInfo.street_count = res[0].count;
+        // resolve(res);
+        // result(null, { status: "200", data: res });
+      })
+      .catch(function (err) {
+        result(null, {
+          status: "600",
+          err: err,
+          error: "Data not found"
+        });
+        return;
+      });
+
+      //return;
+
+
+      await knex
+      .select(knex.raw("count(sp.id) as count"))
+      .from(knex.raw("sivathai_people as sp"))
+      .then(function (res) {
+        dashboardInfo.people_count = res[0].count;
+      })
+      .catch(function (err) {
+        result(null, {
+          status: "700",
+          error: "Data not found"
+        });
+        return;
+      });
+
+      await knex
+      .select(knex.raw("count(sf.id) as count"))
+      .from(knex.raw("sivathai_families as sf"))
+      .where({"sf.family_deleted": '0'})
+      .then(function (res) {
+        dashboardInfo.families_count = res[0].count;
+        // resolve(res);
+        // result(null, { status: "200", data: res });
+      })
+      .catch(function (err) {
+        result(null, {
+          status: "800",
+          error: "Data not found"
+        });
+        return;
+      });
+
+      result(null, {
+        status: "200",
+        data: dashboardInfo,
+        error: "Data not found"
+      });
+
+  } catch (err) {
+    result(null, {
+      status: "500",
+      error: "Data not found"
+    });
+  }
+}
+
 People.updateById = (id, people, result) => {
   try {
     knex("sivathai_people")

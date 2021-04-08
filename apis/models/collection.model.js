@@ -110,7 +110,7 @@ Collection.collectionStreet = async (collectionId, streetId, result)=>{
       }
     });
 
-    knex.select(knex.raw('sc.id as collectionId,(sd.detail_tax_count || " x " || sc.collection_amount) as tax_detail, sc.collection_amount * sd.detail_tax_count as tax_amount, sph.people_name as family_head_name, sd.id as detail_id, sd.detail_contributed, sd.detail_is_cleared,sf.id, sf.id as family_id, sf.family_unique_id, sf.family_head, sf.family_tax_count'), members_count)
+    knex.select(knex.raw('sc.id as collectionId, case when sd.detail_tax_count != \'\' then (sd.detail_tax_count || " x " || sc.collection_amount) else (sf.family_tax_count || " x " || sc.collection_amount) end as tax_detail, case when sd.detail_tax_count !=\'\' then (sc.collection_amount * sd.detail_tax_count) else (sc.collection_amount * sf.family_tax_count) end as tax_amount, sph.people_name as family_head_name, sd.id as detail_id, sd.detail_contributed, sd.detail_is_cleared,sf.id, sf.id as family_id, sf.family_unique_id, sf.family_head, sf.family_tax_count'), members_count)
     .from('sivathai_families as sf')
     .leftJoin('sivathai_collection_details as sd', function(){
       this.on(function(){
@@ -288,41 +288,65 @@ Collection.updateCollectionComments = (id, collection, result) => {
   }
 };
 
-Collection.updateCollectionTaxes = async (contribute, result) => {
+Collection.addCollectionTaxes = async (contribute, result) => {
   try {
     const collectionDetailId = contribute.id;
     const familyId = contribute.detail_family_id;
     const collectionId = contribute.detail_collection_id;
 
-    await knex('sivathai_taxes_amount')
-    .where({tax_collection_id: collectionId, tax_collection_detail_id: collectionDetailId, tax_family_id: familyId })
-    .delete()
-    .then(res=>{
-      })
-    .catch(ere=>{
-
-    })
-
-    let familyTaxes = contribute.contribute.map(x=>{
-      let y = {
-        tax_amount : x.tax_amount,
-        tax_collection_detail_id : x.tax_collection_detail_id,
-        tax_collection_id : x.tax_collection_id,
-        tax_family_id : x.tax_family_id,
+      let familyTax = {
+        tax_amount : contribute.contribute.tax_amount,
+        tax_collection_detail_id : contribute.contribute.tax_collection_detail_id,
+        tax_collection_id : contribute.contribute.tax_collection_id,
+        tax_family_id : contribute.contribute.tax_family_id,
         tax_updated: Date.now()
       };
-      return y;
-    })
 
-    if(familyTaxes.length>0){
-      await knex.insert(familyTaxes).into('sivathai_taxes_amount')
+      await knex.insert(familyTax).into('sivathai_taxes_amount')
       .then(res=>{
 
       })
       .catch(err=>{
         result(null, { status: "400", error: "Can not be updated" });
       });
-    }
+
+
+    await knex("sivathai_collection_details")
+      .where({ id: collectionDetailId })
+      .update({
+        detail_contributed: contribute.detail_contributed,
+        detail_updated: Date.now()
+      })
+      .then((res) => {
+        result(null, { status: "200", error: "Updated successfully" });
+      })
+      .catch((err) => {
+        result(null, { status: "400", error: "Can not be updated" });
+      });
+  } catch (err) {
+    result(null, { status: "400", error: "Can not be updated" });
+  }
+};
+
+
+Collection.removeCollectionTaxes = async (contribute, result) => {
+  try {
+    const collectionDetailId = contribute.id;
+    const familyId = contribute.detail_family_id;
+    const collectionId = contribute.detail_collection_id;
+    const familyTax = contribute.contribute;
+
+    console.log('contribute :>> ', contribute);
+
+    await knex('sivathai_taxes_amount')
+    .where({tax_collection_id: collectionId, tax_collection_detail_id: collectionDetailId, tax_family_id: familyId, id: familyTax })
+    .delete()
+    .then(res=>{
+      console.log('res :>> ', res);
+      })
+    .catch(ere=>{
+      console.log('errror');
+    })
 
     await knex("sivathai_collection_details")
       .where({ id: collectionDetailId })
