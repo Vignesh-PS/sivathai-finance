@@ -1,6 +1,6 @@
 {
   "name": "sivathai-collections",
-  "version": "9.0.3",
+  "version": "0.0.1",
   "description": "Angular 11 with Electron (Typescript + SASS + Hot Reload)",
   "homepage": "https://github.com/maximegris/angular-electron",
   "author": {
@@ -72,6 +72,7 @@
     "conventional-changelog-cli": "2.1.1",
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
+    "custom-electron-titlebar": "3.2.6",
     "electron": "11.0.3",
     "electron-builder": "22.9.1",
     "electron-reload": "1.5.0",
@@ -121,6 +122,9 @@
     "npm": "7.6.3",
     "os": "0.1.1",
     "rxjs-compat": "6.6.6",
-    "sqlite3": "5.0.2"
+    "sqlite3": "5.0.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "file-system": "^2.2.2"
   }
 }

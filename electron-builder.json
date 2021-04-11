@@ -1,10 +1,11 @@
 {
-  "productName": "angular-electron",
+  "productName": "Sivathai Collections",
   "directories": {
     "output": "release/"
   },
     "files": [
         "**/*",
+        "./node_modules/express/**",
         "!**/*.ts",
         "!*.code-workspace",
         "!LICENSE.md",
