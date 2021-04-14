@@ -20,126 +20,65 @@ const template = [
   }] : []),
   // { role: 'fileMenu' }
   {
-    label: 'Sales',
+    label: 'Menus',
     submenu: [
-      { 
-        label: 'New Sale',
+      {
+        label: 'All Streets',
         click(item, focusedWindow,event) {
-          // let brw=focusedWindow;
-          // brw.loadURL('http://localhost:4200/detail');
-          // console.log('click','|',brw);
-          focusedWindow.webContents.send('switch-ng-page', 'new-sale');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'all-streets');
+        }
       },
-      { 
-        label: 'Sale Return',
+      {
+        label: 'All Families',
         click(item, focusedWindow, event) {
-          focusedWindow.webContents.send('switch-ng-page', 'sale-return');
-          //event.sender.send('asynchronous-reply', 'async pong');
-        } 
-      }
-    ]
-  },
-  {
-    label: 'Purchase',
-    submenu: [
-      { 
-        label: 'New Purchase',
-        click(item, focusedWindow) {
-          alert('Purchase');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'all-families');
+        }
       },
-      { 
-        label: 'Purchase Return',
-        click(item, focusedWindow) {
-          alert('Purchase Return');
-        } 
-      }
-    ]
-  },
-  {
-    label: 'Data',
-    submenu: [
-      { 
-        label: 'Category',
-        click(item, focusedWindow) {
-          alert('Purchase');
-        } 
-      },
-      { 
-        label: 'Product',
-        click(item, focusedWindow) {
-          focusedWindow.webContents.send('switch-ng-page', 'product');
-        } 
-      },
-      { 
-        label: 'Staff',
-        click(item, focusedWindow) {
-          focusedWindow.webContents.send('switch-ng-page', 'staff');
-        } 
+      {
+        label: 'All Collections',
+        click(item, focusedWindow, event) {
+          focusedWindow.webContents.send('switch-ng-page', 'all-collections');
+        }
       }
     ]
   },
   {
     label: 'Quick Action',
     submenu: [
-      { 
-        label: 'Sales Re-Print Invoice',
+      {
+        label: 'Pendings',
         click(item, focusedWindow) {
-          alert('Purchase');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'no-service');
+        }
       },
-      { 
-        label: 'Purchase Re-Print Invoice',
+      {
+        label: 'All People',
         click(item, focusedWindow) {
-          alert('Purchase Return');
-        } 
-      },
-      { 
-        label: 'Purchase Check Invoice',
-        click(item, focusedWindow) {
-          alert('Purchase Return');
-        } 
-      },
-      { 
-        label: 'Sales Check Invoice',
-        click(item, focusedWindow) {
-          alert('Purchase Return');
-        } 
-      }
-    ]
-  },
-  {
-    label: 'Stock',
-    submenu: [
-      { 
-        label: 'Manage Stock',
-        click(item, focusedWindow) {
-          alert('Purchase');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'no-service');
+        }
       }
     ]
   },
   {
     label: 'Reports',
     submenu: [
-      { 
-        label: 'Sales',
+      {
+        label: 'Families',
         click(item, focusedWindow) {
-          alert('Purchase');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'no-service');
+        }
       },
-      { 
-        label: 'Purchase',
+      {
+        label: 'People',
         click(item, focusedWindow) {
-          alert('Purchase Return');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'no-service');
+        }
       },
-      { 
-        label: 'Stocks',
+      {
+        label: 'Collections',
         click(item, focusedWindow) {
-          alert('Purchase Return');
-        } 
+          focusedWindow.webContents.send('switch-ng-page', 'no-service');
+        }
       }
     ]
   },
@@ -147,26 +86,26 @@ const template = [
     role: 'help',
     submenu: [
       {
-        label: 'About',
+        label: 'Contact Developer - Selvavignesh Perumal',
         click: async () => {
           const { shell } = require('electron')
-          await shell.openExternal('https://electronjs.org')
+          await shell.openExternal('https://www.facebook.com/selva.vignesh.1029')
         }
       }
       ,{
-        label: 'Learn More',
+        label: 'Other Support - Balagunasingh',
         click: async () => {
           const { shell } = require('electron')
-          await shell.openExternal('https://electronjs.org')
+          await shell.openExternal('https://www.facebook.com/balagunasingh')
         }
       },
-      {
-        label: 'Toggle Developer Tools',
-        accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
-        click(item, focusedWindow) {
-          if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-        }
-      },
+      // {
+      //   label: 'Toggle Developer Tools',
+      //   accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
+      //   click(item, focusedWindow) {
+      //     if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+      //   }
+      // },
     ]
   }
 ]

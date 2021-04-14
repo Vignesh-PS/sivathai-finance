@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
+import {CoreModule} from './core/core.module';
 // import { NbButtonModule, NbLayoutModule, NbThemeModule } from '@nebular/theme';
 import {
   NbSidebarModule,
@@ -35,6 +36,7 @@ import { WebService } from './services/web.service';
     SharedModule,
     AppRoutingModule,
     NbCardModule,
+    CoreModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),

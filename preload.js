@@ -2,13 +2,21 @@ const path = require('path');
 const url = require('url');
 const customTitlebar = require('custom-electron-titlebar');
 const { ipcRenderer } = require('electron')
+const { app } = require('electron')
+
+
+console.log('documents :>> ', app.getPath('documents'));
 
 process.once('loaded', () => {
+
+
+
   window.addEventListener('DOMContentLoaded', () => {
     // let MyTitleBar = new customTitlebar.Titlebar({
     //   backgroundColor: customTitlebar.Color.fromHex('#2f3241'),
     //   icon: url.format(path.join(__dirname, 'src/assets/img', '/logo.png')),
     // });
+
 
     const replaceText = (selector, text) => {
       const element = document.getElementById(selector)

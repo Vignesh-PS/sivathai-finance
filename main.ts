@@ -2,6 +2,7 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as glob from 'glob';
+require('./apis/config/db-check');
 require('./server');
 
 let win: BrowserWindow = null;

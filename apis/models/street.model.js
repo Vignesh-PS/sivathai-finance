@@ -11,7 +11,7 @@ const knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename:
-      homedir + "\\Documents\\sivathai-collections\\" + fileConfig.db_location,
+      homedir + "\\sivathai-collections\\" + fileConfig.db_location,
   },
 });
 
