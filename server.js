@@ -12,8 +12,22 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello sangs." });
 });
 
+
+
 require("./apis/routes/all.routes.js")(app);
 // set port, listen for requests
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log("Server is running on port 3000.");
 });
+
+app.get('/shutdown-server', (req,res)=>{
+    // process.exit(0);
+    res.redirect('/');
+    server.close();
+})
+
+app.server = server;
+
+
+module.exports = app;
+

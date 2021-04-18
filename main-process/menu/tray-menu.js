@@ -6,7 +6,7 @@ const url = require('url');
 let tray = null
 
 app.whenReady().then(()=>{
-    let imgPath=path.join(__dirname, './images/icon.png')
+    let imgPath=path.join(__dirname, '../../src/assets/img/icon.png')
     tray = new Tray(nativeImage.createFromPath(imgPath))
     const contextMenu = Menu.buildFromTemplate([
       { label: 'Item1', type: 'radio' },

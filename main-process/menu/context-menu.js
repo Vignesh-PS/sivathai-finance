@@ -12,3 +12,5 @@ ipcMain.on('show-context-menu', (event) => {
     const menu = Menu.buildFromTemplate(template)
     menu.popup(BrowserWindow.fromWebContents(event.sender))
 })
+
+let testVariable = 100;

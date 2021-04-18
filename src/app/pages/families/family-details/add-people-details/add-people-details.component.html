@@ -88,8 +88,6 @@
 
     </nb-list>
 
-
-
     <nb-list class="dialog-list" *ngIf="dialogAction=='edit' || dialogAction=='add'">
 
       <nb-list-item class="row">
@@ -167,13 +165,13 @@
       </nb-list-item>
 
     </nb-list>
-
-  </nb-card-body>
-
-  <nb-card-footer *ngIf="dialogAction!='view'">
-    <div class="mt-3">
+ <div class="mt-3">
       <button nbButton outline (click)="closeWindow()" status="danger" [disabled]="loading">Cancel</button>
       <button class="ml-3" nbButton outline (click)="submitFormResults()" status="primary" [disabled]="loading">{{dialogAction=='edit'?'Update': 'Add'}}</button>
     </div>
-  </nb-card-footer>
+  </nb-card-body>
+
+  <!-- <nb-card-footer *ngIf="dialogAction!='view'">
+
+  </nb-card-footer> -->
 </nb-card>

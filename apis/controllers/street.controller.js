@@ -29,6 +29,7 @@ exports.create = (req, res) => {
 // Retrieve all Streets from the database.
 exports.findAll = (req, res) => {
   Street.getAll((err, data) => {
+    // knex.destroy();
     if (err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving streets.",
@@ -108,3 +109,15 @@ exports.deleteAll = (req, res) => {
     else res.send({ message: `All Streets were deleted successfully!` });
   });
 };
+// Delete all Streets from the database.
+exports.destroyDB = (req, res) => {
+  Street.destroyDB((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred.",
+      });
+    else res.send({ message: `Connection Destroyed!` });
+  });
+};
+

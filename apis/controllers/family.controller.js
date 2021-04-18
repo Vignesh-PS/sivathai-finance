@@ -156,3 +156,16 @@ exports.deleteAll = (req, res) => {
         else res.send({ message: `All Familys were deleted successfully!` });
       });
 };
+
+// Delete all Streets from the database.
+exports.destroyDB = (req, res) => {
+  Family.destroyDB((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred.",
+      });
+    else res.send({ message: `Connection Destroyed!` });
+  });
+};
+

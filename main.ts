@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as url from 'url';
 import * as glob from 'glob';
 require('./apis/config/db-check');
-require('./server');
+// require('./server');
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -28,7 +28,7 @@ function createWindow(): BrowserWindow {
     show: true,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js'),
+      // preload: path.join(__dirname, 'preload.js'),
       allowRunningInsecureContent: (serve) ? true : false,
       contextIsolation: false,  // false if you want to run 2e2 test with Spectron
       enableRemoteModule : true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)

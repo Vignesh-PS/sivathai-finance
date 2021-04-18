@@ -108,6 +108,10 @@ export class AppComponent implements OnInit, AfterViewChecked {
           });
           break;
       }
+
+      if(typeof(arg)=="object"){
+        this.handleMessage(arg);
+      }
       //this.electronService.ipcRenderer.send('open-error-dialog');
     })
   }
@@ -121,7 +125,13 @@ export class AppComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
+  handleMessage(arg){
+        let msgType = arg.type;
+        if(msgType=='message'){
+          // this.commonService.showToast('info', 'Message',arg.message);
+          alert(arg.message);
+        }
+  }
 
 
   // to prevent expression issue

@@ -5,7 +5,7 @@ var path = require("path");
 var url = require("url");
 var glob = require("glob");
 require('./apis/config/db-check');
-require('./server');
+// const server = require('./server');
 var win = null;
 var args = process.argv.slice(1), serve = args.some(function (val) { return val === '--serve'; });
 function createWindow() {
@@ -23,7 +23,7 @@ function createWindow() {
         show: true,
         webPreferences: {
             nodeIntegration: true,
-            preload: path.join(__dirname, 'preload.js'),
+            // preload: path.join(__dirname, 'preload.js'),
             allowRunningInsecureContent: (serve) ? true : false,
             contextIsolation: false,
             enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)

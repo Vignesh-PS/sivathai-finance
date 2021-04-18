@@ -4,6 +4,13 @@ module.exports = (app) => {
   const people = require("../controllers/people.controller.js");
   const collection = require("../controllers/collection.controller.js");
 
+  // app.post('/destroyDB', people.destroyDB, street.destroyDB, family.destroyDB, collection.destroyDB);
+  app.post('/destroyDB', function(req, res){
+    people.destroyDB;
+    street.destroyDB;
+    family.destroyDB;
+    collection.destroyDB;
+  });
   //Streets
   app.post("/streetAdd", street.create);
 

@@ -20,6 +20,10 @@ const knex = require("knex")({
     filename:
       homedir + "\\sivathai-collections\\" + fileConfig.db_location,
   },
+  // postProcessResponse:(result, queryContext)=>{
+  //   console.log(queryContext);
+  //   return result;
+  // }
 });
 
 People.create = (newPeople, result) => {
@@ -48,7 +52,7 @@ People.create = (newPeople, result) => {
       })
       .catch((err) => {
         result(null, { status: "400", error: "Can not be added.", err: err });
-      });
+      })
   } catch (err) {
     result(null, { status: "400", error: "Can not be added." });
   }
@@ -115,8 +119,6 @@ People.dashboardInfo = async(result)=>{
       });
 
       //return;
-
-
       await knex
       .select(knex.raw("count(sp.id) as count"))
       .from(knex.raw("sivathai_people as sp"))
@@ -146,7 +148,10 @@ People.dashboardInfo = async(result)=>{
           error: "Data not found"
         });
         return;
-      });
+      })
+      // .finally(function(){
+      //   knex.destroy();
+      // })
 
       result(null, {
         status: "200",
@@ -203,5 +208,16 @@ People.remove = (id, result) => {
     result(null, { status: "400", error: "People can not be deleted." });
   }
 };
+
+
+People.destroyDB = (result)=>{
+  try {
+    console.log('destroy');
+    knex.destroy();
+    result(null, { status: "200", error: "Connection Destroyed." });
+  }catch(err){
+    result(null, { status: "200", error: "Connection can not be destroyed.", err: err });
+  }
+}
 
 module.exports = People;

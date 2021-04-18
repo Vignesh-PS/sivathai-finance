@@ -309,4 +309,14 @@ Family.familyAllDetails = async (familyId, result) => {
   }
 };
 
+
+Family.destroyDB = (result)=>{
+  try {
+    knex.destroy();
+    result(null, { status: "200", error: "Connection Destroyed." });
+  }catch(err){
+    result(null, { status: "200", error: "Connection can not be destroyed.", err: err });
+  }
+}
+
 module.exports = Family;

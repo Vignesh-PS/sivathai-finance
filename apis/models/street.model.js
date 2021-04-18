@@ -55,6 +55,7 @@ Street.getAll = (result) => {
       .orderBy("s.id", "desc")
       .then(function (res) {
         // resolve(res);
+        // knex.destroy();
         result(null, { status: "200", data: res });
       })
       .catch(function (err) {
@@ -102,5 +103,14 @@ Street.remove = (id, result) => {
     result(null, { status: "400", error: "Street can not be deleted." });
   }
 };
+
+Street.destroyDB = (result)=>{
+  try {
+    knex.destroy();
+    result(null, { status: "200", error: "Connection Destroyed." });
+  }catch(err){
+    result(null, { status: "200", error: "Connection can not be destroyed.", err: err });
+  }
+}
 
 module.exports = Street;
