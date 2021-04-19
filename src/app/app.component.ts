@@ -3,12 +3,13 @@ import { NbComponentStatus, NbMenuItem } from '@nebular/theme';
 import { CommonService } from './services/common.service';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { ElectronService } from './core/services';
+import { WebService } from './services/web.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit, AfterViewChecked {
+export class AppComponent implements OnInit {
   isShowHeaderFooter: any = "alwaysOpen";
   currentUrl: string = ""; adminid: any;
   menus: NbMenuItem[] = [
@@ -41,6 +42,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     private changeDetector: ChangeDetectorRef,
     private zone: NgZone,
     private electronService: ElectronService,
+    private web: WebService,
     private router: Router) {
 
     this.commonService.currentMessage.subscribe(isShowHeaderFooter => this.isShowHeaderFooter = isShowHeaderFooter);
@@ -88,8 +90,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
   runElectronRenderer() {
     // Async message handler
     this.electronService.ipcRenderer.on('switch-ng-page', (event, arg) => {
-      console.log('event :>> ', event);
-      console.log('arg :>> ', arg);
 
       switch (arg) {
         case 'all-streets':
@@ -106,6 +106,9 @@ export class AppComponent implements OnInit, AfterViewChecked {
           this.zone.run(() => {
             this.router.navigate(['/list-collections']);
           });
+          break;
+        case 'import-database':
+          this.importDatabase();
           break;
       }
 
@@ -133,15 +136,15 @@ export class AppComponent implements OnInit, AfterViewChecked {
         }
   }
 
+  importDatabase(){
+    this.web.postData('destroyDB', {}).then(res=>{
+      if(res.status=='200'){
+        this.electronService.ipcRenderer.send('ipc-renderer', 'db-connection-destroyed')
+      }
+    })
+    .catch(err=>{
 
-  // to prevent expression issue
-  ngAfterViewChecked(): void {
-
-    // const page = localStorage.getItem('currentPage');
-    // if(page=='loginPage'){
-    //   this.isShowHeaderFooter = false;
-    // }else{
-    //   this.isShowHeaderFooter = 'alwaysOpen';
-    // }
+    });
   }
+
 }

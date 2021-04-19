@@ -4,13 +4,11 @@ module.exports = (app) => {
   const people = require("../controllers/people.controller.js");
   const collection = require("../controllers/collection.controller.js");
 
-  // app.post('/destroyDB', people.destroyDB, street.destroyDB, family.destroyDB, collection.destroyDB);
-  app.post('/destroyDB', function(req, res){
-    people.destroyDB;
-    street.destroyDB;
-    family.destroyDB;
-    collection.destroyDB;
+  //Clear db connection
+  app.post('/destroyDB', people.destroyDB, street.destroyDB, family.destroyDB, collection.destroyDB, (req, res)=>{
+    res.send({status: 200,data: 'cleared all'})
   });
+
   //Streets
   app.post("/streetAdd", street.create);
 

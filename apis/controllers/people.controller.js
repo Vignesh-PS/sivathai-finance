@@ -128,14 +128,17 @@ exports.deleteAll = (req, res) => {
 };
 
 // Delete all Streets from the database.
-exports.destroyDB = (req, res) => {
+exports.destroyDB = (req, res, next) => {
   People.destroyDB((err, data) => {
     if (err)
       res.status(500).send({
         message:
           err.message || "Some error occurred.",
       });
-    else res.send({ message: `Connection Destroyed!` });
+
+      else next();
+
+    // else console.log('res >> ', res);res.send({res:JSON.stringify(res), message: `Connection Destroyed!` });
   });
 };
 
