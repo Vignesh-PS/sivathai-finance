@@ -28,6 +28,10 @@ const routes: Routes = [
     loadChildren: ()=> import('./pages/collections/collections.module').then(m => m.CollectionsModule)
   },
   {
+    path: 'reports',
+    loadChildren: ()=> import('./pages/reports/reports.module').then(m => m.ReportsModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
