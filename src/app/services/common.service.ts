@@ -49,8 +49,10 @@ export class CommonService {
     this.msgSource.next(msg);
   }
 
-  currencyFormatter(number: number){
-    if(!number){
+  currencyFormatter(number: any):any{
+    var re = /^[1-9]\d*(\.\d+)?$/;
+
+    if(re.test(number)==false){
       return 0;
     }
     return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number);

@@ -35,26 +35,29 @@ Report.pendingCollections = async (collectionId, result) =>{
         collectionStreets = streets;
       })
 
-
-       // console.log('collectionStreets.length :>> ', collectionStreets.length);
-
       for(street of collectionStreets){
+        console.log('street :>> ', street.id);
+
 
         await Collection.collectionStreet(collectionId, street.id, async (err, streetData) => {
           if(streetData){
             var streeetData = {
-              ...street,
+              ...streetData.street,
               collections: streetData.data,
-              collection_stat: streetData.collection_stats
+              ...streetData.collection_stats
             }
 
-            await streetInfos.push(streeetData);
+            console.log('streetData.id :>> ', streetData.id);
+            streetInfos.push(streeetData);
           }
         });
       }
-        console.log('street :>> ', streetInfos);
 
-      result(null, {status: '200', collection: collectionInfo, collection_streets: streetInfos});
+      setTimeout(() => {
+
+        result(null, {status: '200', collection: collectionInfo, data: streetInfos});
+
+      }, 200);
 
 
   }catch(err){

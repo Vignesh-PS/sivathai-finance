@@ -1,11 +1,72 @@
 <nb-card>
   <nb-card-header>
-    Pending Accounts
+    Reports
 
-    <button class="btn btn-outline-dark float-right">Export Data</button>
+
+    <button class="btn btn-outline-dark float-right" [nbContextMenu]="exportMenus">Export Data</button>
+
+    <nb-select  class="float-right mr-3" placeholder="Choose Report" [(ngModel)]="selectedReport" (selectedChange)="mappingData(selectedReport)">
+      <nb-option value="All Families">All Families</nb-option>
+      <nb-option [value]="'Pending'">Pendings</nb-option>
+      <nb-option [value]="'Completed'">Completed</nb-option>
+    </nb-select>
+
   </nb-card-header>
 
-  <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Streets details'">
+  <nb-card-body class="pending-page" id="report-card" [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Streets details'">
+
+
+    <h3 [hidden]="!collectionInfo.collection_name">{{collectionInfo.collection_name + ' : '+ collectionInfo.collection_year}}
+      <span class="float-right">{{selectedReport}} Report</span>
+    </h3>
+    <h4 class="mb-5">{{ common.currencyFormatter(collectionInfo.collection_amount) +'/per tax'}}</h4>
+
+    <div *ngFor="let c of tableSource" class="mb-4">
+      <div class="row mb-3">
+        <div class="ml-3">
+          Street / Collected Amount <br>
+          <b>{{c.street_name}} / {{common.currencyFormatter(c.total_amount+0)}}</b>
+        </div>
+        <div class="ml-3">
+          Total Families <br>
+         <b> {{c.total_families ? c.total_families:'0'}}</b>
+        </div>
+        <div class="ml-3">
+          Cleared <br>
+          <b>{{c.total_cleared_count?c.total_cleared_count:'0'}}</b>
+        </div>
+        <div class="ml-3">
+          Pending <br>
+          <b>{{(c.total_families && c.total_cleared_count) ? (c.total_families - c.total_cleared_count) : c.total_families }}</b>
+        </div>
+      </div>
+
+    <table class="w-100">
+
+      <thead *ngIf="c.collections.length>0">
+        <th>S.No</th>
+        <th>Family No</th>
+        <th>Name</th>
+        <th>Tax Amount</th>
+        <th>Collected Amount</th>
+        <th>Comments</th>
+      </thead>
+
+      <tbody *ngIf="c.collections.length>0">
+        <tr *ngFor="let e of c.collections; let entryIndex=index;">
+          <td>{{entryIndex+1}}</td>
+          <td>{{e.family_unique_id}}</td>
+          <td>{{e.family_head_name}}</td>
+          <td>{{common.currencyFormatter(e.tax_amount)}} ({{e.tax_detail}})</td>
+          <td>{{e.detail_contributed ? common.currencyFormatter(e.detail_contributed) : '0'}}</td>
+          <td><br><br></td>
+        </tr>
+      </tbody>
+
+      <p class="bg-light text-danger" *ngIf="c.collections.length==0">No Families</p>
+
+    </table>
+  </div>
 
 
   </nb-card-body>
