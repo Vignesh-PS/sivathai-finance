@@ -22,10 +22,11 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
-              "node_modules/pdfmake/build/pdfmake.min.js",
-							"node_modules/pdfmake/build/vfs_fonts.js",
               "src/styles.scss"            ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/pdfmake/build/pdfmake.min.js",
+							"node_modules/pdfmake/build/vfs_fonts.js"
+            ],
             "customWebpackConfig": {
               "path": "./angular.webpack.js"
             }

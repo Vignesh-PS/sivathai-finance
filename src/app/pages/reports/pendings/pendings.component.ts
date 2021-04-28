@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { NbMenuService } from '@nebular/theme';
 import { CommonService } from '../../../services/common.service';
 import { WebService } from '../../../services/web.service';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ReportService } from '../report-service.service';
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+
 
 @Component({
   selector: 'app-pendings',
@@ -71,7 +72,7 @@ export class PendingsComponent implements OnInit {
    console.log(report);
 
     var html = htmlToPdfmake(report);
-    const documentDefinition = { content: html,  styles:{
+    const documentDefinition:any = { content: html,  styles:{
       clr:{ // we define the class called "red"
         color:'red'
       },
@@ -81,11 +82,14 @@ export class PendingsComponent implements OnInit {
     pageSize: 'A4',
     pageMargins: [ 40, 60, 40, 60 ]
    };
-    pdfMake.createPdf(documentDefinition).download(this.collectionInfo.collection_name+' - '+new Date())+'.pdf';
+    pdfMake.createPdf(documentDefinition).download(this.collectionInfo.collection_name+' - '+ this.selectedReport+' - '+new Date())+'.pdf';
 
   }
 
   generateXlsx(){
+    this.collectionInfo.type = this.selectedReport;
+
+    this.reportService.generateReportExcel(this.collectionInfo, this.tableSource);
 
   }
 
