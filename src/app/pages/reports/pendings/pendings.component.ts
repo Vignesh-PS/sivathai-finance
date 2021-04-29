@@ -8,7 +8,7 @@ import htmlToPdfmake from 'html-to-pdfmake';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-pendings',
@@ -35,6 +35,8 @@ export class PendingsComponent implements OnInit {
   ];
   selectedReport:string='All Families';
 
+  menuSubscription:Subscription;
+
   constructor(private web: WebService, public common: CommonService, private activatedRoute: ActivatedRoute, private nbMenuService: NbMenuService, private reportService: ReportService) { }
 
   fillPageInfo(){
@@ -55,7 +57,7 @@ export class PendingsComponent implements OnInit {
     });
 
 
-    this.nbMenuService.onItemClick().pipe().subscribe((res:any)=>{
+  this.menuSubscription = this.nbMenuService.onItemClick().pipe().subscribe((res:any)=>{
       // console.log('res :>> ', res);
       if(res.item.attr=='pdf'){
         this.generatePdf();
@@ -69,7 +71,7 @@ export class PendingsComponent implements OnInit {
    this.collectionInfo.type = this.selectedReport;
    let report = this.reportService.generateReportHTML(this.collectionInfo, this.tableSource);
 
-   console.log(report);
+  //  console.log(report);
 
     var html = htmlToPdfmake(report);
     const documentDefinition:any = { content: html,  styles:{
@@ -126,6 +128,10 @@ export class PendingsComponent implements OnInit {
     this.fillPageInfo();
 
     // console.log('pdfMake :>> ', pdfMake);
+  }
+
+  ngOnDestroy(){
+    this.menuSubscription.unsubscribe();
   }
 
 }

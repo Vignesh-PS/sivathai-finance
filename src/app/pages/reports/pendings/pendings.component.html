@@ -11,6 +11,8 @@
       <nb-option [value]="'Completed'">Completed</nb-option>
     </nb-select>
 
+    <button class="btn btn-outline-dark float-right mr-3" [routerLink]="['/list-collections', collectionId]" routerLinkActive="router-link-active" >Back</button>
+
   </nb-card-header>
 
   <nb-card-body class="pending-page" id="report-card" [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Streets details'">
