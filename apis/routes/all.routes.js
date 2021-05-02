@@ -3,10 +3,11 @@ module.exports = (app) => {
   const family = require("../controllers/family.controller.js");
   const people = require("../controllers/people.controller.js");
   const collection = require("../controllers/collection.controller.js");
+  const oldcollection = require("../controllers/oldcollection.controller.js");
   const report = require("../controllers/report.controller.js");
 
   //Clear db connection
-  app.post('/destroyDB', people.destroyDB, street.destroyDB, family.destroyDB, collection.destroyDB, report.destroyDB, (req, res)=>{
+  app.post('/destroyDB', people.destroyDB, street.destroyDB, family.destroyDB, collection.destroyDB, report.destroyDB, oldcollection.destroyDB, (req, res)=>{
     res.send({status: 200,data: 'cleared all'})
   });
 
@@ -67,6 +68,17 @@ module.exports = (app) => {
     app.post("/updateClearStatus", collection.updateClearStatus);
 
     app.post("/deleteCollection/:collectionId", collection.delete);
+
+    //Old Collections
+    app.get('/getOldCollection', oldcollection.findAll);
+
+    app.post("/oldcollectionAdd", oldcollection.create);
+
+    app.post("/updateoldCollection/:oldcollectionId", oldcollection.update);
+
+    app.post("/deleteOldcollection/:oldcollectionId", oldcollection.delete);
+
+    app.get('/getOldCollectionDetails', oldcollection.findAllDetail);
 
     //Reports
     app.get("/reportsPending/:collectionId", report.pendingCollections);

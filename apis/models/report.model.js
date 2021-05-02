@@ -36,7 +36,7 @@ Report.pendingCollections = async (collectionId, result) =>{
       })
 
       for(street of collectionStreets){
-        console.log('street :>> ', street.id);
+       // console.log('street :>> ', street.id);
 
 
         await Collection.collectionStreet(collectionId, street.id, async (err, streetData) => {

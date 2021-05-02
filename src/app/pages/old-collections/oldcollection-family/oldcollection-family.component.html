@@ -1,0 +1,37 @@
+<nb-card>
+  <nb-card-header [nbSpinner]="loading">
+    Manage Old Collections
+  </nb-card-header>
+
+  <nb-card-body  [nbSpinner]="loading">
+    <ng2-smart-table (userRowSelect)="editRow($event)" (create)="createRow()" (edit)="editRow($event)" [settings]="tableSettings" [source]="tableSource">
+    </ng2-smart-table>
+  </nb-card-body>
+
+  <nb-card-footer>
+
+
+  <div class="row mt-4 ml-2 mr-2 oldcollection-info">
+
+    <div class="col-3" >
+      <div class="alert alert-info text-center" style="min-height: 135px;" role="alert" [nbSpinner]="loading">
+        <h4 class="text-info">Total Families</h4>
+        <p>
+          {{totalFamilies}}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div [routerLink]="['/reports', 'old']" class="alert alert-danger text-center cursor-pointer" role="alert" [nbSpinner]="loading">
+        <h4 class="text-success">Generate Report</h4>
+        <p>&nbsp; </p>
+      </div>
+    </div>
+
+  </div>
+
+</nb-card-footer>
+
+
+</nb-card>

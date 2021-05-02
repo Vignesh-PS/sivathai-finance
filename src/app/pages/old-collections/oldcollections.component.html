@@ -1,0 +1,14 @@
+<nb-card>
+  <nb-card-header>
+    Manage Old Collections
+  </nb-card-header>
+
+  <nb-card-body  [nbSpinner]="loading" [nbSpinnerMessage]="'Fetching Oldcollections details'">
+    <ng2-smart-table (create)="createRow()" (edit)="editRow($event)" (delete)="deleteRow($event)" [settings]="tableSettings" [source]="tableSource">
+    </ng2-smart-table>
+  </nb-card-body>
+
+  <!-- <button class="btn btn-outline-dark" [routerLink]="['/reports/pendings/1']">Report</button> -->
+
+
+</nb-card>

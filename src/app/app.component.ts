@@ -32,6 +32,19 @@ export class AppComponent implements OnInit {
       title: 'All Collections',
       link: '/list-collections',
       icon: 'briefcase-outline',
+    },
+    {
+      title: 'Old Accounts',
+      icon: 'clipboard-outline',
+      children: [
+        {
+          title: 'All Accounts',
+          link: '/list-collections-old'
+        },{
+          title: 'All Families',
+          link: '/list-families-old'
+        }
+      ]
     }
   ];
 

@@ -28,6 +28,14 @@ const routes: Routes = [
     loadChildren: ()=> import('./pages/collections/collections.module').then(m => m.CollectionsModule)
   },
   {
+    path: 'list-collections-old',
+    loadChildren: ()=> import('./pages/old-collections/oldcollections.module').then(m => m.OldcollectionsModule)
+  },
+  {
+    path: 'list-families-old',
+    loadChildren: ()=> import('./pages/old-collections/oldcollection-family/oldcollection-family.module').then(m => m.OldcollectionFamilyModule)
+  },
+  {
     path: 'reports',
     loadChildren: ()=> import('./pages/reports/reports.module').then(m => m.ReportsModule)
   },
