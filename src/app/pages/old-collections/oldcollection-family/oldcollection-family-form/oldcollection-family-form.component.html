@@ -45,8 +45,8 @@
         </div>
         <div class="content col-8">
 
-          <nb-select placeholder="Choose Collection" fullWidth [(ngModel)]="dialogData.old_detail_collection_id">
-            <nb-option *ngFor="let o of listOldCollections" [value]="o.id"> {{o.old_collection_name}} </nb-option>
+          <nb-select placeholder="Choose Collection" fullWidth (selectedChange)="afterSelectCollection(dialogData.old_detail_collection_id)" [(ngModel)]="dialogData.old_detail_collection_id">
+            <nb-option *ngFor="let o of listOldCollections" [value]="o.id"> {{o.old_collection_name + ' - ' + o.old_collection_amount + '/ Per tax'}} </nb-option>
           </nb-select>
 
         </div>
@@ -63,10 +63,19 @@
 
       <nb-list-item class="row">
         <div class="title col-4">
+          <h6>Amount</h6>
+        </div>
+        <div class="content col-8">
+          <input type="number" [(ngModel)]="dialogData.old_detail_amount" nbInput fullWidth status="basic" id="old_detail_amount" placeholder="Amount">
+        </div>
+      </nb-list-item>
+
+      <nb-list-item class="row">
+        <div class="title col-4">
           <h6>Already Paid</h6>
         </div>
         <div class="content col-8">
-          <input type="number" [(ngModel)]="dialogData.old_detail_tax_count" nbInput fullWidth status="basic" id="old_detail_tax_count" placeholder="Tax Count">
+          <input type="number" [(ngModel)]="dialogData.old_detail_contributed" nbInput fullWidth status="basic" id="old_detail_contributed" placeholder="Already Paid">
         </div>
       </nb-list-item>
 
@@ -76,7 +85,6 @@
         </div>
         <div class="content col-8">
           <textarea rows="4" nbInput fullWidth [(ngModel)]="dialogData.old_detail_comments" id="old_detail_comments" placeholder="Comments"></textarea>
-          <!-- <input type="number" [(ngModel)]="dialogData.old_detail_tax_count" nbInput fullWidth status="basic" id="old_detail_tax_count" placeholder="Tax Count"> -->
         </div>
       </nb-list-item>
 

@@ -80,6 +80,8 @@ module.exports = (app) => {
 
     app.get('/getOldCollectionDetails', oldcollection.findAllDetail);
 
+    app.post("/oldCollectionEntry", oldcollection.newEntry);
+
     //Reports
     app.get("/reportsPending/:collectionId", report.pendingCollections);
 

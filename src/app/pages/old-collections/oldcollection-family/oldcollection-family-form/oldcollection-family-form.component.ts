@@ -45,9 +45,16 @@ export class OldcollectionFamilyFormComponent implements OnInit {
     console.log('id :>> ', id);
     let family = this.listFamilies.filter(x => x.id==id)[0];
     this.dialogData.old_detail_tax_count = family.family_tax_count;
-
-
+    this.dialogData.old_detail_street_id = family.family_street_id;
+    // this.dialogData.old_detail_amount = this.dialogData.old_detail_tax_count * oldCollection.old_collection_amount;
     // console.log(family[0]);
+  }
+
+  afterSelectCollection(id:number){
+    let oldCollection  = this.listOldCollections.filter(x => x.id==id)[0];
+    this.dialogData.old_detail_amount = this.dialogData.old_detail_tax_count * oldCollection.old_collection_amount;
+
+
   }
 
   closeWindow() {
@@ -61,7 +68,15 @@ export class OldcollectionFamilyFormComponent implements OnInit {
   }
 
   fillPageInfo(){
+    if(this.dialogAction=='add' || this.dialogAction=='edit'){
+      this.forAddCollection();
+    }else{
+      this.forViewCollection();
+    }
 
+  }
+
+  forAddCollection(){
     this.loading = true;
     this.web.getData('getFamilies').then(res=>{
       if(res.status=='200'){
@@ -91,8 +106,9 @@ export class OldcollectionFamilyFormComponent implements OnInit {
         this.loading = false;
         this.common.showToast('danger', 'Error', 'Connection Error');
       })
+  }
 
-
+  forViewCollection(){
 
   }
 
@@ -118,6 +134,29 @@ export class OldcollectionFamilyFormComponent implements OnInit {
 
   submitFormResults(){
 
+    console.log('this.dialogData :>> ', this.dialogData);
+
+    // return;
+
+    let confirm = this.formService.collectionFormValidation(this.dialogData);
+    if(!confirm){
+      return;
+    }
+
+    this.loading = true;
+    this.web.postData('oldCollectionEntry', this.dialogData).then(res=>{
+      this.loading = false;
+      if(res.status=='200'){
+        this.common.showToast('success', 'Success', res.error);
+        this.closeWindow();
+      }else{
+        this.common.showToast('warning', 'Warning', res.error);
+      }
+    })
+    .catch(err=>{
+      this.loading = false;
+      this.common.showToast('danger', 'Error', 'Connection Errror');
+    });
 
   }
 

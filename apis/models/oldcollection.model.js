@@ -39,6 +39,51 @@ Oldcollection.create = (newOldcollection, result) => {
   }
 };
 
+Oldcollection.newEntry = async (newEntry, result) => {
+  try {
+
+    let collectionId = newEntry.old_detail_collection_id;
+    let familyId = newEntry.old_detail_family_id;
+    let isExist = false;
+
+    await knex.select('id').from('sivathai_old_collection_details').where({old_detail_collection_id: collectionId, old_detail_family_id: familyId}).then(res=>{
+      if(res.length>0){
+        // result(null, { status: "500",error: "Can not be added as it is already added." });
+        isExist = true;
+        // return;
+      }
+    });
+
+    if(isExist){
+      result(null, { status: "500",error: "Can not be added as it is already added." });
+      return;
+    }
+
+    console.log('newEntry :>> ', newEntry);
+
+    knex
+      .insert({
+        old_detail_collection_id: newEntry.old_detail_collection_id,
+        old_detail_family_id: newEntry.old_detail_family_id,
+        old_detail_street_id: newEntry.old_detail_street_id,
+        old_detail_tax_count: newEntry.old_detail_tax_count,
+        old_detail_amount: newEntry.old_detail_amount,
+        old_detail_contributed: newEntry.old_detail_contributed,
+        old_detail_comments: newEntry.old_detail_comments
+      })
+      .into("sivathai_old_collection_details")
+      .then((res) => {
+        console.log(res, "id");
+        result(null, { status: "200",id:res, error: "Collection added successfully." });
+      })
+      .catch((err) => {
+        result(null, { status: "400", err: err,error: "Can not be added." });
+      });
+  } catch (err) {
+    result(null, { status: "500",err: err, error: "Can not be added." });
+  }
+};
+
 
 Oldcollection.getAll = (result) => {
   try {

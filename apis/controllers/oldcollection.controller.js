@@ -39,6 +39,17 @@ exports.findAll = (req, res) => {
   });
 };
 
+// Retrieve all Oldcollections from the database.
+exports.newEntry = (req, res) => {
+  Oldcollection.newEntry(req.body, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving oldcollections.",
+      });
+    else res.send(data);
+  });
+};
+
 exports.findAllDetail = (req, res) => {
   Oldcollection.getAllDetail((err, data) => {
     if (err)

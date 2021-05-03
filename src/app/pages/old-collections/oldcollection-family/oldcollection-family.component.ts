@@ -49,7 +49,7 @@ export class OldcollectionFamilyComponent implements OnInit {
     actions: {
       columnTitle: "Actions",
       add: true,
-      edit: false,
+      edit: true,
       delete: false,
       //   custom: [
       //   { name: 'viewrecord', title: '<i class="fa fa-eye"></i>'},
@@ -75,7 +75,7 @@ export class OldcollectionFamilyComponent implements OnInit {
         type: "string"
       },
       old_collection_count: {
-        title: 'Pendings',
+        title: 'Pendings (Function Names)',
         type: 'string',
         valuePrepareFunction: (col:string, row:OldcollectionFamilyModel, event:any)=>{
           return `${row.old_collection_count} (${row.old_collection_names.length<80 ? row.old_collection_names: row.old_collection_names.substring(0, 80)+'...'})`;
@@ -86,7 +86,7 @@ export class OldcollectionFamilyComponent implements OnInit {
 
   createRow(){
     const w = this.windowService.open(OldcollectionFamilyFormComponent, {
-      title: `Add Street`,
+      title: `Add Collection`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
       context: { data: new OldcollectionFamilyModel(), action: 'add' },
@@ -101,6 +101,18 @@ export class OldcollectionFamilyComponent implements OnInit {
 
   editRow(event: any) :void {
 
+    const w = this.windowService.open(OldcollectionFamilyFormComponent, {
+      title: `View Family`,
+      hasBackdrop: true,
+      closeOnBackdropClick: false,
+      context: { data: new OldcollectionFamilyModel(), action: 'view' },
+      windowClass: "formWindow",
+    });
+
+    w.onClose.pipe().subscribe((res) => {
+      console.log(res);
+      this.ngOnInit();
+    });
     // const data = event.data;
 
     // this.router.navigate(['/list-oldcollections', this.oldcollectionId, data.id]);
