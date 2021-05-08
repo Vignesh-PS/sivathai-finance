@@ -118,6 +118,7 @@ Oldcollection.getAllDetail = async (result) => {
 
     let collections = [];
     let allCollections = [];
+    let allStreets = [];
 
    await knex
       .select(old_collection_count,old_collection_ids, "sod.old_detail_family_id", "sod.old_detail_street_id", "sph.people_name", "ss.street_name", "sf.family_unique_id")
@@ -151,7 +152,14 @@ Oldcollection.getAllDetail = async (result) => {
         allCollections.push(collection);
       }
 
-      result(null, { status: "200", data: allCollections, families_count: allCollections.length });
+    await  knex
+    .select('*')
+    .from('sivathai_streets')
+    .then(streets=>{
+      allStreets = streets;
+    })
+
+      result(null, { status: "200", data: allCollections, streets: allStreets, families_count: allCollections.length });
   } catch (err) {
     result(null, {
       status: "500",

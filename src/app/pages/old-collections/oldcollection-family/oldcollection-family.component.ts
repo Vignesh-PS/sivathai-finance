@@ -21,6 +21,9 @@ export class OldcollectionFamilyComponent implements OnInit {
   base_url: string = environment.base_url;
   loading: boolean;
   totalFamilies:number;
+  listStreets:any = [];
+  selectedStreet:string = '';
+  tableSourceTemp:any = [];
 
   constructor(
     private windowService: NbWindowService,
@@ -125,7 +128,10 @@ export class OldcollectionFamilyComponent implements OnInit {
       this.loading = false;
       if(res.status=='200'){
         this.totalFamilies = res.families_count;
-        this.tableSource = res.data;
+        this.listStreets = res.streets;
+        // this.tableSource = res.data;
+        this.tableSourceTemp = [...res.data];
+        this.mappingTableData(this.selectedStreet);
       }else{
         this.common.showToast('warning', 'No data', res.error);
       }
@@ -137,6 +143,15 @@ export class OldcollectionFamilyComponent implements OnInit {
     //this.loading = false;
   }
 
+  mappingTableData(street:any){
+    let data = [...this.tableSourceTemp];
+    if(street==null || street==''){
+      this.tableSource = data;
+      return;
+    }
 
+    this.tableSource = data.filter((x: any)=> x.old_detail_street_id==street);
+
+  }
 
 }
