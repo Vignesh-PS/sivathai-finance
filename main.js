@@ -5,7 +5,7 @@ var path = require("path");
 var url = require("url");
 var glob = require("glob");
 require('./apis/config/db-check');
-// const server = require('./server');
+// require('./server');
 var win = null;
 var args = process.argv.slice(1), serve = args.some(function (val) { return val === '--serve'; });
 function createWindow() {

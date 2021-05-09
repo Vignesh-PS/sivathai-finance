@@ -1,21 +1,131 @@
 <nb-card accent="info">
-  <nb-card-header> Profile</nb-card-header>
+  <nb-card-header *ngIf="dialogAction!='view'"> Manage Pendings</nb-card-header>
+  <nb-card-header *ngIf="dialogAction=='view'"> Manage Pendings - {{this.familyInfo.street_name + ' - ' + this.familyInfo.family_head_name}}</nb-card-header>
+  <nb-card-header> Manage Pendings</nb-card-header>
   <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
-    <nb-list *ngIf="dialogAction=='view'" class="dialog-list">
+    <div *ngIf="dialogAction=='view'" class="dialog-list">
+
+      <div class="row">
+        <div class="col-12">
+
+          <div class="row">
+            <div class="col-6">
+              <div class="align-items-center mb-3">
+                <div class="list-item-title">
+                  <label for="family_street_id" class="font-weight-bold">Family No</label>
+                </div>
+                <div class="list-item-content">
+                  {{familyInfo.family_unique_id}}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="align-items-center mb-3">
+                <div class="list-item-title">
+                  <label for="family_comments" class="font-weight-bold">Tax Count</label>
+                </div>
+                <div class="list-item-content">
+                  {{familyInfo.family_tax_count}}
+                </div>
+              </div>
+            </div>
+          </div>
 
 
-      <nb-list-item *ngIf="dialogData.user_name" class="row">
-        <div class="title col-4">
-          <h6>Street Name</h6>
+          <nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+            <nb-card-front>
+              <nb-card status="light">
+                <nb-card-header>Pendings</nb-card-header>
+                <nb-card-body>
+                  <div class="align-items-center mb-3">
+                    <div class="list-item-content">
+                      <b *ngIf="familyInfo.length==0">No pendings.</b>
+                      <br>
+
+                      <table class="w-100 mt-3" *ngIf="familyInfo.length!=0">
+                        <tr class="bg-light">
+                          <th>S.No</th>
+                          <th>Function Name</th>
+                          <th>Tax Count</th>
+                          <th>Amount</th>
+                          <th>Contributed</th>
+                          <th>Is Cleared</th>
+                          <th>Action</th>
+                        </tr>
+                        <tr *ngFor="let c of familyPendings; let i = index" [ngClass]="{'bg-light': i%2==1}">
+                          <td>{{i+1}}</td>
+                          <td>{{c.old_collection_name + ' - '+c.old_collection_year}}</td>
+                          <td>{{c.old_detail_tax_count}}</td>
+                          <td>{{common.currencyFormatter(c.old_detail_amount)}}</td>
+                          <td>{{common.currencyFormatter(c.old_detail_contributed)}}</td>
+                          <td>{{c.old_detail_is_cleared==1?'<i class="fas fa-check-double text-success"></i>': '<i class="fas fa-exclamation-triangle text-warning"></i>'}}</td>
+
+                          <td>
+                            <button class="btn btn-outline-info" *ngIf="c.old_detail_is_cleared!=1">Add Amount</button>
+                            <button class="btn btn-outline-info" *ngIf="c.old_detail_is_cleared==1">
+                              Cleared at <br>
+                              {{timeStamptoDate(c.old_detail_cleared_time)|date:'medium'}}
+                            </button>
+                            <button class="btn btn-outline-info ml-2">{{c.old_detail_is_cleared==1?'Mark as pending':'Mark as clear'}}</button>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </nb-card-body>
+                <nb-card-footer>
+                  <span (click)="flipped=true" class="cursor-pointer float-right">See Details</span>
+                </nb-card-footer>
+              </nb-card>
+            </nb-card-front>
+            <nb-card-back>
+              <nb-card status="light">
+                <nb-card-header>Contributed</nb-card-header>
+                <nb-card-body>
+                  A nebula is an interstellar cloud of dust, hydrogen,
+                  helium and other ionized gases.
+                  Originally, nebula was a name for
+                  any diffuse astronomical object,
+                  including galaxies beyond the Milky Way.
+                </nb-card-body>
+                <nb-card-footer>
+                  <span (click)="flipped=false" class="cursor-pointer float-right">Back</span>
+                </nb-card-footer>
+              </nb-card>
+            </nb-card-back>
+          </nb-flip-card>
+
         </div>
-        <div class="content col-8">
-        {{dialogData.user_name}}
-        </div>
-      </nb-list-item>
+
+        <!-- <div class="col-6">
+           <div class="align-items-center mb-3">
+            <div class="list-item-title">
+              <label for="family_street_id" class="font-weight-bold">Any Comments</label>
+            </div>
+            <div class="list-item-content">
+              <textarea (blur)="updateComments()" placeholder="Comments" nbInput fullWidth [(ngModel)]="collectionDetailsInfo.detail_comments" rows="4">
+
+              </textarea>
+            </div>
+          </div>
+
+          <div class="align-items-center mb-3">
+            <div class="list-item-title">
+              <label for="family_comments" class="font-weight-bold">Last Modified</label>
+            </div>
+            <div class="list-item-content">
+              {{timeStamptoDate(collectionDetailsInfo?.detail_updated) | date:'medium'}}
+            </div>
+          </div>
+
+        </div> -->
+
+      </div>
 
 
-    </nb-list>
+    </div>
 
 
 

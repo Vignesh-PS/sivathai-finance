@@ -24,8 +24,11 @@ export class OldcollectionFamilyFormComponent implements OnInit {
   listFamilies:any = [];
   listOldCollections:any = [];
   listStreets:any = [];
-
   familyGroups: any[]=[];
+  flipped:boolean;
+
+  familyInfo:any = {};
+  familyPendings:any = [];
 
   constructor(
     @Inject(NB_WINDOW_CONTEXT) context,
@@ -109,7 +112,21 @@ export class OldcollectionFamilyFormComponent implements OnInit {
   }
 
   forViewCollection(){
-
+    this.loading = true;
+    this.web.getData(`getOldCollectionDetails/${this.dialogData.old_detail_family_id}`).then(res=>{
+      console.log('res :>> ', res);
+      this.loading = false;
+      if(res.status=='200'){
+        this.familyInfo = res.family;
+        this.familyPendings = res.collections;
+      }else{
+        this.common.showToast('warning', 'No data', res.error);
+      }
+    })
+    .catch(err=>{
+      this.loading = false;
+      this.common.showToast('danger', 'Error', 'Connection Error');
+    })
   }
 
   mappingData(){

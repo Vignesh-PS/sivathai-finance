@@ -79,9 +79,12 @@ export class OldcollectionFamilyComponent implements OnInit {
       },
       old_collection_count: {
         title: 'Pendings (Function Names)',
-        type: 'string',
+        type: 'html',
         valuePrepareFunction: (col:string, row:OldcollectionFamilyModel, event:any)=>{
-          return `${row.old_collection_count} (${row.old_collection_names.length<80 ? row.old_collection_names: row.old_collection_names.substring(0, 80)+'...'})`;
+          if(!col){
+            return '<i class="fa fa-check-circle text-success"></i> &nbsp;All Cleared';
+          }
+          return `<i class="fa fa-exclamation-circle text-black-50"></i> &nbsp; ${row.old_collection_count} (${row.old_collection_names.length<80 ? row.old_collection_names: row.old_collection_names.substring(0, 80)+'...'})`;
         }
       }
     }
@@ -105,11 +108,11 @@ export class OldcollectionFamilyComponent implements OnInit {
   editRow(event: any) :void {
 
     const w = this.windowService.open(OldcollectionFamilyFormComponent, {
-      title: `View Family`,
+      title: `View Family - ${event.data.people_name}`,
       hasBackdrop: true,
       closeOnBackdropClick: false,
-      context: { data: new OldcollectionFamilyModel(), action: 'view' },
-      windowClass: "formWindow",
+      context: { data: event.data, action: 'view' },
+      windowClass: "formWindowPending",
     });
 
     w.onClose.pipe().subscribe((res) => {

@@ -113,12 +113,14 @@ Oldcollection.getAll = (result) => {
 
 Oldcollection.getAllDetail = async (result) => {
   try {
-    const old_collection_count = knex.count('id').from('sivathai_old_collection_details').whereRaw(`old_detail_family_id=sod.old_detail_family_id`).as('old_collection_count');
-    const old_collection_ids = knex.select(knex.raw('group_concat(old_detail_collection_id)')).from('sivathai_old_collection_details').whereRaw('old_detail_family_id=sod.old_detail_family_id').as('old_collection_ids');
+    const old_collection_count = knex.count('id').from('sivathai_old_collection_details').whereRaw(`old_detail_family_id=sod.old_detail_family_id AND old_detail_is_cleared!=1`).as('old_collection_count');
+    const old_collection_ids = knex.select(knex.raw('group_concat(old_detail_collection_id)')).from('sivathai_old_collection_details').whereRaw('old_detail_family_id=sod.old_detail_family_id AND old_detail_is_cleared!=1').as('old_collection_ids');
 
     let collections = [];
     let allCollections = [];
     let allStreets = [];
+    let pendingsCount = 0;
+    let clearedCount = 0;
 
    await knex
       .select(old_collection_count,old_collection_ids, "sod.old_detail_family_id", "sod.old_detail_street_id", "sph.people_name", "ss.street_name", "sf.family_unique_id")
@@ -141,6 +143,11 @@ Oldcollection.getAllDetail = async (result) => {
 
       for (let collection of collections){
         let pendingIds = collection.old_collection_ids;
+        if(!pendingIds==0){
+          pendingsCount++;
+        }else{
+          clearedCount++;
+        }
         await knex.select(knex.raw('group_concat(old_collection_name) as old_collection_names')).from('sivathai_old_collections').whereRaw(`id in (${pendingIds})`)
         .then(result=>{
           collection.old_collection_names = result[0].old_collection_names;
@@ -159,7 +166,7 @@ Oldcollection.getAllDetail = async (result) => {
       allStreets = streets;
     })
 
-      result(null, { status: "200", data: allCollections, streets: allStreets, families_count: allCollections.length });
+      result(null, { status: "200", cleared: clearedCount, pendings: pendingsCount, data: allCollections, streets: allStreets, families_count: allCollections.length });
   } catch (err) {
     result(null, {
       status: "500",
@@ -169,6 +176,55 @@ Oldcollection.getAllDetail = async (result) => {
     });
   }
 };
+
+Oldcollection.getAllFamily = async(familyId,result)=>{
+  try{
+    let familyInfo = {};
+    let collectionsOld = [];
+    let taxesInfo = [];
+
+    await knex
+    .select(
+      knex.raw(
+        "sp.people_name AS family_head_name, sp.people_yob as family_head_yob, sp.people_gender as family_head_gender, sp.people_in_native as family_head_in_native, sp.people_contact as family_head_contact, ss.*,sf.*, count(sfc.id) as family_no_of_members"
+      )
+    )
+    .from(knex.raw("sivathai_families sf"))
+    .leftJoin(knex.raw("sivathai_streets ss"), "ss.id", "sf.family_street_id")
+    .leftJoin(knex.raw("sivathai_people sp"), "sp.id", "sf.family_head")
+    .leftJoin(
+      knex.raw("sivathai_people sfc"),
+      "sfc.people_family_id",
+      "sf.id"
+    )
+    .where("sf.id", familyId)
+    .then((res) => {
+      familyInfo = res[0];
+    })
+    .catch((err) => {
+      result(null, { status: "400", error: "Family not found" });
+    });
+
+    await knex.select(knex.raw('sod.*, so.*')).from('sivathai_old_collection_details as sod')
+    .leftJoin(knex.raw('sivathai_old_collections as so'), 'so.id', 'sod.old_detail_collection_id')
+    .whereRaw(`sod.old_detail_family_id=${familyId}`)
+    .then(res=>{
+      collectionsOld = res;
+    });
+
+    await knex.select(knex.raw('sta.*, so.*')).from('sivathai_old_taxes_amount as sta')
+      .leftJoin(knex.raw('sivathai_old_collections as so'), 'so.id', 'sta.tax_old_collection_id')
+      .whereRaw(`sta.tax_old_family_id=${familyId}`)
+      .then(res=>{
+        taxesInfo = res;
+      })
+
+
+    result(null, { status: "200", family: familyInfo, collections: collectionsOld, taxes: taxesInfo });
+  }catch(err){
+    result(null, { status: "400", err: err, error: "Can not loaded" });
+  }
+}
 
 Oldcollection.updateById = (id, oldcollection, result) => {
   try {

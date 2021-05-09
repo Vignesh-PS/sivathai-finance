@@ -80,6 +80,8 @@ module.exports = (app) => {
 
     app.get('/getOldCollectionDetails', oldcollection.findAllDetail);
 
+    app.get('/getOldCollectionDetails/:familyId', oldcollection.findAllFamily);
+
     app.post("/oldCollectionEntry", oldcollection.newEntry);
 
     //Reports

@@ -51,7 +51,17 @@ exports.newEntry = (req, res) => {
 };
 
 exports.findAllDetail = (req, res) => {
-  Oldcollection.getAllDetail((err, data) => {
+  Oldcollection.getAllDetail( (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving oldcollections.",
+      });
+    else res.send(data);
+  });
+};
+
+exports.findAllFamily = (req, res) => {
+  Oldcollection.getAllFamily(req.params.familyId,(err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving oldcollections.",
