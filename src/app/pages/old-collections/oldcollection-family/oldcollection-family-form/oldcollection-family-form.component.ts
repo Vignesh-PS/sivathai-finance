@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, Inject, ViewEncapsulation, TemplateRef } from "@angular/core";
 import { CommonService } from "../../../../services/common.service";
 import { WebService } from "../../../../services/web.service";
 import { environment } from "../../../../../environments/environment";
 import { OldcollectionFamilyFormService } from "./oldcollection-family-form.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import OldcollectionFamilyModel from "./oldcollection-family-model";
-import { NbWindowRef, NB_WINDOW_CONTEXT } from "@nebular/theme";
+import { NbDialogService, NbWindowRef, NB_WINDOW_CONTEXT } from "@nebular/theme";
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { FormControl } from "@angular/forms";
@@ -29,6 +29,10 @@ export class OldcollectionFamilyFormComponent implements OnInit {
 
   familyInfo:any = {};
   familyPendings:any = [];
+  familyTaxes:any = [];
+
+  selectedCollection:any = {};
+  taxAmount:number;
 
   constructor(
     @Inject(NB_WINDOW_CONTEXT) context,
@@ -37,11 +41,61 @@ export class OldcollectionFamilyFormComponent implements OnInit {
     public common: CommonService,
     private web: WebService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: NbDialogService
   ) {
     this.dialogData = context.data;
     this.dialogAction = context.action;
     this.dialogData.action = context.action;
+  }
+
+
+  addContribution(dialog:TemplateRef<any>, oldCol:any){
+    this.selectedCollection = oldCol;
+    const d = this.dialog.open(dialog, {
+
+    })
+
+    d.onClose.pipe().subscribe(res=>{
+
+    })
+
+  }
+
+  addTaxesAmount(dialog:any){
+
+    if(!this.taxAmount || this.taxAmount<1){
+      this.common.showToast('warning', 'Warning', 'Invalid amount');
+      return;
+    }
+
+    const data = {
+      old_tax_collection_id: this.selectedCollection.collection_id,
+      old_tax_collection_detail_id: this.selectedCollection.old_detail_collection_id,
+      old_tax_family_id: this.familyInfo.id,
+      old_tax_amount: this.taxAmount
+    };
+
+    this.selectedCollection.old_detail_contributed += this.taxAmount;
+
+    let contribut = {...this.selectedCollection, contribute: data};
+    console.log('contribute :>> ', contribut);
+
+    this.web.postData('addOldCollectionTaxes', contribut).then(res=>{
+      if(res.status==200){
+        this.fillPageInfo();
+        dialog.close();
+      }else{
+        this.common.showToast('warning', 'No data', res.error);
+      }
+    })
+    .catch(err=>{
+      this.common.showToast('danger', 'Error', 'Connection Error');
+    })
+
+    this.taxAmount = 0;
+
+
   }
 
   afterSelectFamily(id:number){
@@ -58,6 +112,27 @@ export class OldcollectionFamilyFormComponent implements OnInit {
     this.dialogData.old_detail_amount = this.dialogData.old_detail_tax_count * oldCollection.old_collection_amount;
 
 
+  }
+
+  alertAmountRemove(tax:any){
+    if(window.confirm('Are you sure to remove..?')){
+      // this.collectionDetailsInfo.detail_contributed -= tax.tax_amount;
+
+      // let contribut = {...this.collectionDetailsInfo, contribute: tax.id};
+      // console.log('contribute :>> ', contribut);
+
+      // this.web.postData('removeCollectionTaxesOld', contribut).then(res=>{
+      //   this.fillPageInfo();
+      //   if(res.status==200){
+      //   }else{
+      //     this.common.showToast('warning', 'No data', res.error);
+      //   }
+      // })
+      // .catch(err=>{
+      //   this.fillPageInfo();
+      //   this.common.showToast('danger', 'Error', 'Connection Error');
+      // });
+    }
   }
 
   closeWindow() {
@@ -119,6 +194,7 @@ export class OldcollectionFamilyFormComponent implements OnInit {
       if(res.status=='200'){
         this.familyInfo = res.family;
         this.familyPendings = res.collections;
+        this.familyTaxes = res.taxes;
       }else{
         this.common.showToast('warning', 'No data', res.error);
       }

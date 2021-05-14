@@ -205,7 +205,7 @@ Oldcollection.getAllFamily = async(familyId,result)=>{
       result(null, { status: "400", error: "Family not found" });
     });
 
-    await knex.select(knex.raw('sod.*, so.*')).from('sivathai_old_collection_details as sod')
+    await knex.select(knex.raw('sod.*, so.*, so.id as collection_id')).from('sivathai_old_collection_details as sod')
     .leftJoin(knex.raw('sivathai_old_collections as so'), 'so.id', 'sod.old_detail_collection_id')
     .whereRaw(`sod.old_detail_family_id=${familyId}`)
     .then(res=>{
@@ -218,7 +218,6 @@ Oldcollection.getAllFamily = async(familyId,result)=>{
       .then(res=>{
         taxesInfo = res;
       })
-
 
     result(null, { status: "200", family: familyInfo, collections: collectionsOld, taxes: taxesInfo });
   }catch(err){
@@ -266,8 +265,14 @@ Oldcollection.updateOldcollectionComments = (id, oldcollection, result) => {
   }
 };
 
-Oldcollection.addOldcollectionTaxes = async (contribute, result) => {
+Oldcollection.addOldCollectionTaxes = async (contribute, result) => {
   try {
+
+    console.log('contribute :>> ', contribute);
+
+        result(null, { status: "400", error: "Can not be updated" });
+
+
     const oldcollectionDetailId = contribute.id;
     const familyId = contribute.detail_family_id;
     const oldcollectionId = contribute.detail_old_collection_id;

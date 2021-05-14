@@ -168,7 +168,7 @@ exports.updateOldcollectionComments = (req, res) => {
   });
 };
 
-exports.addOldcollectionTaxes = (req, res) => {
+exports.addOldCollectionTaxes = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -177,7 +177,7 @@ exports.addOldcollectionTaxes = (req, res) => {
     return;
   }
 
-  Oldcollection.addOldcollectionTaxes( req.body, (err, data) => {
+  Oldcollection.addOldCollectionTaxes( req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({

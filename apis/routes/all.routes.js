@@ -84,6 +84,8 @@ module.exports = (app) => {
 
     app.post("/oldCollectionEntry", oldcollection.newEntry);
 
+    app.post("/addOldCollectionTaxes", oldcollection.addOldCollectionTaxes);
+
     //Reports
     app.get("/reportsPending/:collectionId", report.pendingCollections);
 

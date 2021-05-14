@@ -1,7 +1,6 @@
 <nb-card accent="info">
   <nb-card-header *ngIf="dialogAction!='view'"> Manage Pendings</nb-card-header>
   <nb-card-header *ngIf="dialogAction=='view'"> Manage Pendings - {{this.familyInfo.street_name + ' - ' + this.familyInfo.family_head_name}}</nb-card-header>
-  <nb-card-header> Manage Pendings</nb-card-header>
   <nb-card-body  [nbSpinner]="loading" nbSpinnerStatus="danger">
 
     <div *ngIf="dialogAction=='view'" class="dialog-list">
@@ -60,10 +59,17 @@
                           <td>{{c.old_detail_tax_count}}</td>
                           <td>{{common.currencyFormatter(c.old_detail_amount)}}</td>
                           <td>{{common.currencyFormatter(c.old_detail_contributed)}}</td>
-                          <td>{{c.old_detail_is_cleared==1?'<i class="fas fa-check-double text-success"></i>': '<i class="fas fa-exclamation-triangle text-warning"></i>'}}</td>
+
+                          <td *ngIf="c.old_detail_is_cleared==1">
+                            <i class="fas fa-check-double text-success"></i>
+                          </td>
+
+                          <td *ngIf="c.old_detail_is_cleared!=1">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                          </td>
 
                           <td>
-                            <button class="btn btn-outline-info" *ngIf="c.old_detail_is_cleared!=1">Add Amount</button>
+                            <button class="btn btn-outline-info" (click)="addContribution(dialogAddAmount, c)" *ngIf="c.old_detail_is_cleared!=1">Add Amount</button>
                             <button class="btn btn-outline-info" *ngIf="c.old_detail_is_cleared==1">
                               Cleared at <br>
                               {{timeStamptoDate(c.old_detail_cleared_time)|date:'medium'}}
@@ -84,11 +90,25 @@
               <nb-card status="light">
                 <nb-card-header>Contributed</nb-card-header>
                 <nb-card-body>
-                  A nebula is an interstellar cloud of dust, hydrogen,
-                  helium and other ionized gases.
-                  Originally, nebula was a name for
-                  any diffuse astronomical object,
-                  including galaxies beyond the Milky Way.
+                  <b *ngIf="familyTaxes.length<1">No contributions made yet.</b>
+                  <br>
+
+                  <table class="w-100 mt-3" *ngIf="familyTaxes.length>0">
+                    <tr class="bg-light">
+                      <th>S.No</th>
+                      <th>Amount (Rs)</th>
+                      <th>Date</th>
+                      <th>Action</th>
+                    </tr>
+                    <tr *ngFor="let c of familyTaxes; let i = index" [ngClass]="{'bg-light': i%2==1}">
+                      <td>{{index+1}}</td>
+                      <td>{{common.currencyFormatter(c.tax_old_amount)}}</td>
+                      <td>{{timeStamptoDate(c?.tax_old_updated)|date:'medium'}}</td>
+                      <td>
+                        <i class="fa fa-times-circle" (click)="collectionDetailsInfo.detail_is_cleared!=1?alertAmountRemove(c):false"></i>
+                      </td>
+                    </tr>
+                  </table>
                 </nb-card-body>
                 <nb-card-footer>
                   <span (click)="flipped=false" class="cursor-pointer float-right">Back</span>
@@ -96,34 +116,8 @@
               </nb-card>
             </nb-card-back>
           </nb-flip-card>
-
         </div>
-
-        <!-- <div class="col-6">
-           <div class="align-items-center mb-3">
-            <div class="list-item-title">
-              <label for="family_street_id" class="font-weight-bold">Any Comments</label>
-            </div>
-            <div class="list-item-content">
-              <textarea (blur)="updateComments()" placeholder="Comments" nbInput fullWidth [(ngModel)]="collectionDetailsInfo.detail_comments" rows="4">
-
-              </textarea>
-            </div>
-          </div>
-
-          <div class="align-items-center mb-3">
-            <div class="list-item-title">
-              <label for="family_comments" class="font-weight-bold">Last Modified</label>
-            </div>
-            <div class="list-item-content">
-              {{timeStamptoDate(collectionDetailsInfo?.detail_updated) | date:'medium'}}
-            </div>
-          </div>
-
-        </div> -->
-
       </div>
-
 
     </div>
 
@@ -208,4 +202,25 @@
       <button class="ml-3" nbButton outline (click)="submitFormResults()" status="primary" [disabled]="loading">{{dialogAction=='edit'?'Update': 'Add'}}</button>
     </div>
   </nb-card-footer>
+
+
+  <ng-template #dialogAddAmount let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Enter valid Amount
+    <button class="btn btn-outline-dark float-right" (click)="ref.close()">
+      <i class="fa fa-times"></i>
+    </button>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="list-item-content">
+          <label for="tax_amount">Enter Amount</label>
+          <input type="number" name="tax_amount" id="tax_amount" placeholder="Enter Amount" nbInput fullWidth [(ngModel)]="taxAmount">
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+      <button nbButton outline status="danger" (click)="addTaxesAmount(ref)" [disabled]="loading">Add</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
 </nb-card>
