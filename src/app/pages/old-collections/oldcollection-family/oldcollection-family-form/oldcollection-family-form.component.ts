@@ -76,9 +76,8 @@ export class OldcollectionFamilyFormComponent implements OnInit {
       old_tax_amount: this.taxAmount
     };
 
-    this.selectedCollection.old_detail_contributed += this.taxAmount;
-
     let contribut = {...this.selectedCollection, contribute: data};
+    contribut.old_detail_contributed +=this.taxAmount;
     console.log('contribute :>> ', contribut);
 
     this.web.postData('addOldCollectionTaxes', contribut).then(res=>{
@@ -86,7 +85,7 @@ export class OldcollectionFamilyFormComponent implements OnInit {
         this.fillPageInfo();
         dialog.close();
       }else{
-        this.common.showToast('warning', 'No data', res.error);
+        this.common.showToast('warning', 'Not Saved', res.error);
       }
     })
     .catch(err=>{
@@ -95,7 +94,6 @@ export class OldcollectionFamilyFormComponent implements OnInit {
 
     this.taxAmount = 0;
 
-
   }
 
   afterSelectFamily(id:number){
@@ -103,35 +101,46 @@ export class OldcollectionFamilyFormComponent implements OnInit {
     let family = this.listFamilies.filter(x => x.id==id)[0];
     this.dialogData.old_detail_tax_count = family.family_tax_count;
     this.dialogData.old_detail_street_id = family.family_street_id;
-    // this.dialogData.old_detail_amount = this.dialogData.old_detail_tax_count * oldCollection.old_collection_amount;
-    // console.log(family[0]);
   }
 
   afterSelectCollection(id:number){
     let oldCollection  = this.listOldCollections.filter(x => x.id==id)[0];
     this.dialogData.old_detail_amount = this.dialogData.old_detail_tax_count * oldCollection.old_collection_amount;
-
-
   }
 
   alertAmountRemove(tax:any){
     if(window.confirm('Are you sure to remove..?')){
-      // this.collectionDetailsInfo.detail_contributed -= tax.tax_amount;
 
-      // let contribut = {...this.collectionDetailsInfo, contribute: tax.id};
-      // console.log('contribute :>> ', contribut);
+      this.web.postData('removeCollectionTaxesOld', tax).then(res=>{
+        this.fillPageInfo();
+        if(res.status==200){
+        }else{
+          this.common.showToast('warning', 'No data', res.error);
+        }
+      })
+      .catch(err=>{
+        this.fillPageInfo();
+        this.common.showToast('danger', 'Error', 'Connection Error');
+      });
+    }
+  }
 
-      // this.web.postData('removeCollectionTaxesOld', contribut).then(res=>{
-      //   this.fillPageInfo();
-      //   if(res.status==200){
-      //   }else{
-      //     this.common.showToast('warning', 'No data', res.error);
-      //   }
-      // })
-      // .catch(err=>{
-      //   this.fillPageInfo();
-      //   this.common.showToast('danger', 'Error', 'Connection Error');
-      // });
+  changeClearStatus(collection:any, stat:number){
+    if(window.confirm('Are you sure to proceed..?')){
+      let contribute = {...collection};
+      contribute.old_detail_is_cleared = stat;
+      this.web.postData('oldUpdateClearStatus', contribute)
+        .then(res=>{
+          if(res.status=='200'){
+            this.fillPageInfo();
+            this.common.showToast('success', 'Success', res.error);
+          }else{
+            this.common.showToast('warning', 'Warning', res.error);
+          }
+        })
+        .catch(err=>{
+          this.common.showToast('danger', 'Error', 'Connection Error');
+        })
     }
   }
 
@@ -253,8 +262,8 @@ export class OldcollectionFamilyFormComponent implements OnInit {
 
   }
 
-  timeStamptoDate(str: number): Date {
-    const d = new Date(str * 1000);
+  timeStamptoDate(str: any): Date {
+    let d = new Date(parseInt(str));
     return d;
   }
 

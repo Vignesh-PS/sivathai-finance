@@ -11,42 +11,43 @@ module.exports = (app) => {
     res.send({status: 200,data: 'cleared all'})
   });
 
-  //Streets
-  app.post("/streetAdd", street.create);
+    //Streets
+    app.post("/streetAdd", street.create);
 
-  app.get("/getStreets", street.findAll);
+    app.get("/getStreets", street.findAll);
 
-  app.get("/getStreet/:streetId", street.findOne);
+    app.get("/getStreet/:streetId", street.findOne);
 
-  app.post("/updateStreet/:streetId", street.update);
+    app.post("/updateStreet/:streetId", street.update);
 
-  app.post("/deleteStreet/:streetId", street.delete);
+    app.post("/deleteStreet/:streetId", street.delete);
 
-  //Families
-  app.post("/familyAdd", family.create);
+    //Families
+    app.post("/familyAdd", family.create);
 
-  app.get("/getFamilies", family.findAll);
+    app.get("/getFamilies", family.findAll);
 
-  app.get("/getFamily/:familyId", family.findOne);
+    app.get("/getFamily/:familyId", family.findOne);
 
-  app.get("/getFamilyDetails/:familyId", family.familyAllDetails);
+    app.get("/getFamilyDetails/:familyId", family.familyAllDetails);
 
-  app.post("/updateFamily/:familyId", family.update);
+    app.post("/updateFamily/:familyId", family.update);
 
-  app.post("/deleteFamily/:familyId", family.delete);
+    app.post("/deleteFamily/:familyId", family.delete);
 
-  app.post("/checkUniqueExists", family.checkUnique);
+    app.post("/checkUniqueExists", family.checkUnique);
 
-  //People
-  app.post("/peopleAdd", people.create);
+    //People
+    app.post("/peopleAdd", people.create);
 
-  app.get("/dashboardInfo", people.dashboardInfo);
+    app.get("/dashboardInfo", people.dashboardInfo);
 
-  app.post("/updatePeople/:peopleId", people.update);
+    app.post("/updatePeople/:peopleId", people.update);
 
-  app.post("/deletePeople/:peopleId", people.delete);
+    app.post("/deletePeople/:peopleId", people.delete);
 
-  //Collections
+
+    //Collections
     app.post("/collectionAdd", collection.create);
 
     app.get("/getCollection", collection.findAll);
@@ -69,6 +70,7 @@ module.exports = (app) => {
 
     app.post("/deleteCollection/:collectionId", collection.delete);
 
+
     //Old Collections
     app.get('/getOldCollection', oldcollection.findAll);
 
@@ -86,7 +88,13 @@ module.exports = (app) => {
 
     app.post("/addOldCollectionTaxes", oldcollection.addOldCollectionTaxes);
 
+    app.post("/oldUpdateClearStatus", oldcollection.oldUpdateClearStatus);
+
+    app.post("/removeCollectionTaxesOld", oldcollection.removeCollectionTaxesOld);
+
     //Reports
     app.get("/reportsPending/:collectionId", report.pendingCollections);
+
+    app.get("/reportsPendingOld", report.pendingCollectionsOld);
 
 };

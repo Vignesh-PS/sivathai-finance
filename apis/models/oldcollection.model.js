@@ -48,9 +48,7 @@ Oldcollection.newEntry = async (newEntry, result) => {
 
     await knex.select('id').from('sivathai_old_collection_details').where({old_detail_collection_id: collectionId, old_detail_family_id: familyId}).then(res=>{
       if(res.length>0){
-        // result(null, { status: "500",error: "Can not be added as it is already added." });
         isExist = true;
-        // return;
       }
     });
 
@@ -58,8 +56,6 @@ Oldcollection.newEntry = async (newEntry, result) => {
       result(null, { status: "500",error: "Can not be added as it is already added." });
       return;
     }
-
-    console.log('newEntry :>> ', newEntry);
 
     knex
       .insert({
@@ -154,7 +150,7 @@ Oldcollection.getAllDetail = async (result) => {
         })
         .catch(err=>{
 
-        })
+        });
 
         allCollections.push(collection);
       }
@@ -205,14 +201,14 @@ Oldcollection.getAllFamily = async(familyId,result)=>{
       result(null, { status: "400", error: "Family not found" });
     });
 
-    await knex.select(knex.raw('sod.*, so.*, so.id as collection_id')).from('sivathai_old_collection_details as sod')
+    await knex.select(knex.raw('sod.*, so.*, so.id as collection_id, sod.id as detail_id')).from('sivathai_old_collection_details as sod')
     .leftJoin(knex.raw('sivathai_old_collections as so'), 'so.id', 'sod.old_detail_collection_id')
     .whereRaw(`sod.old_detail_family_id=${familyId}`)
     .then(res=>{
       collectionsOld = res;
     });
 
-    await knex.select(knex.raw('sta.*, so.*')).from('sivathai_old_taxes_amount as sta')
+    await knex.select(knex.raw('sta.*, so.*, sta.id as tax_id')).from('sivathai_old_taxes_amount as sta')
       .leftJoin(knex.raw('sivathai_old_collections as so'), 'so.id', 'sta.tax_old_collection_id')
       .whereRaw(`sta.tax_old_family_id=${familyId}`)
       .then(res=>{
@@ -267,100 +263,111 @@ Oldcollection.updateOldcollectionComments = (id, oldcollection, result) => {
 
 Oldcollection.addOldCollectionTaxes = async (contribute, result) => {
   try {
-
-    console.log('contribute :>> ', contribute);
-
-        result(null, { status: "400", error: "Can not be updated" });
-
-
-    const oldcollectionDetailId = contribute.id;
-    const familyId = contribute.detail_family_id;
-    const oldcollectionId = contribute.detail_old_collection_id;
+    const oldCollectionDetailId = contribute.detail_id;
 
       let familyTax = {
-        tax_amount : contribute.contribute.tax_amount,
-        tax_old_collection_detail_id : contribute.contribute.tax_old_collection_detail_id,
-        tax_old_collection_id : contribute.contribute.tax_old_collection_id,
-        tax_family_id : contribute.contribute.tax_family_id,
-        tax_updated: Date.now()
+        tax_old_collection_id : contribute.contribute.old_tax_collection_id,
+        tax_old_collection_detail_id : oldCollectionDetailId,
+        tax_old_family_id : contribute.contribute.old_tax_family_id,
+        tax_old_amount : contribute.contribute.old_tax_amount,
+        tax_old_updated: Date.now()
       };
 
-      await knex.insert(familyTax).into('sivathai_taxes_amount')
+      // console.log('familyTax :>> ', familyTax);
+
+      await knex.insert(familyTax).into('sivathai_old_taxes_amount')
       .then(res=>{
 
       })
       .catch(err=>{
-        result(null, { status: "400", error: "Can not be updated" });
+        result(null, { status: "500", err:err,error: "Can not be updated" });
       });
 
 
     await knex("sivathai_old_collection_details")
-      .where({ id: oldcollectionDetailId })
+      .where({ id: oldCollectionDetailId })
       .update({
-        detail_contributed: contribute.detail_contributed,
-        detail_updated: Date.now()
+        old_detail_contributed: contribute.old_detail_contributed,
+        old_detail_updated: Date.now()
       })
       .then((res) => {
         result(null, { status: "200", error: "Updated successfully" });
       })
       .catch((err) => {
-        result(null, { status: "400", error: "Can not be updated" });
+        result(null, { status: "600",err:err, error: "Can not be updated" });
       });
   } catch (err) {
-    result(null, { status: "400", error: "Can not be updated" });
+    result(null, { status: "700", err:err, error: "Can not be updated" });
   }
 };
 
-Oldcollection.removeOldcollectionTaxes = async (contribute, result) => {
+Oldcollection.removeCollectionTaxesOld = async (contribute, result) => {
   try {
-    const oldcollectionDetailId = contribute.id;
-    const familyId = contribute.detail_family_id;
-    const oldcollectionId = contribute.detail_old_collection_id;
-    const familyTax = contribute.contribute;
 
     console.log('contribute :>> ', contribute);
+    const collectionId = contribute.tax_old_collection_id;
+    const collectionDetailId = contribute.tax_old_collection_detail_id;
+    const familyId = contribute.tax_old_family_id;
+    const taxId = contribute.tax_id;
+    let collectionDetailInfo = {};
 
-    await knex('sivathai_taxes_amount')
-    .where({tax_old_collection_id: oldcollectionId, tax_old_collection_detail_id: oldcollectionDetailId, tax_family_id: familyId, id: familyTax })
+    await knex('sivathai_old_collection_details')
+    .where({id: collectionDetailId})
+    .then(res=>{
+      collectionDetailInfo = res[0];
+    })
+    .catch(err=>{
+      collectionDetailInfo = {};
+    })
+
+    if(!collectionDetailInfo.id){
+      result(null, { status: "400",err: err, error: "Can not be updated" });
+      return;
+    }
+    // result(null, { status: "400" ,err: collectionDetailInfo, error: "Can not be updated" });
+
+
+    await knex('sivathai_old_taxes_amount')
+    .where({tax_old_collection_id: collectionId, tax_old_collection_detail_id: collectionDetailId, tax_old_family_id: familyId, id: taxId })
     .delete()
     .then(res=>{
       console.log('res :>> ', res);
       })
-    .catch(ere=>{
-      console.log('errror');
+    .catch(err=>{
+      result(null, { status: "500",err: err, error: "Can not be updated" });
     })
 
     await knex("sivathai_old_collection_details")
-      .where({ id: oldcollectionDetailId })
+      .where({ id: collectionDetailId })
       .update({
-        detail_contributed: contribute.detail_contributed,
-        detail_updated: Date.now()
+        old_detail_contributed: collectionDetailInfo.old_detail_contributed - contribute.tax_old_amount,
+        old_detail_is_cleared: 0,
+        old_detail_updated: Date.now()
       })
       .then((res) => {
         result(null, { status: "200", error: "Updated successfully" });
       })
       .catch((err) => {
-        result(null, { status: "400", error: "Can not be updated" });
+        result(null, { status: "600", err:err, error: "Can not be updated" });
       });
   } catch (err) {
-    result(null, { status: "400", error: "Can not be updated" });
+    result(null, { status: "700",err:err, error: "Can not be updated" });
   }
 };
 
-Oldcollection.updateClearStatus = async (contribute, result) => {
+Oldcollection.oldUpdateClearStatus = async (contribute, result) => {
   try {
-    const oldcollectionDetailId = contribute.id;
-    const familyId = contribute.detail_family_id;
-
-    let clearStatus = contribute.detail_is_cleared;
+    const oldCollectionDetailId = contribute.detail_id;
+    const familyId = contribute.old_detail_family_id;
+    let clearStatus = contribute.old_detail_is_cleared;
     await knex("sivathai_old_collection_details")
-      .where({ id: oldcollectionDetailId, detail_family_id: familyId })
+      .where({ id: oldCollectionDetailId, old_detail_family_id: familyId })
       .update({
-        detail_is_cleared: contribute.detail_is_cleared,
-        detail_cleared_time: Date.now()
+        old_detail_is_cleared: clearStatus,
+        old_detail_cleared_time: Date.now()
       })
       .then((res) => {
-        result(null, { status: "200", error: clearStatus==1?'Cleared successfully.':'Changed it into pending.' });
+        result(null, { status: "200", res:res,error: clearStatus==1?'Cleared successfully.':'Changed it into pending.' });
       })
       .catch((err) => {
         result(null, { status: "400", error: "Can not be changed" });

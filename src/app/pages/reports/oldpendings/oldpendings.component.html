@@ -1,0 +1,65 @@
+<nb-card>
+  <nb-card-header>
+    Reports
+    <button class="btn btn-outline-dark float-right" [nbContextMenu]="exportMenus">Export Data</button>
+    <button class="btn btn-outline-dark float-right mr-3" [routerLink]="['/list-families-old']" routerLinkActive="router-link-active" >Back</button>
+  </nb-card-header>
+
+  <nb-card-body class="oldpending-page" id="report-card" *ngFor="let ob of tableSource">
+
+    <h4>{{ob.street_name}}</h4>
+
+    <div *ngFor="let fam of ob.families" class="mb-4">
+      <div class="row mb-3">
+        <div class="ml-3">
+          Name <br>
+          <b>{{fam.people_name}}</b>
+        </div>
+        <div class="ml-3">
+          Family No <br>
+         <b> {{fam.family_unique_id}}</b>
+        </div>
+        <div class="ml-3">
+          Pendings <br>
+          <b>{{fam.old_collection_count}}</b>
+        </div>
+      </div>
+
+    <table class="w-100">
+
+      <thead *ngIf="fam.collections.length>0">
+        <th>S.No</th>
+        <th>Function</th>
+        <th>Tax Amount</th>
+        <th>Collected Amount</th>
+        <th>Is Cleared</th>
+        <th>Comments</th>
+      </thead>
+
+      <tbody *ngIf="fam.collections.length>0">
+        <tr *ngFor="let e of fam.collections; let entryIndex=index;">
+          <td>{{entryIndex+1}}</td>
+          <td>{{e.old_collection_name + ' - '+e.old_collection_year}}</td>
+          <td>{{common.currencyFormatter(e.old_detail_amount)}}</td>
+          <td>{{common.currencyFormatter(e.old_detail_contributed)}}</td>
+          <td *ngIf="e.old_detail_is_cleared==1">
+            <i class="fas fa-check-double text-success"></i>
+          </td>
+          <td *ngIf="e.old_detail_is_cleared!=1">
+            <i class="fas fa-exclamation-triangle text-warning"></i>
+          </td>
+          <td><br><br></td>
+        </tr>
+      </tbody>
+
+      <p class="bg-light text-danger" *ngIf="fam.collections.length==0">All Cleared</p>
+
+    </table>
+  </div>
+
+  <div *ngIf="ob.families.length==0">
+    No Families are in pending.
+  </div>
+
+  </nb-card-body>
+</nb-card>

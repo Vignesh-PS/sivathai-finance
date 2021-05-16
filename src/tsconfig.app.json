@@ -15,7 +15,7 @@
     "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": false,
+    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "preserveWhitespaces": true,
     "enableIvy": true

@@ -70,11 +70,11 @@
 
                           <td>
                             <button class="btn btn-outline-info" (click)="addContribution(dialogAddAmount, c)" *ngIf="c.old_detail_is_cleared!=1">Add Amount</button>
-                            <button class="btn btn-outline-info" *ngIf="c.old_detail_is_cleared==1">
+                            <button class="btn btn-outline-success" *ngIf="c.old_detail_is_cleared==1">
                               Cleared at <br>
                               {{timeStamptoDate(c.old_detail_cleared_time)|date:'medium'}}
                             </button>
-                            <button class="btn btn-outline-info ml-2">{{c.old_detail_is_cleared==1?'Mark as pending':'Mark as clear'}}</button>
+                            <button class="btn ml-2" [ngClass]="{'btn-outline-info' : c.old_detail_is_cleared==1, 'btn-outline-success': c.old_detail_is_cleared!=1}" (click)="c.old_detail_is_cleared==1?changeClearStatus(c, 0):changeClearStatus(c, 1)">{{c.old_detail_is_cleared==1?'Mark as pending':'Mark as clear'}}</button>
                           </td>
                         </tr>
                       </table>
@@ -101,11 +101,11 @@
                       <th>Action</th>
                     </tr>
                     <tr *ngFor="let c of familyTaxes; let i = index" [ngClass]="{'bg-light': i%2==1}">
-                      <td>{{index+1}}</td>
+                      <td>{{i+1}}</td>
                       <td>{{common.currencyFormatter(c.tax_old_amount)}}</td>
                       <td>{{timeStamptoDate(c?.tax_old_updated)|date:'medium'}}</td>
                       <td>
-                        <i class="fa fa-times-circle" (click)="collectionDetailsInfo.detail_is_cleared!=1?alertAmountRemove(c):false"></i>
+                        <i class="fa fa-times-circle" (click)="c.old_detail_is_cleared!=1?alertAmountRemove(c):false"></i>
                       </td>
                     </tr>
                   </table>

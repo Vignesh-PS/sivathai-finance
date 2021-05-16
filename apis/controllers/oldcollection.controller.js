@@ -192,7 +192,7 @@ exports.addOldCollectionTaxes = (req, res) => {
   });
 };
 
-exports.removeOldcollectionTaxes = (req, res) => {
+exports.removeCollectionTaxesOld = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -201,7 +201,7 @@ exports.removeOldcollectionTaxes = (req, res) => {
     return;
   }
 
-  Oldcollection.removeOldcollectionTaxes( req.body, (err, data) => {
+  Oldcollection.removeCollectionTaxesOld( req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -216,7 +216,7 @@ exports.removeOldcollectionTaxes = (req, res) => {
   });
 };
 
-exports.updateClearStatus = (req, res) => {
+exports.oldUpdateClearStatus = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -225,7 +225,7 @@ exports.updateClearStatus = (req, res) => {
     return;
   }
 
-  Oldcollection.updateClearStatus( req.body, (err, data) => {
+  Oldcollection.oldUpdateClearStatus( req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({

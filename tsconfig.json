@@ -33,5 +33,9 @@
     "exceljs": [
       "node_modules/exceljs/dist/exceljs.min"
     ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

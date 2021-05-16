@@ -27,7 +27,7 @@ export class ReportService {
     <body>
       <h3>${collection.collection_name} : ${collection.collection_year}</h3>
       <h4>${collection.type} Report</h4>
-      <h5 style="margin-bottom: 1.5rem;">600/per tax</h5>`;
+      <h5 style="margin-bottom: 1.5rem;">${collection.collection_amount}/per tax</h5>`;
 
       let bodyHtml = '';
 
@@ -52,7 +52,7 @@ export class ReportService {
               <th style="text-align: left">Name</th>
               <th style="text-align: left">Tax Amount</th>
               <th style="text-align: left">Collected Amount</th>
-              <th style="text-align: left">Comments</th>
+              <th style="text-align: left">Comments  </th>
             </thead>
             <tbody>`
 
@@ -148,4 +148,86 @@ export class ReportService {
       fs.saveAs(blob, collection.collection_name+' - '+ collection.type+' - '+new Date()+'.xlsx');
     })
   }
+
+
+  generateOldReportHTML(data:any){
+
+    let topHtml = `<!DOCTYPE html>
+    <html lang="en">
+    <body>
+      <h4>Old Accounts</h4>`;
+
+      let bodyHtml = '';
+
+      for(let street of data){
+
+        let streetName = ` <h3> ${street.street_name} </h3>`;
+        bodyHtml+=streetName;
+
+        let hadFamilies = ``;
+
+        if(street.families.length==0){
+          hadFamilies = `<p>All Families Cleared</p> <br>`;
+
+          bodyHtml +=  hadFamilies;
+        }else{
+
+          for(let row of street.families){
+            let tableHead = `<div style="margin-bottom: 2.5rem">
+            <table>
+              <tr style="margin-bottom: 0rem; border: none;">
+                <td> Name <br ><b >${row['people_name']} </b></td>
+                <td> Family No <br ><b > ${row['family_unique_id']}</b></td>
+                <td> Pendings <br ><b >${row['old_collection_count']}</b></td>
+              </tr>
+            </table>`;
+            let needTable = '';
+
+              let tableBody = '';
+              if(row['collections'].length>0){
+
+                needTable = `<table  style="width: 100%;">
+                <thead>
+                  <th>S.No</th>
+                  <th>Function</th>
+                  <th>Tax Amount</th>
+                  <th>Collected Amount</th>
+                  <th>Comments    </th>
+                </thead>
+                <tbody>`
+
+                  row['collections'].forEach((tableRow:any, index:number) => {
+                    let tableBodyTemp = `
+                      <tr>
+                        <td >${index+1}</td>
+                        <td >${tableRow['old_collection_name']} - ${tableRow['old_collection_year']}</td>
+                        <td >${this.currencyFormatter(tableRow['old_detail_amount'])}</td>
+                        <td >${tableRow['old_detail_contributed'] ? `${this.currencyFormatter(tableRow['old_detail_contributed'])} / ${tableRow['old_detail_is_cleared']==1?'C':'P'}` : '0 / P'}</td>
+                        <td ><br ><br ></td>
+                      </tr>
+                    `;
+                    tableBody += tableBodyTemp;
+                  });
+
+              }else{
+                  tableBody =`<p style="background: #f0f0f0;">No Pendings</p>`;
+              }
+
+
+              let tableFooter = `</tbody></table></div>`;
+
+              bodyHtml += tableHead + needTable + tableBody + tableFooter;
+          }
+
+        }
+
+    }
+
+
+      let bottomHtml = `</body></html>`;
+
+
+      return topHtml + bodyHtml + bottomHtml;
+  }
+
 }

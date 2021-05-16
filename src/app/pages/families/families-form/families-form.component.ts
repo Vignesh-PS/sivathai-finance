@@ -140,8 +140,8 @@ export class FamiliesFormComponent implements OnInit {
   }
 
 
-  timeStamptoDate(str: number): Date {
-    const d = new Date(str * 1000);
+  timeStamptoDate(str: any): Date {
+    let d = new Date(parseInt(str));
     return d;
   }
 

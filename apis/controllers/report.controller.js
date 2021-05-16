@@ -9,6 +9,15 @@ exports.pendingCollections = (req, res) => {
   })
 }
 
+exports.pendingCollectionsOld = (req, res) => {
+  Report.pendingCollectionsOld( (err, data)=>{
+    if(err)
+      res.status(500).send({err: 'Error Occured'})
+
+    else res.send(data);
+  })
+}
+
 
 // Disconnect db connection
 exports.destroyDB = (req, res, next) => {
