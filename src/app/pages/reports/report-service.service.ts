@@ -173,7 +173,7 @@ export class ReportService {
         }else{
 
           for(let row of street.families){
-            let tableHead = `<div style="margin-bottom: 2.5rem">
+            let tableHead = `<div class="changemargin">
             <table>
               <tr style="margin-bottom: 0rem; border: none;">
                 <td> Name <br ><b >${row['people_name']} </b></td>
@@ -230,4 +230,85 @@ export class ReportService {
       return topHtml + bodyHtml + bottomHtml;
   }
 
+  
+  generateOldReportExcel(data:any){
+    let workbook = new Workbook();
+    let emptyRow = {
+      sno: '',
+      family_unique_id: '',
+      family_head_name: '',
+      tax_detail: '',
+      comments: '',
+    }
+  
+    for (let streetRow of data){
+
+      streetRow.collections = [];
+      if (streetRow.families.length > 0) {
+        streetRow.families.forEach((family, familyIndex) => {
+                // familyIndex++;
+                let familyInfoRow = {
+                    sno: familyIndex+1,
+                    family_unique_id: 'No: '+family.family_unique_id,
+                    family_head_name: 'Name: '+ family.people_name,
+                    tax_detail: '',
+                    comment: ''
+                }
+                streetRow.collections.push(emptyRow);
+                streetRow.collections.push(emptyRow);
+                streetRow.collections.push(familyInfoRow)
+
+                if(family.collections.length>0){
+                    let familyCollections = family.collections.map((x, collectionIndex)=>{
+                        let y = {...emptyRow};
+                        y.sno = `${familyInfoRow.sno}.${collectionIndex + 1}`;
+                        y.family_unique_id = x.old_collection_name;
+                        y.family_head_name = `${x.old_detail_amount} (${x.old_detail_tax_count} x ${x.old_collection_amount})`;
+                        y.tax_detail = x.old_detail_contributed + (x.old_detail_is_cleared==1?'/C': '/P');
+                        y.comments = '';
+                        return y;
+                    })
+
+                    streetRow.collections.push(...familyCollections);
+
+                }else{
+                let familyCollections = {...emptyRow};
+                familyCollections.family_unique_id = 'No Collections';
+                streetRow.collections.push(familyCollections)
+                }
+            
+        });
+      }else{
+          let emptyFamily = {...emptyRow};
+          emptyFamily.family_unique_id = 'All families are cleared';
+          streetRow.collections.push(emptyFamily);
+      }
+
+      let worksheet = workbook.addWorksheet(streetRow['street_name']);
+      worksheet.columns = [
+        { header: 'S.No', key: 'sno', width: 8 },
+        { header: 'Function', key: 'family_unique_id', width: 25 },
+        { header: 'Tax Amount', key: 'family_head_name', width: 25 },
+        { header: 'Collected Amount', key: 'tax_detail', width: 20 },
+        { header: 'Comments', key: 'comment', width: 50 },
+      ];
+
+      worksheet.addRows(streetRow.collections); 
+
+      worksheet.eachRow(row=>{
+        row.height = 18;
+        // row.eachCell(cell=>{
+        //   cell.alignment.horizontal = 'left';
+        //   cell.alignment.vertical = 'middle';
+
+        // })
+      })
+    }
+
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, 'Old Pendings - '+new Date()+'.xlsx');
+    })
+  }
+  
 }

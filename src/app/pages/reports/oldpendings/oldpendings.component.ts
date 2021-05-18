@@ -69,7 +69,8 @@ export class OldpendingsComponent implements OnInit {
         color:'red'
       },
       changemargin:{
-        marginBottom: 8
+        marginTop: 8,
+        marginBottom: 0
       }
     }
     ,
@@ -81,8 +82,7 @@ export class OldpendingsComponent implements OnInit {
   }
 
   generateXlsx(){
-    // this.collectionInfo.type = this.selectedReport;
-    // this.reportService.generateReportExcel(this.collectionInfo, this.tableSource);
+     this.reportService.generateOldReportExcel( this.tableSource);
   }
 
   ngOnInit(): void {
