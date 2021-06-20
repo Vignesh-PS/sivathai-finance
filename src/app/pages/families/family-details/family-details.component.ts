@@ -70,7 +70,7 @@ export class FamilyDetailsComponent implements OnInit {
   }
 
 
-  openPeopleInfo(action:string, people:PeopleModel){
+  openPeopleInfo(action:string, people:PeopleModel=new PeopleModel()){
 
     people.people_family_id = this.familyId;
     const dialog = this.dialog.open(AddPeopleDetailsComponent, {

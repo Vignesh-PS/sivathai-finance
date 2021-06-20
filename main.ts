@@ -26,6 +26,7 @@ function createWindow(): BrowserWindow {
     height: size.height,
     frame: true,
     show: true,
+    icon: 'src/assets/img/logo.png',
     webPreferences: {
       nodeIntegration: true,
       // preload: path.join(__dirname, 'preload.js'),
@@ -66,7 +67,7 @@ function createWindow(): BrowserWindow {
 try {
 
   app.on('ready', () => setTimeout(createWindow, 400));
-
+//app.allowRendererProcessReuse = false
   app.on('window-all-closed', () => {
 
     if (process.platform !== 'darwin') {

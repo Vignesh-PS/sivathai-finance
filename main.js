@@ -21,6 +21,7 @@ function createWindow() {
         height: size.height,
         frame: true,
         show: true,
+        icon: 'src/assets/img/logo.png',
         webPreferences: {
             nodeIntegration: true,
             // preload: path.join(__dirname, 'preload.js'),
@@ -55,6 +56,7 @@ function createWindow() {
 }
 try {
     electron_1.app.on('ready', function () { return setTimeout(createWindow, 400); });
+    electron_1.app.allowRendererProcessReuse = false;
     electron_1.app.on('window-all-closed', function () {
         if (process.platform !== 'darwin') {
             electron_1.app.quit();

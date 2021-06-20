@@ -9,6 +9,8 @@
 
 # dependencies
 /node_modules
+/release/win-ia32-unpacked
+/release/win-unpacked
 
 # profiling files
 chrome-profiler-events*.json

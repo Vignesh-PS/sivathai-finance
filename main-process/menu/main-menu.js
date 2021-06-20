@@ -87,29 +87,29 @@ const template = [
       },
     ],
   },
-  {
-    label: "Reports",
-    submenu: [
-      {
-        label: "Families",
-        click(item, focusedWindow) {
-          focusedWindow.webContents.send("switch-ng-page", "no-service");
-        },
-      },
-      {
-        label: "People",
-        click(item, focusedWindow) {
-          focusedWindow.webContents.send("switch-ng-page", "no-service");
-        },
-      },
-      {
-        label: "Collections",
-        click(item, focusedWindow) {
-          focusedWindow.webContents.send("switch-ng-page", "no-service");
-        },
-      },
-    ],
-  },
+  // {
+  //   label: "Reports",
+  //   submenu: [
+  //     {
+  //       label: "Families",
+  //       click(item, focusedWindow) {
+  //         focusedWindow.webContents.send("switch-ng-page", "no-service");
+  //       },
+  //     },
+  //     {
+  //       label: "People",
+  //       click(item, focusedWindow) {
+  //         focusedWindow.webContents.send("switch-ng-page", "no-service");
+  //       },
+  //     },
+  //     {
+  //       label: "Collections",
+  //       click(item, focusedWindow) {
+  //         focusedWindow.webContents.send("switch-ng-page", "no-service");
+  //       },
+  //     },
+  //   ],
+  // },
   {
     role: "help",
     submenu: [
@@ -129,13 +129,13 @@ const template = [
           await shell.openExternal("https://www.facebook.com/balagunasingh");
         },
       },
-      {
-        label: "Toggle Developer Tools",
-        accelerator: process.platform === "darwin" ? "Alt+A" : "Alt+A",
-        click(item, focusedWindow) {
-          if (focusedWindow) focusedWindow.webContents.toggleDevTools();
-        },
-      },
+      // {
+      //   label: "Toggle Developer Tools",
+      //   accelerator: process.platform === "darwin" ? "Alt+A" : "Alt+A",
+      //   click(item, focusedWindow) {
+      //     if (focusedWindow) focusedWindow.webContents.toggleDevTools();
+      //   },
+      // },
     ],
   },
 ];
