@@ -97,7 +97,7 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.runElectronRenderer();
+    // this.runElectronRenderer();
   }
 
   runElectronRenderer() {

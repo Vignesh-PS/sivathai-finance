@@ -79,7 +79,11 @@ export class FamiliesComponent implements OnInit {
       },
       family_no_of_members: {
         title: "No of members",
-        type: "string"
+        type: "string",
+        valuePrepareFunction: (data:number)=>{
+          data++;
+          return data;
+        }
       },
       family_tax_count: {
         title: "No of Tax",
