@@ -28,6 +28,8 @@ export class CollectionstreetfamilyComponent implements OnInit {
   familyHeadInfo:any = {};
   creditInfo:any = [];
   taxAmount:number = 0;
+  taxReceipt:any;
+  tax_received:any;
 
   constructor(
     private formService: CollectionstreetfamilysFormService,
@@ -74,17 +76,34 @@ export class CollectionstreetfamilyComponent implements OnInit {
 
   addTaxesAmount(dialog:any){
 
+     console.log(this.tax_received);
+
+    if(!this.taxReceipt || this.taxReceipt==''){
+      this.common.showToast('warning', 'Warning', 'Enter a receipt no');
+      return;
+    }
+
+    if(!this.tax_received || this.tax_received==''){
+      this.common.showToast('warning', 'Warning', 'Choose a received date');
+      return;
+    }
+
     if(!this.taxAmount || this.taxAmount<1){
       this.common.showToast('warning', 'Warning', 'Invalid amount');
       return;
     }
 
+
     const data = {
       tax_collection_id: this.collectionId,
       tax_collection_detail_id: this.collectionDetailsInfo.id,
       tax_family_id: this.familyId,
-      tax_amount: this.taxAmount
+      tax_amount: this.taxAmount,
+      tax_received: this.tax_received.getTime(),
+      tax_receipt: this.taxReceipt
     };
+
+    // return;
 
     let contributeAmount = 0;
     this.creditInfo.forEach((x:any) => {

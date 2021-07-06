@@ -13,8 +13,10 @@ const knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename:
-      homedir + "\\sivathai-collections\\" + fileConfig.db_location,
+      homedir + "/sivathai-collections/" + fileConfig.db_location,
   },
+  useNullAsDefault: true
+
 });
 
 Oldcollection.create = (newOldcollection, result) => {
@@ -270,6 +272,8 @@ Oldcollection.addOldCollectionTaxes = async (contribute, result) => {
         tax_old_collection_detail_id : oldCollectionDetailId,
         tax_old_family_id : contribute.contribute.old_tax_family_id,
         tax_old_amount : contribute.contribute.old_tax_amount,
+        tax_old_receipt : contribute.contribute.old_tax_receipt,
+        tax_old_received : contribute.contribute.old_tax_received,
         tax_old_updated: Date.now()
       };
 

@@ -5,6 +5,8 @@ const fs = require("fs");
 const dbPath = homedir + "/sivathai-collections/";
 const dbName = fileConfig.db_location;
 
+console.log(dbPath);
+
 if (fs.existsSync(dbPath+dbName)) {
 
   console.log('exist');

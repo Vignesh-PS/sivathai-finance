@@ -18,8 +18,9 @@ const knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename:
-      homedir + "\\sivathai-collections\\" + fileConfig.db_location,
+      homedir + "/sivathai-collections/" + fileConfig.db_location,
   },
+  useNullAsDefault: true
   // postProcessResponse:(result, queryContext)=>{
   //   console.log(queryContext);
   //   return result;

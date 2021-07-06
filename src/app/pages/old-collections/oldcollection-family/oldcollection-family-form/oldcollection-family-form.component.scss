@@ -18,12 +18,19 @@ nb-list-item{
   }
 }
 
-
-nb-card-body{
-  max-height: 80vh;
-  overflow: scroll;
-  min-width: 700px;
+nb-calendar{
+  nb-card-body{
+    max-height: unset !important;
+    overflow: unset !important;
+    min-width: unset !important;
+  }
 }
+
+// nb-card-body{
+//   max-height: 80vh;
+//   overflow: scroll;
+//   min-width: 700px;
+// }
 .dialog-list{
   overflow: unset !important;
 }

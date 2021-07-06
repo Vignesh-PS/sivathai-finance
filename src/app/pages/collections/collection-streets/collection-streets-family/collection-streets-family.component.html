@@ -65,14 +65,16 @@
             <table class="w-100 mt-3">
               <tr class="bg-light">
                 <th>S.No</th>
+                <th>Receipt.No</th>
                 <th>Amount (Rs)</th>
                 <th>Date</th>
                 <th>Action</th>
               </tr>
               <tr *ngFor="let c of creditInfo; let i = index" [ngClass]="{'bg-light': i%2==1}">
                 <td>{{c.sno}}</td>
+                <td>{{c.tax_receipt}}</td>
                 <td>{{common.currencyFormatter(c.tax_amount)}}</td>
-                <td>{{timeStamptoDate(c?.tax_updated)|date:'medium'}}</td>
+                <td>{{timeStamptoDate(c?.tax_received)|date:'mediumDate'}}</td>
                 <td>
                   <i class="fa fa-times-circle" (click)="collectionDetailsInfo.detail_is_cleared!=1?alertAmountRemove(c):false"></i>
                 </td>
@@ -164,10 +166,23 @@
     </button>
       </nb-card-header>
       <nb-card-body>
-        <div class="list-item-content">
+
+        <div class="list-item-content mb-3">
+          <label for="tax_receipt">Enter Receipt No</label>
+          <input type="number" name="tax_receipt" id="tax_receipt" placeholder="Enter Receipt No" nbInput fullWidth [(ngModel)]="taxReceipt">
+        </div>
+
+        <div class="list-item-content mb-3">
+          <label for="tax_received">Choose Date</label>
+          <input name="tax_received" id="tax_received" placeholder="Choose Date" [nbDatepicker]="taxReceived" nbInput fullWidth [(ngModel)]="tax_received">
+          <nb-datepicker #taxReceived></nb-datepicker>
+        </div>
+
+        <div class="list-item-content mb-3">
           <label for="tax_amount">Enter Amount</label>
           <input type="number" name="tax_amount" id="tax_amount" placeholder="Enter Amount" nbInput fullWidth [(ngModel)]="taxAmount">
         </div>
+
       </nb-card-body>
       <nb-card-footer>
       <button nbButton outline status="danger" (click)="addTaxesAmount(ref)" [disabled]="loading">Add</button>

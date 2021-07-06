@@ -27,6 +27,7 @@ import { OldcollectionFamilyComponent } from './oldcollection-family.component';
      NbWindowModule.forChild(),
      NbSpinnerModule,
      NbDialogModule,
+     NbDatepickerModule,
      NbSelectModule,
      NbAutocompleteModule,
      NbAlertModule

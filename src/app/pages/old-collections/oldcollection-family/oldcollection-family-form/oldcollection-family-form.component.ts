@@ -33,6 +33,8 @@ export class OldcollectionFamilyFormComponent implements OnInit {
 
   selectedCollection:any = {};
   taxAmount:number;
+  taxReceipt:any;
+  tax_received:any;
 
   constructor(
     @Inject(NB_WINDOW_CONTEXT) context,
@@ -64,6 +66,16 @@ export class OldcollectionFamilyFormComponent implements OnInit {
 
   addTaxesAmount(dialog:any){
 
+    if(!this.taxReceipt || this.taxReceipt==''){
+      this.common.showToast('warning', 'Warning', 'Enter a receipt no');
+      return;
+    }
+
+    if(!this.tax_received || this.tax_received==''){
+      this.common.showToast('warning', 'Warning', 'Choose a received date');
+      return;
+    }
+
     if(!this.taxAmount || this.taxAmount<1){
       this.common.showToast('warning', 'Warning', 'Invalid amount');
       return;
@@ -73,7 +85,9 @@ export class OldcollectionFamilyFormComponent implements OnInit {
       old_tax_collection_id: this.selectedCollection.collection_id,
       old_tax_collection_detail_id: this.selectedCollection.old_detail_collection_id,
       old_tax_family_id: this.familyInfo.id,
-      old_tax_amount: this.taxAmount
+      old_tax_amount: this.taxAmount,
+      old_tax_receipt: this.taxReceipt,
+      old_tax_received: this.tax_received.getTime()
     };
 
     let contribut = {...this.selectedCollection, contribute: data};

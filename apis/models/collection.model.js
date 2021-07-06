@@ -13,8 +13,9 @@ const knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename:
-      homedir + "\\sivathai-collections\\" + fileConfig.db_location,
+      homedir + "/sivathai-collections/" + fileConfig.db_location,
   },
+  useNullAsDefault: true
 });
 
 Collection.create = (newCollection, result) => {
@@ -87,7 +88,7 @@ Collection.collectionStreet = async (collectionId, streetId, result)=>{
 
     const members_count = knex.count('id').from('sivathai_people').whereRaw(`people_family_id=sf.id`).as('members_count');
 
-    const all_contribute_count = knex.count('id').from('sivathai_collection_details').where({detail_collection_id: collectionId, detail_street_id: streetId, detail_is_cleared:0}).as('total_contribute_count');
+    const all_contribute_count = knex.count('id').from('sivathai_collection_details').whereRaw('detail_contributed > 0').where({detail_collection_id: collectionId, detail_street_id: streetId ,detail_is_cleared:0}).as('total_contribute_count');
     const all_clear_count = knex.count('id').from('sivathai_collection_details').where({detail_collection_id: collectionId, detail_is_cleared: 1, detail_street_id: streetId}).as('total_cleared_count');
     const all_amount = knex.sum('detail_contributed').from('sivathai_collection_details').where({detail_collection_id: collectionId, detail_street_id: streetId}).as('total_amount');
     const all_families = knex.count('id').from('sivathai_families').where({family_deleted:0, family_street_id: streetId}).as('total_families');
@@ -299,6 +300,8 @@ Collection.addCollectionTaxes = async (contribute, result) => {
         tax_collection_detail_id : contribute.contribute.tax_collection_detail_id,
         tax_collection_id : contribute.contribute.tax_collection_id,
         tax_family_id : contribute.contribute.tax_family_id,
+        tax_receipt : contribute.contribute.tax_receipt,
+        tax_received : contribute.contribute.tax_received,
         tax_updated: Date.now()
       };
 
