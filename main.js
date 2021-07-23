@@ -56,7 +56,7 @@ function createWindow() {
 }
 try {
     electron_1.app.on('ready', function () { return setTimeout(createWindow, 400); });
-    electron_1.app.allowRendererProcessReuse = false;
+    //app.allowRendererProcessReuse = false
     electron_1.app.on('window-all-closed', function () {
         if (process.platform !== 'darwin') {
             electron_1.app.quit();
